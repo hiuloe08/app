@@ -5,494 +5,1332 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <title>SperNew Optimize</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>/* ============================================================
-   SPERNEW OPTIMIZE — style.css
-   Green Tech / Gaming Dark Theme
+   SPERNEW OPTIMIZE — NEON CYBERPUNK ULTRA GAMING EDITION
    ============================================================ */
 
 :root {
-  --g: #00ff88;
-  --g2: #00cc6a;
-  --g3: #00ff88cc;
-  --bg: #020e08;
-  --bg2: #051a0f;
-  --bg3: #071f12;
-  --bg4: #0a2a18;
-  --card: #061810;
-  --card2: #082010;
-  --border: #00ff8822;
-  --border2: #00ff8844;
-  --text: #e0ffe8;
-  --text2: #7abf9a;
-  --text3: #3a6b4a;
+  --cyan:   #00f5ff;
+  --cyan2:  #00c8d4;
+  --cyan3:  rgba(0,245,255,0.2);
+  --pink:   #ff006e;
+  --pink2:  #cc0058;
+  --pink3:  rgba(255,0,110,0.2);
+  --purple: #7c00ff;
+  --green:  #00ff88;
   --yellow: #ffe94d;
-  --blue: #4df0ff;
-  --red: #ff4d6a;
-  --orange: #ff8c00;
+  --red:    #ff3366;
+  --bg:     #050812;
+  --bg2:    #080d1a;
+  --bg3:    #0c1220;
+  --bg4:    #101828;
+  --card:   #0a0f1e;
+  --card2:  #0e1525;
+  --border:  rgba(0,245,255,0.1);
+  --border2: rgba(0,245,255,0.22);
+  --text:    #dff4ff;
+  --text2:   #6ab0c8;
+  --text3:   #2a4558;
   --font-main: 'Orbitron', monospace;
   --font-body: 'Rajdhani', sans-serif;
   --font-mono: 'Share Tech Mono', monospace;
-  --nav-h: 64px;
-  --top-h: 52px;
+  --nav-h: 66px;
+  --top-h: 54px;
   --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --glow-c: 0 0 10px #00f5ff, 0 0 30px rgba(0,245,255,0.35);
+  --glow-p: 0 0 10px #ff006e, 0 0 30px rgba(255,0,110,0.35);
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(--text); font-family: var(--font-body); }
+* { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
+html,body { height:100%; overflow:hidden; background:var(--bg); color:var(--text); font-family:var(--font-body); }
 
-/* ============ SPLASH ============ */
+/* scanlines */
+body::after {
+  content:''; position:fixed; inset:0; pointer-events:none; z-index:9997;
+  background:repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.07) 2px, rgba(0,0,0,0.07) 4px);
+}
+
+/* ══════════════════════════════════════════════════
+   SPLASH
+══════════════════════════════════════════════════ */
 #splash-screen {
-  position: fixed; inset: 0; z-index: 1000;
-  background: var(--bg);
-  display: flex; align-items: center; justify-content: center;
-  overflow: hidden;
+  position:fixed; inset:0; z-index:1000;
+  background:radial-gradient(ellipse 140% 110% at 50% 0%, #0d1640 0%, #050812 65%);
+  display:flex; align-items:center; justify-content:center; overflow:hidden;
 }
 .splash-bg {
-  position: absolute; inset: 0;
-  background: radial-gradient(ellipse 80% 60% at 50% 40%, #00ff8808 0%, transparent 70%);
+  position:absolute; inset:0;
+  background:
+    radial-gradient(ellipse 60% 40% at 25% 50%, rgba(0,245,255,0.05) 0%, transparent 65%),
+    radial-gradient(ellipse 60% 40% at 75% 50%, rgba(255,0,110,0.05) 0%, transparent 65%);
 }
 .splash-grid {
-  position: absolute; inset: 0;
+  position:absolute; inset:0;
   background-image:
-    linear-gradient(var(--border) 1px, transparent 1px),
-    linear-gradient(90deg, var(--border) 1px, transparent 1px);
-  background-size: 40px 40px;
-  animation: gridPulse 3s ease-in-out infinite;
+    linear-gradient(rgba(0,245,255,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,245,255,0.04) 1px, transparent 1px);
+  background-size:50px 50px;
+  animation:gridDrift 6s ease-in-out infinite;
 }
-@keyframes gridPulse { 0%,100%{opacity:.4} 50%{opacity:.8} }
+.splash-grid::after {
+  content:''; position:absolute; bottom:0; left:0; right:0; height:50%;
+  background:linear-gradient(to bottom, transparent, var(--bg));
+}
+@keyframes gridDrift { 0%,100%{opacity:.4;transform:translateY(0)} 50%{opacity:.9;transform:translateY(-8px)} }
 
-.splash-content {
-  position: relative; z-index: 2;
-  display: flex; flex-direction: column; align-items: center; gap: 10px;
-}
-.splash-logo-wrap { position: relative; width: 120px; height: 120px; display: flex; align-items: center; justify-content: center; }
+.splash-content { position:relative; z-index:2; display:flex; flex-direction:column; align-items:center; gap:8px; }
+.splash-logo-wrap { position:relative; width:140px; height:140px; display:flex; align-items:center; justify-content:center; }
 .splash-hexagon {
-  width: 90px; height: 90px;
-  display: flex; align-items: center; justify-content: center;
-  animation: hexSpin 8s linear infinite;
+  width:100px; height:100px; display:flex; align-items:center; justify-content:center;
+  filter:drop-shadow(0 0 18px rgba(0,245,255,0.6));
+  animation:hexSpin 12s linear infinite;
 }
-@keyframes hexSpin { to { transform: rotate(360deg); } }
-.splash-hex-inner { width: 80px; height: 80px; }
-
-.splash-rings { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
-.ring { position: absolute; border-radius: 50%; border: 1px solid var(--g); animation: ringPulse 2s ease-in-out infinite; }
-.ring-1 { width: 100px; height: 100px; animation-delay: 0s; }
-.ring-2 { width: 114px; height: 114px; animation-delay: .4s; opacity: .5; }
-.ring-3 { width: 128px; height: 128px; animation-delay: .8s; opacity: .25; }
-@keyframes ringPulse { 0%,100%{transform:scale(1);opacity:.6} 50%{transform:scale(1.05);opacity:1} }
+@keyframes hexSpin { to{transform:rotate(360deg)} }
+.splash-hex-inner { width:90px; height:90px; }
+.splash-rings { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; }
+.ring { position:absolute; border-radius:50%; animation:ringPulse 2.8s ease-in-out infinite; }
+.ring-1 { width:110px; height:110px; border:1px solid rgba(0,245,255,0.55); }
+.ring-2 { width:126px; height:126px; border:1px solid rgba(0,245,255,0.28); animation-delay:.45s; }
+.ring-3 { width:142px; height:142px; border:1px solid rgba(0,245,255,0.12); animation-delay:.9s; }
+@keyframes ringPulse { 0%,100%{transform:scale(1);opacity:.5} 50%{transform:scale(1.07);opacity:1} }
 
 .splash-title {
-  font-family: var(--font-main); font-size: 32px; font-weight: 900;
-  color: var(--g); letter-spacing: 8px;
-  text-shadow: 0 0 20px var(--g), 0 0 40px var(--g3);
-  animation: titleGlow 2s ease-in-out infinite;
+  font-family:var(--font-main); font-size:34px; font-weight:900; letter-spacing:10px; margin-top:8px;
+  background:linear-gradient(135deg, #00f5ff 0%, #00ffcc 50%, #00f5ff 100%);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+  animation:titlePulse 3s ease-in-out infinite;
 }
-@keyframes titleGlow { 0%,100%{text-shadow:0 0 20px var(--g),0 0 40px var(--g3)} 50%{text-shadow:0 0 30px var(--g),0 0 60px var(--g),0 0 80px var(--g3)} }
-
-.splash-sub {
-  font-family: var(--font-main); font-size: 13px; font-weight: 400;
-  color: var(--text2); letter-spacing: 12px; margin-top: -6px;
+@keyframes titlePulse {
+  0%,100%{filter:drop-shadow(0 0 12px rgba(0,245,255,0.7))}
+  50%{filter:drop-shadow(0 0 28px rgba(0,245,255,1)) drop-shadow(0 0 55px rgba(0,245,255,0.4))}
 }
-.splash-tagline {
-  font-family: var(--font-mono); font-size: 11px; color: var(--text3);
-  letter-spacing: 3px; margin-top: 4px;
+.splash-sub { font-family:var(--font-main); font-size:11px; color:var(--text2); letter-spacing:14px; margin-top:-4px; }
+.splash-tagline { font-family:var(--font-mono); font-size:10px; color:var(--text3); letter-spacing:3px; margin-top:4px; }
+.splash-loader { width:240px; margin-top:26px; }
+.loader-bar { height:2px; background:rgba(0,245,255,0.08); border-radius:2px; overflow:hidden; position:relative; }
+.loader-bar::before {
+  content:''; position:absolute; inset:0;
+  background:linear-gradient(90deg, transparent, rgba(0,245,255,0.4), transparent);
+  animation:scanMove 2s linear infinite;
 }
-.splash-loader { width: 220px; margin-top: 20px; }
-.loader-bar {
-  height: 3px; background: var(--bg4); border-radius: 2px; overflow: hidden;
-  border: 1px solid var(--border2);
-}
+@keyframes scanMove { 0%{transform:translateX(-100%)} 100%{transform:translateX(300%)} }
 .loader-fill {
-  height: 100%; width: 0%; background: linear-gradient(90deg, var(--g2), var(--g));
-  transition: width .1s linear;
-  box-shadow: 0 0 10px var(--g);
+  height:100%; width:0%;
+  background:linear-gradient(90deg, var(--cyan2), var(--cyan), #00ffcc);
+  box-shadow:0 0 8px var(--cyan);
+  transition:width .1s linear;
 }
 .loader-text {
-  font-family: var(--font-mono); font-size: 10px; color: var(--text3);
-  text-align: center; margin-top: 8px; letter-spacing: 1px;
+  font-family:var(--font-mono); font-size:10px; color:var(--cyan2);
+  letter-spacing:2px; margin-top:10px; text-align:center;
+  text-shadow:0 0 8px var(--cyan);
 }
-.splash-version {
-  font-family: var(--font-mono); font-size: 9px; color: var(--text3);
-  letter-spacing: 2px; margin-top: 8px; opacity: .5;
-}
-
-.splash-particles { position: absolute; inset: 0; pointer-events: none; }
+.splash-version { font-family:var(--font-mono); font-size:9px; color:var(--text3); letter-spacing:2px; margin-top:6px; }
+.splash-particles { position:absolute; inset:0; pointer-events:none; }
 .particle {
-  position: absolute; width: 2px; height: 2px; border-radius: 50%;
-  background: var(--g); animation: floatUp linear infinite;
-  opacity: 0;
+  position:absolute; border-radius:50%; background:var(--cyan);
+  box-shadow:0 0 6px var(--cyan);
+  animation:particleFloat 4s ease-in-out infinite;
 }
-@keyframes floatUp {
-  0% { transform: translateY(0) scale(1); opacity: .8; }
-  100% { transform: translateY(-200px) scale(0); opacity: 0; }
-}
+@keyframes particleFloat { 0%,100%{opacity:0;transform:translateY(0)} 50%{opacity:.8;transform:translateY(-70px)} }
 
-/* ============ APP ============ */
-#app {
-  position: fixed; inset: 0;
-  display: flex; flex-direction: column;
-  background: var(--bg);
-}
+/* ══════════════════════════════════════════════════
+   APP SHELL
+══════════════════════════════════════════════════ */
+#app { display:flex; flex-direction:column; height:100vh; height:100dvh; overflow:hidden; }
 
-/* TOPBAR */
+/* ── TOP BAR ── */
 .topbar {
-  height: var(--top-h); min-height: var(--top-h);
-  background: var(--bg2);
-  border-bottom: 1px solid var(--border2);
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 0 16px;
-  padding-top: env(safe-area-inset-top, 0);
+  height:var(--top-h); min-height:var(--top-h);
+  display:flex; align-items:center; justify-content:space-between;
+  padding:0 16px;
+  background:linear-gradient(180deg, rgba(5,8,18,0.99) 0%, rgba(8,13,26,0.96) 100%);
+  border-bottom:1px solid var(--border);
+  position:relative; z-index:100;
 }
-.topbar-logo { display: flex; align-items: center; gap: 8px; }
-.topbar-logo span {
-  font-family: var(--font-main); font-size: 14px; font-weight: 700;
-  color: var(--g); letter-spacing: 3px;
+.topbar::after {
+  content:''; position:absolute; bottom:-1px; left:8%; right:8%; height:1px;
+  background:linear-gradient(90deg, transparent, var(--cyan), var(--pink), transparent);
+  opacity:.5;
+}
+.topbar-logo {
+  display:flex; align-items:center; gap:8px;
+  font-family:var(--font-main); font-size:14px; font-weight:700;
+  letter-spacing:3px; color:var(--cyan);
+  text-shadow:var(--glow-c);
 }
 .tier-badge {
-  font-family: var(--font-main); font-size: 10px; font-weight: 700;
-  padding: 3px 10px; border-radius: 20px;
-  background: var(--bg4); color: var(--g);
-  border: 1px solid var(--g);
-  letter-spacing: 2px;
+  font-family:var(--font-main); font-size:9px; font-weight:700;
+  padding:3px 10px; border-radius:20px; letter-spacing:2px;
+  background:rgba(0,245,255,0.07); border:1px solid var(--border2); color:var(--cyan);
 }
-.status-dot {
-  width: 7px; height: 7px; border-radius: 50%; background: var(--g);
-  box-shadow: 0 0 6px var(--g); animation: statusBlink 2s ease-in-out infinite;
+.tier-badge.vip {
+  background:linear-gradient(135deg,rgba(255,215,0,.12),rgba(255,140,0,.12));
+  border-color:rgba(255,215,0,.4); color:#ffd700;
 }
-@keyframes statusBlink { 0%,100%{opacity:1} 50%{opacity:.4} }
-.topbar-right { display: flex; align-items: center; gap: 6px; }
-.status-text { font-family: var(--font-mono); font-size: 10px; color: var(--text3); letter-spacing: 1px; }
+.topbar-right { display:flex; align-items:center; gap:6px; }
+.status-dot { width:7px; height:7px; border-radius:50%; background:var(--green); box-shadow:0 0 8px var(--green); animation:blink 2s ease-in-out infinite; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.35} }
+.status-text { font-family:var(--font-mono); font-size:10px; color:var(--green); letter-spacing:1px; }
 
-/* PAGES */
-.pages-container {
-  flex: 1; overflow: hidden; position: relative;
+/* ── PAGES ── */
+.pages-container { flex:1; overflow:hidden; position:relative; }
+.page { display:none; position:absolute; inset:0; overflow:hidden; }
+.page.active { display:flex; flex-direction:column; }
+.page-scroll {
+  flex:1; overflow-y:auto; overflow-x:hidden;
+  padding:16px 14px calc(var(--nav-h) + var(--safe-bottom) + 16px);
+  -webkit-overflow-scrolling:touch;
 }
-.page {
-  position: absolute; inset: 0;
-  display: none; flex-direction: column;
-  padding-bottom: calc(var(--nav-h) + var(--safe-bottom));
-}
-.page.active { display: flex; }
-.page-scroll { flex: 1; overflow-y: auto; padding: 16px; -webkit-overflow-scrolling: touch; }
-.page-scroll::-webkit-scrollbar { display: none; }
+.page-scroll::-webkit-scrollbar { width:2px; }
+.page-scroll::-webkit-scrollbar-thumb { background:var(--border2); border-radius:2px; }
 
-/* HERO */
+/* ── SECTION HEADERS ── */
+.section-header { margin-bottom:18px; }
+.section-title-lg {
+  font-family:var(--font-main); font-size:20px; font-weight:700;
+  color:var(--cyan); letter-spacing:4px; text-shadow:var(--glow-c);
+}
+.section-sub { font-family:var(--font-mono); font-size:11px; color:var(--text3); letter-spacing:2px; margin-top:4px; }
+.section-title {
+  font-family:var(--font-main); font-size:10px; font-weight:600;
+  color:var(--text2); letter-spacing:3px; margin:16px 0 10px; text-transform:uppercase;
+}
+
+/* ══════════════════════════════════════════════════
+   HOME PAGE
+══════════════════════════════════════════════════ */
 .hero-section {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 20px 0 16px;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:20px 18px;
+  background:linear-gradient(135deg, rgba(0,245,255,0.04) 0%, rgba(124,0,255,0.04) 100%);
+  border:1px solid var(--border2);
+  border-radius:18px; margin-bottom:14px; position:relative; overflow:hidden;
 }
+.hero-section::before {
+  content:''; position:absolute; inset:0;
+  background:conic-gradient(from 0deg at 25% 30%, rgba(0,245,255,0.03) 0deg, transparent 120deg, rgba(255,0,110,0.03) 240deg, transparent 360deg);
+  animation:heroConic 20s linear infinite;
+}
+@keyframes heroConic { to{transform:rotate(360deg)} }
+.hero-section::after {
+  content:''; position:absolute; top:0; left:0; right:0; height:1px;
+  background:linear-gradient(90deg, transparent, var(--cyan3), transparent);
+}
+.hero-text { position:relative; z-index:1; }
 .hero-title {
-  font-family: var(--font-main); font-size: 22px; font-weight: 900;
-  line-height: 1.1; color: var(--text);
+  font-family:var(--font-main); font-size:22px; font-weight:900;
+  line-height:1.15; letter-spacing:2px; color:var(--text);
 }
-.hero-title span { color: var(--g); }
-.hero-desc { font-size: 11px; color: var(--text3); margin-top: 6px; font-family: var(--font-mono); }
-
+.hero-title span {
+  background:linear-gradient(135deg, var(--cyan), var(--pink));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+  filter:drop-shadow(0 0 8px var(--cyan));
+}
+.hero-desc { font-family:var(--font-mono); font-size:10px; color:var(--text3); letter-spacing:1px; margin-top:8px; }
 .boost-btn {
-  display: flex; flex-direction: column; align-items: center; gap: 6px;
-  background: linear-gradient(135deg, #00ff8820, #00ff8808);
-  border: 2px solid var(--g); border-radius: 16px;
-  padding: 14px 18px; cursor: pointer; transition: all .2s;
-  min-width: 80px;
+  position:relative; z-index:1; flex-shrink:0;
+  display:flex; flex-direction:column; align-items:center; gap:6px;
+  background:linear-gradient(145deg, var(--cyan), var(--cyan2));
+  border:none; border-radius:16px; padding:14px 16px; cursor:pointer;
+  box-shadow:0 0 22px rgba(0,245,255,0.45), 0 0 44px rgba(0,245,255,0.15), inset 0 1px 0 rgba(255,255,255,0.25);
+  transition:all .2s ease;
 }
-.boost-btn:active { transform: scale(.95); background: #00ff8830; }
-.boost-btn span { font-family: var(--font-main); font-size: 9px; color: var(--g); letter-spacing: 1px; }
+.boost-btn:active { transform:scale(.92); box-shadow:0 0 35px rgba(0,245,255,0.7); }
+.boost-icon { color:#001a22; }
+.boost-btn span { font-family:var(--font-main); font-size:8px; font-weight:700; color:#001a22; letter-spacing:2px; }
 
 /* STATS GRID */
-.stats-grid {
-  display: grid; grid-template-columns: 1fr 1fr;
-  gap: 10px; margin-bottom: 12px;
-}
+.stats-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px; }
 .stat-card {
-  background: var(--card);
-  border: 1px solid var(--border2);
-  border-radius: 12px; padding: 14px;
-  position: relative; overflow: hidden;
+  background:var(--card); border:1px solid var(--border);
+  border-radius:14px; padding:14px 12px; position:relative; overflow:hidden; transition:border-color .3s;
 }
 .stat-card::before {
-  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
-  background: linear-gradient(90deg, transparent, var(--g), transparent);
-  animation: scanLine 3s linear infinite;
+  content:''; position:absolute; top:0; left:0; right:0; height:1px;
+  background:linear-gradient(90deg, transparent, rgba(0,245,255,0.5), transparent);
+  opacity:0; transition:opacity .3s;
 }
-@keyframes scanLine { 0%{opacity:0} 50%{opacity:1} 100%{opacity:0} }
-
-.stat-label { font-family: var(--font-main); font-size: 9px; color: var(--text3); letter-spacing: 2px; }
+.stat-card::after {
+  content:''; position:absolute; top:-20px; right:-20px; width:70px; height:70px; border-radius:50%;
+  background:radial-gradient(circle, rgba(0,245,255,0.04), transparent);
+}
+.stat-card:hover { border-color:var(--border2); }
+.stat-card:hover::before { opacity:1; }
+.stat-label { font-family:var(--font-main); font-size:9px; color:var(--text3); letter-spacing:3px; margin-bottom:6px; }
 .stat-value {
-  font-family: var(--font-main); font-size: 28px; font-weight: 900;
-  color: var(--text); line-height: 1; margin: 4px 0;
+  font-family:var(--font-main); font-size:28px; font-weight:700;
+  color:var(--cyan); line-height:1; text-shadow:0 0 14px rgba(0,245,255,0.5);
 }
-.stat-value span { font-size: 13px; color: var(--text2); }
-.stat-bar { height: 3px; background: var(--bg4); border-radius: 2px; margin: 4px 0; overflow: hidden; }
-.stat-bar-fill { height: 100%; width: 0%; border-radius: 2px; transition: width .8s ease; }
-.stat-bar-fill.green { background: linear-gradient(90deg, var(--g2), var(--g)); box-shadow: 0 0 6px var(--g); }
-.stat-bar-fill.yellow { background: linear-gradient(90deg, #ccb800, var(--yellow)); box-shadow: 0 0 6px var(--yellow); }
-.stat-bar-fill.blue { background: linear-gradient(90deg, #00b8cc, var(--blue)); box-shadow: 0 0 6px var(--blue); }
-.stat-bar-fill.red { background: linear-gradient(90deg, #cc2244, var(--red)); box-shadow: 0 0 6px var(--red); }
-.stat-status { font-family: var(--font-mono); font-size: 9px; color: var(--text3); }
+.stat-value span { font-size:13px; color:var(--text3); }
+.stat-bar { height:3px; background:rgba(0,245,255,0.07); border-radius:2px; margin:8px 0 6px; overflow:hidden; }
+.stat-bar-fill { height:100%; border-radius:2px; width:0%; transition:width 1s ease; position:relative; }
+.stat-bar-fill::after { content:''; position:absolute; right:0; top:-3px; bottom:-3px; width:4px; border-radius:2px; }
+.stat-bar-fill.green { background:linear-gradient(90deg, rgba(0,200,100,.5), var(--green)); }
+.stat-bar-fill.green::after { background:var(--green); box-shadow:0 0 8px var(--green); }
+.stat-bar-fill.yellow { background:linear-gradient(90deg, rgba(255,233,77,.4), var(--yellow)); }
+.stat-bar-fill.yellow::after { background:var(--yellow); box-shadow:0 0 8px var(--yellow); }
+.stat-bar-fill.blue { background:linear-gradient(90deg, rgba(0,200,212,.4), var(--cyan)); }
+.stat-bar-fill.blue::after { background:var(--cyan); box-shadow:0 0 8px var(--cyan); }
+.stat-bar-fill.red { background:linear-gradient(90deg, rgba(255,51,102,.4), var(--red)); }
+.stat-bar-fill.red::after { background:var(--red); box-shadow:0 0 8px var(--red); }
+.stat-status { font-family:var(--font-mono); font-size:9px; color:var(--text3); letter-spacing:1px; }
 
 /* PERF SCORE */
 .perf-score-card {
-  background: var(--card);
-  border: 1px solid var(--border2);
-  border-radius: 12px; padding: 16px;
-  display: flex; align-items: center; justify-content: space-between;
-  margin-bottom: 16px;
+  display:flex; align-items:center; justify-content:space-between;
+  background:linear-gradient(135deg, rgba(124,0,255,0.07) 0%, rgba(0,245,255,0.04) 100%);
+  border:1px solid rgba(124,0,255,0.22);
+  border-radius:18px; padding:18px 16px; margin-bottom:14px; position:relative; overflow:hidden;
 }
-.perf-label { font-family: var(--font-main); font-size: 9px; color: var(--text3); letter-spacing: 2px; }
-.perf-score-val { font-family: var(--font-main); font-size: 40px; font-weight: 900; color: var(--g); line-height: 1; margin: 4px 0; }
-.perf-grade { font-family: var(--font-mono); font-size: 11px; color: var(--text2); }
-.score-ring { width: 80px; height: 80px; }
-
-/* SECTION TITLE */
-.section-title {
-  font-family: var(--font-main); font-size: 10px; color: var(--text3);
-  letter-spacing: 3px; margin-bottom: 10px;
-  display: flex; align-items: center; gap: 8px;
+.perf-score-card::before {
+  content:'PERFORMANCE'; position:absolute; bottom:10px; right:14px;
+  font-family:var(--font-mono); font-size:8px; color:rgba(124,0,255,0.2); letter-spacing:3px;
 }
-.section-title::after { content: ''; flex: 1; height: 1px; background: var(--border2); }
+.perf-label { font-family:var(--font-main); font-size:9px; color:var(--text3); letter-spacing:3px; margin-bottom:4px; }
+.perf-score-val {
+  font-family:var(--font-main); font-size:56px; font-weight:900; line-height:1;
+  background:linear-gradient(135deg, var(--cyan), var(--purple));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+  filter:drop-shadow(0 0 18px var(--cyan));
+}
+.perf-grade { font-family:var(--font-mono); font-size:11px; color:var(--green); letter-spacing:2px; margin-top:5px; }
+.score-ring { width:82px; height:82px; }
 
 /* QUICK ACTIONS */
-.quick-actions {
-  display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;
-  margin-bottom: 16px;
-}
+.quick-actions { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; }
 .qa-btn {
-  display: flex; flex-direction: column; align-items: center; gap: 6px;
-  background: var(--card); border: 1px solid var(--border);
-  border-radius: 12px; padding: 12px 6px; cursor: pointer;
-  transition: all .2s; color: var(--text);
+  display:flex; flex-direction:column; align-items:center; gap:6px;
+  background:var(--card); border:1px solid var(--border);
+  border-radius:14px; padding:12px 6px; cursor:pointer;
+  transition:all .2s ease; color:var(--cyan);
 }
-.qa-btn span { font-family: var(--font-body); font-size: 10px; font-weight: 600; color: var(--text2); }
-.qa-btn:active { background: var(--bg4); border-color: var(--g); transform: scale(.96); }
+.qa-btn:active { transform:scale(.88); background:rgba(0,245,255,0.07); border-color:var(--cyan); box-shadow:0 0 10px rgba(0,245,255,0.25); }
+.qa-btn span { font-family:var(--font-main); font-size:8px; color:var(--text2); letter-spacing:1px; }
 
-/* SECTION HEADER */
-.section-header { padding: 12px 0 16px; }
-.section-title-lg { font-family: var(--font-main); font-size: 18px; font-weight: 900; color: var(--g); letter-spacing: 4px; }
-.section-sub { font-family: var(--font-body); font-size: 12px; color: var(--text3); margin-top: 2px; }
-
-/* FEATURE LIST */
+/* ══════════════════════════════════════════════════
+   FEATURES PAGE
+══════════════════════════════════════════════════ */
 .feat-group-label {
-  display: flex; align-items: center; gap: 8px;
-  font-family: var(--font-main); font-size: 10px; color: var(--text2);
-  letter-spacing: 2px; margin: 14px 0 8px;
+  display:flex; align-items:center; gap:10px;
+  font-family:var(--font-main); font-size:10px; color:var(--text2); letter-spacing:2px; margin:14px 0 10px;
 }
 .badge-free {
-  background: var(--g); color: var(--bg); font-size: 9px; font-weight: 700;
-  padding: 2px 8px; border-radius: 4px; font-family: var(--font-main);
+  padding:3px 9px; border-radius:4px;
+  font-family:var(--font-main); font-size:9px;
+  background:rgba(0,245,255,0.08); border:1px solid var(--border2); color:var(--cyan);
 }
 .badge-vip {
-  background: linear-gradient(135deg, var(--yellow), var(--orange)); color: #000;
-  font-size: 9px; font-weight: 700; padding: 2px 8px; border-radius: 4px;
-  font-family: var(--font-main);
+  padding:3px 9px; border-radius:4px;
+  font-family:var(--font-main); font-size:9px;
+  background:linear-gradient(135deg,rgba(255,215,0,.12),rgba(255,140,0,.12));
+  border:1px solid rgba(255,215,0,.35); color:#ffd700;
 }
-.vip-group { color: var(--yellow); }
 .upgrade-mini-btn {
-  margin-left: auto; background: transparent;
-  border: 1px solid var(--yellow); color: var(--yellow);
-  font-family: var(--font-main); font-size: 8px; padding: 4px 10px;
-  border-radius: 4px; cursor: pointer; letter-spacing: 1px;
+  margin-left:auto; padding:4px 12px; border-radius:6px; cursor:pointer;
+  font-family:var(--font-main); font-size:8px; letter-spacing:2px;
+  background:linear-gradient(135deg, var(--pink), var(--pink2));
+  color:#fff; border:none; box-shadow:0 0 10px rgba(255,0,110,0.35);
 }
-
-.feature-list { display: flex; flex-direction: column; gap: 8px; }
-.feature-list.locked .feat-item { opacity: .5; }
-.feature-list.locked .feat-item .feat-toggle { pointer-events: none; }
-
+.feature-list { display:flex; flex-direction:column; gap:8px; }
+.feature-list.locked { opacity:.45; pointer-events:none; filter:grayscale(.3); }
 .feat-item {
-  display: flex; align-items: center;
-  background: var(--card); border: 1px solid var(--border);
-  border-radius: 10px; padding: 12px 14px; gap: 12px;
+  display:flex; align-items:center; gap:12px;
+  background:var(--card); border:1px solid var(--border);
+  border-radius:14px; padding:12px 14px; transition:all .2s ease;
 }
-.feat-icon { width: 36px; height: 36px; border-radius: 8px; background: var(--bg4); display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
-.feat-info { flex: 1; }
-.feat-name { font-family: var(--font-body); font-weight: 600; font-size: 14px; color: var(--text); }
-.feat-desc { font-family: var(--font-body); font-size: 11px; color: var(--text3); margin-top: 1px; }
+.feat-item:hover { border-color:var(--border2); background:var(--card2); }
+.feat-icon { font-size:20px; width:28px; text-align:center; }
+.feat-info { flex:1; }
+.feat-name { font-family:var(--font-main); font-size:11px; color:var(--text); letter-spacing:1px; }
+.feat-desc { font-family:var(--font-mono); font-size:10px; color:var(--text3); margin-top:2px; }
 
-/* TOGGLE */
-.toggle { position: relative; display: inline-block; width: 44px; height: 24px; flex-shrink: 0; }
-.toggle input { opacity: 0; width: 0; height: 0; }
+/* ── TOGGLE ── */
+.toggle { position:relative; display:inline-block; width:44px; height:24px; cursor:pointer; }
+.toggle input { opacity:0; width:0; height:0; }
 .toggle-track {
-  position: absolute; inset: 0; border-radius: 12px;
-  background: var(--bg4); border: 1px solid var(--border2);
-  transition: .2s; cursor: pointer;
+  position:absolute; inset:0; border-radius:24px;
+  background:rgba(0,245,255,0.06); border:1px solid var(--border2); transition:all .3s;
 }
 .toggle-track::after {
-  content: ''; position: absolute; width: 18px; height: 18px;
-  border-radius: 50%; top: 2px; left: 2px; background: var(--text3);
-  transition: .2s;
+  content:''; position:absolute; left:3px; top:3px;
+  width:16px; height:16px; border-radius:50%;
+  background:var(--text3); transition:all .3s; box-shadow:0 2px 4px rgba(0,0,0,.4);
 }
-.toggle input:checked + .toggle-track { background: #00ff8822; border-color: var(--g); }
-.toggle input:checked + .toggle-track::after { transform: translateX(20px); background: var(--g); box-shadow: 0 0 8px var(--g); }
+.toggle input:checked + .toggle-track {
+  background:rgba(0,245,255,0.12); border-color:var(--cyan);
+  box-shadow:0 0 10px rgba(0,245,255,0.28);
+}
+.toggle input:checked + .toggle-track::after {
+  transform:translateX(20px); background:var(--cyan); box-shadow:0 0 8px var(--cyan);
+}
 
-/* REALTIME STATS */
-.realtime-grid { display: flex; flex-direction: column; gap: 10px; }
+/* ══════════════════════════════════════════════════
+   REALTIME STATS
+══════════════════════════════════════════════════ */
+.realtime-grid { display:flex; flex-direction:column; gap:10px; }
 .rt-card {
-  background: var(--card); border: 1px solid var(--border2);
-  border-radius: 12px; padding: 14px;
+  background:var(--card); border:1px solid var(--border);
+  border-radius:14px; padding:14px; position:relative; overflow:hidden;
 }
-.rt-card-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-.rt-label { font-family: var(--font-main); font-size: 9px; color: var(--text3); letter-spacing: 2px; }
-.rt-value { font-family: var(--font-main); font-size: 20px; font-weight: 700; }
-.rt-value.green { color: var(--g); }
-.rt-value.yellow { color: var(--yellow); }
-.rt-value.blue { color: var(--blue); }
-.rt-value.red { color: var(--red); }
-
-.rt-graph {
-  height: 40px; display: flex; align-items: flex-end; gap: 2px;
-  margin-bottom: 8px;
+.rt-card::before {
+  content:''; position:absolute; top:0; left:15%; right:15%; height:1px;
+  background:linear-gradient(90deg, transparent, var(--cyan3), transparent);
 }
-.graph-bar {
-  flex: 1; border-radius: 2px 2px 0 0;
-  transition: height .3s ease;
-  min-height: 2px;
-}
-.rt-info {
-  display: flex; justify-content: space-between;
-  font-family: var(--font-mono); font-size: 10px; color: var(--text3);
-}
-.rt-info b { color: var(--text2); }
-
-/* NETWORK STATS */
-.net-stats {
-  display: flex; gap: 10px; margin-top: 8px;
-}
+.rt-card-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
+.rt-label { font-family:var(--font-main); font-size:10px; color:var(--text2); letter-spacing:2px; }
+.rt-value { font-family:var(--font-main); font-size:24px; font-weight:700; }
+.rt-value.green { color:var(--green); text-shadow:0 0 10px var(--green); }
+.rt-value.yellow { color:var(--yellow); text-shadow:0 0 10px var(--yellow); }
+.rt-value.blue { color:var(--cyan); text-shadow:0 0 10px var(--cyan); }
+.rt-value.red { color:var(--red); text-shadow:0 0 10px var(--red); }
+.rt-graph { display:flex; align-items:flex-end; gap:2px; height:40px; margin-bottom:10px; overflow:hidden; }
+.graph-bar { flex:1; border-radius:2px 2px 0 0; min-height:2px; transition:height .3s ease; }
+.rt-info { display:flex; justify-content:space-between; font-family:var(--font-mono); font-size:10px; color:var(--text3); }
+.rt-info b { color:var(--text2); }
+.net-stats { display:flex; gap:8px; }
 .net-item {
-  flex: 1; background: var(--card); border: 1px solid var(--border);
-  border-radius: 10px; padding: 12px; display: flex; align-items: center; gap: 10px;
+  flex:1; display:flex; align-items:center; gap:8px;
+  background:var(--card); border:1px solid var(--border); border-radius:12px; padding:12px;
 }
-.net-icon {
-  width: 32px; height: 32px; background: var(--bg4); border-radius: 8px;
-  display: flex; align-items: center; justify-content: center;
-  font-family: var(--font-main); font-size: 16px; color: var(--g);
-  flex-shrink: 0;
-}
-.net-val { font-family: var(--font-main); font-size: 12px; font-weight: 700; color: var(--text); }
-.net-lbl { font-family: var(--font-body); font-size: 10px; color: var(--text3); margin-top: 2px; }
+.net-icon { font-size:18px; color:var(--cyan); font-weight:700; }
+.net-val { font-family:var(--font-main); font-size:12px; color:var(--text); }
+.net-lbl { font-family:var(--font-mono); font-size:9px; color:var(--text3); margin-top:2px; }
 
-/* VIP PAGE */
+/* ══════════════════════════════════════════════════
+   VIP PAGE
+══════════════════════════════════════════════════ */
 .vip-hero {
-  position: relative; border-radius: 16px; overflow: hidden;
-  margin-bottom: 16px; padding: 28px 20px;
-  background: linear-gradient(135deg, #1a1000, #0a0800);
-  border: 1px solid #ffe94d44;
+  border-radius:18px; overflow:hidden; position:relative; margin-bottom:16px;
+  min-height:160px; display:flex; align-items:center; justify-content:center;
 }
 .vip-hero-bg {
-  position: absolute; inset: 0;
-  background: radial-gradient(ellipse at 50% 0%, #ffe94d15 0%, transparent 70%);
+  position:absolute; inset:0;
+  background:linear-gradient(135deg, #1a0038 0%, #0a001a 40%, #001830 100%);
 }
-.vip-hero-content { position: relative; z-index: 1; text-align: center; }
-.vip-crown { font-size: 36px; margin-bottom: 8px; }
+.vip-hero-bg::before {
+  content:''; position:absolute; inset:0;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 50%, rgba(255,215,0,0.07) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 40% at 20% 80%, rgba(124,0,255,0.1) 0%, transparent 60%);
+}
+.vip-hero-bg::after {
+  content:''; position:absolute; inset:0;
+  background-image:
+    linear-gradient(rgba(255,215,0,0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,215,0,0.035) 1px, transparent 1px);
+  background-size:32px 32px;
+}
+.vip-hero-content { position:relative; z-index:1; text-align:center; padding:28px 20px; }
+.vip-crown { font-size:42px; filter:drop-shadow(0 0 22px #ffd700); margin-bottom:8px; display:block; }
 .vip-hero-title {
-  font-family: var(--font-main); font-size: 24px; font-weight: 900;
-  color: var(--yellow); letter-spacing: 4px;
-  text-shadow: 0 0 20px var(--yellow);
+  font-family:var(--font-main); font-size:24px; font-weight:900; letter-spacing:6px;
+  background:linear-gradient(135deg, #ffe066, #ffaa00, #ffe066);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+  filter:drop-shadow(0 0 18px rgba(255,215,0,0.6));
 }
-.vip-hero-sub { font-family: var(--font-body); font-size: 13px; color: #ccac30; margin-top: 4px; }
-.vip-hero-sub.vi { font-size: 12px; color: #806830; }
-
-.vip-features-grid {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px;
-}
+.vip-hero-sub { font-family:var(--font-mono); font-size:11px; color:rgba(255,215,0,.45); letter-spacing:2px; margin-top:5px; }
+.vip-hero-sub.vi { color:rgba(255,215,0,.28); font-size:10px; }
+.vip-features-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:16px; }
 .vip-feat-card {
-  background: var(--card2); border: 1px solid #ffe94d22;
-  border-radius: 12px; padding: 14px;
+  background:linear-gradient(135deg, rgba(255,215,0,0.03), rgba(124,0,255,0.03));
+  border:1px solid rgba(255,215,0,0.1); border-radius:14px; padding:14px; text-align:center;
 }
-.vip-feat-icon { font-size: 24px; margin-bottom: 6px; }
-.vip-feat-title { font-family: var(--font-main); font-size: 9px; color: var(--yellow); letter-spacing: 1px; margin-bottom: 4px; }
-.vip-feat-desc { font-family: var(--font-body); font-size: 11px; color: var(--text3); }
-
+.vip-feat-icon { font-size:24px; margin-bottom:6px; }
+.vip-feat-title { font-family:var(--font-main); font-size:9px; color:#ffd700; letter-spacing:1px; margin-bottom:4px; }
+.vip-feat-desc { font-family:var(--font-mono); font-size:9px; color:var(--text3); }
 .vip-cta-section {
-  background: var(--card); border: 1px solid var(--border2);
-  border-radius: 14px; padding: 20px; text-align: center;
+  background:linear-gradient(135deg, rgba(255,0,110,0.07), rgba(124,0,255,0.07));
+  border:1px solid rgba(255,0,110,0.18); border-radius:18px; padding:22px; text-align:center;
 }
-.vip-price { margin-bottom: 14px; }
-.price-label { font-family: var(--font-mono); font-size: 10px; color: var(--text3); display: block; margin-bottom: 4px; letter-spacing: 2px; }
-.price-val { font-family: var(--font-main); font-size: 16px; font-weight: 700; color: var(--yellow); }
+.price-label { font-family:var(--font-main); font-size:9px; color:var(--text3); letter-spacing:3px; display:block; margin-bottom:4px; }
+.price-val { font-family:var(--font-main); font-size:16px; color:var(--pink); letter-spacing:2px; display:block; margin-bottom:16px; }
 .vip-cta-btn {
-  display: inline-flex; align-items: center; gap: 8px;
-  background: linear-gradient(135deg, var(--yellow), var(--orange));
-  color: #000; font-family: var(--font-main); font-size: 13px; font-weight: 700;
-  padding: 14px 28px; border-radius: 12px; border: none; cursor: pointer;
-  letter-spacing: 2px; transition: all .2s;
+  width:100%; display:flex; align-items:center; justify-content:center; gap:10px;
+  background:linear-gradient(135deg, var(--pink), var(--purple));
+  border:none; border-radius:14px; padding:16px; cursor:pointer;
+  font-family:var(--font-main); font-size:12px; font-weight:700;
+  color:#fff; letter-spacing:2px;
+  box-shadow:0 0 22px rgba(255,0,110,0.4), 0 0 45px rgba(124,0,255,0.18);
+  transition:all .2s ease;
 }
-.vip-cta-btn:active { transform: scale(.97); }
+.vip-cta-btn:active { transform:scale(.96); }
 
-/* SETTINGS */
-.settings-group {
-  background: var(--card); border: 1px solid var(--border);
-  border-radius: 14px; margin-bottom: 14px; overflow: hidden;
+/* ══════════════════════════════════════════════════
+   AIM LAB
+══════════════════════════════════════════════════ */
+.aim-status-card {
+  display:flex; align-items:center; gap:14px;
+  background:linear-gradient(135deg, rgba(255,0,110,0.055) 0%, rgba(0,245,255,0.04) 100%);
+  border:1px solid rgba(255,0,110,0.18); border-radius:18px; padding:16px; margin-bottom:16px;
+  position:relative; overflow:hidden;
 }
+.aim-status-card::after {
+  content:'SYSTEM ACTIVE'; position:absolute; top:9px; right:12px;
+  font-family:var(--font-mono); font-size:8px; color:rgba(255,0,110,0.25); letter-spacing:2px;
+}
+.aim-crosshair-wrap { flex-shrink:0; }
+.aim-crosshair { width:56px; height:56px; position:relative; display:flex; align-items:center; justify-content:center; }
+.ch-ring {
+  position:absolute; width:50px; height:50px; border-radius:50%;
+  border:1.5px solid var(--pink); box-shadow:0 0 10px var(--pink3);
+  animation:chPulse 2s ease-in-out infinite;
+}
+@keyframes chPulse { 0%,100%{opacity:.7;transform:scale(1)} 50%{opacity:1;transform:scale(1.07)} }
+.ch-h { position:absolute; width:30px; height:1.5px; background:var(--pink); box-shadow:0 0 6px var(--pink); }
+.ch-v { position:absolute; width:1.5px; height:30px; background:var(--pink); box-shadow:0 0 6px var(--pink); }
+.ch-dot { position:absolute; width:4px; height:4px; border-radius:50%; background:var(--pink); box-shadow:0 0 8px var(--pink); }
+.aim-status-info { flex:1; }
+.aim-status-badge { font-family:var(--font-mono); font-size:10px; color:var(--green); letter-spacing:2px; margin-bottom:4px; text-shadow:0 0 8px var(--green); }
+.aim-mode-label { font-family:var(--font-main); font-size:11px; color:var(--text2); letter-spacing:1px; margin-bottom:8px; }
+.aim-score-row { display:flex; align-items:center; gap:8px; }
+.aim-score-lbl { font-family:var(--font-mono); font-size:9px; color:var(--text3); letter-spacing:2px; }
+.aim-score-val { font-family:var(--font-main); font-size:22px; font-weight:700; color:var(--pink); text-shadow:0 0 12px var(--pink); }
+.aim-apply-btn-mini {
+  padding:10px 14px; border-radius:10px; cursor:pointer; border:none; flex-shrink:0;
+  font-family:var(--font-main); font-size:9px; font-weight:700; letter-spacing:1px;
+  background:linear-gradient(135deg, var(--pink), var(--pink2));
+  color:#fff; box-shadow:0 0 12px rgba(255,0,110,0.4);
+}
+.aim-section-title {
+  font-family:var(--font-main); font-size:11px; font-weight:600;
+  color:var(--cyan); letter-spacing:2px; margin:18px 0 10px;
+  display:flex; align-items:center; gap:8px;
+}
+.aim-section-title::after { content:''; flex:1; height:1px; background:linear-gradient(90deg, var(--border2), transparent); }
+
+/* AimLock */
+.aimlock-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-bottom:10px; }
+.aimlock-btn {
+  display:flex; flex-direction:column; align-items:center; gap:3px;
+  background:var(--card); border:1px solid var(--border); border-radius:12px;
+  padding:12px 6px; cursor:pointer; transition:all .2s;
+}
+.aimlock-btn.active { background:rgba(255,0,110,0.09); border-color:var(--pink); box-shadow:0 0 12px rgba(255,0,110,0.22); }
+.al-ver { font-family:var(--font-main); font-size:15px; font-weight:700; color:var(--pink); }
+.al-name { font-family:var(--font-main); font-size:9px; color:var(--text2); letter-spacing:1px; }
+.al-desc { font-family:var(--font-mono); font-size:8px; color:var(--text3); }
+.aimlock-detail { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:10px 14px; margin-bottom:4px; }
+.ald-row {
+  display:flex; justify-content:space-between; align-items:center;
+  font-family:var(--font-mono); font-size:10px; color:var(--text3);
+  padding:5px 0; border-bottom:1px solid rgba(255,255,255,0.04);
+}
+.ald-row:last-child { border-bottom:none; }
+.ald-val { color:var(--cyan); font-weight:600; }
+
+/* Cards */
+.smooth-card,.assist-card,.hold-card,.gyro-card,.headlock-card,.touch-latency-card {
+  background:var(--card); border:1px solid var(--border); border-radius:14px; padding:14px; margin-bottom:4px;
+}
+.smooth-preview-row { display:flex; align-items:center; gap:12px; margin-bottom:10px; }
+.smooth-bar-wrap { flex:1; }
+.smooth-bar-track { height:6px; background:rgba(0,245,255,0.07); border-radius:4px; overflow:hidden; }
+.smooth-bar-fill { height:100%; background:linear-gradient(90deg, var(--cyan2), var(--pink)); border-radius:4px; transition:width .2s; }
+.smooth-labels { display:flex; justify-content:space-between; font-family:var(--font-mono); font-size:9px; color:var(--text3); margin-top:4px; }
+.smooth-pct { font-family:var(--font-main); font-size:16px; font-weight:700; color:var(--cyan); min-width:44px; text-align:right; }
+.smooth-presets { display:flex; gap:8px; margin-top:10px; }
+.smooth-pre-btn {
+  flex:1; padding:8px; border-radius:8px; cursor:pointer;
+  font-family:var(--font-main); font-size:9px; letter-spacing:1px;
+  background:var(--card2); border:1px solid var(--border); color:var(--text2); transition:all .2s;
+}
+.smooth-pre-btn.active { background:rgba(0,245,255,0.09); border-color:var(--cyan); color:var(--cyan); }
+
+.assist-toggle-row,.hold-toggle-row,.gyro-toggle-row { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+.assist-title,.hold-title,.gyro-title { font-family:var(--font-main); font-size:12px; color:var(--text); letter-spacing:1px; margin-bottom:2px; }
+.assist-sub,.hold-sub,.gyro-sub { font-family:var(--font-mono); font-size:10px; color:var(--text3); }
+.assist-options,.hold-options,.gyro-options { margin-top:14px; }
+.assist-opt-row {
+  display:flex; align-items:center; justify-content:space-between;
+  font-family:var(--font-mono); font-size:11px; color:var(--text2); margin-bottom:10px;
+}
+.assist-lvl-btns { display:flex; gap:6px; }
+.assist-lvl,.assist-target,.assist-when,.gyro-mode-btn {
+  padding:5px 10px; border-radius:6px; cursor:pointer;
+  font-family:var(--font-main); font-size:9px; letter-spacing:1px;
+  background:var(--card2); border:1px solid var(--border); color:var(--text3); transition:all .2s;
+}
+.assist-lvl.active,.assist-target.active,.assist-when.active,.gyro-mode-btn.active {
+  background:rgba(0,245,255,0.09); border-color:var(--cyan); color:var(--cyan);
+}
+
+/* Sensitivity */
+.sens-preset-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-bottom:12px; }
+.sens-preset-btn {
+  display:flex; flex-direction:column; align-items:center; gap:3px;
+  background:var(--card); border:1px solid var(--border); border-radius:12px;
+  padding:12px 6px; cursor:pointer; transition:all .2s;
+}
+.sens-preset-btn.active { background:rgba(0,245,255,0.07); border-color:var(--cyan); }
+.sp-icon { font-size:18px; }
+.sp-name { font-family:var(--font-main); font-size:9px; color:var(--text); letter-spacing:1px; }
+.sp-desc { font-family:var(--font-mono); font-size:8px; color:var(--text3); }
+.sens-sliders { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:14px; margin-bottom:4px; }
+.sens-row { margin-bottom:14px; }
+.sens-row:last-child { margin-bottom:0; }
+.sens-label { display:flex; justify-content:space-between; font-family:var(--font-mono); font-size:11px; color:var(--text2); margin-bottom:6px; }
+.sens-val { color:var(--cyan); font-weight:600; }
+.sens-slider {
+  width:100%; -webkit-appearance:none; appearance:none; height:4px; border-radius:4px; outline:none; cursor:pointer;
+  background:linear-gradient(90deg, var(--cyan) 0%, var(--border2) 0%);
+}
+.sens-slider::-webkit-slider-thumb {
+  -webkit-appearance:none; width:16px; height:16px; border-radius:50%;
+  background:var(--cyan); cursor:pointer;
+  box-shadow:0 0 8px var(--cyan), 0 0 16px rgba(0,245,255,0.4);
+}
+
+/* Headlock */
+.headlock-visual { display:flex; gap:14px; align-items:flex-start; }
+.headlock-target {
+  width:64px; height:64px; flex-shrink:0;
+  position:relative; display:flex; align-items:center; justify-content:center;
+  background:rgba(255,51,102,0.04); border:1px solid rgba(255,51,102,0.2); border-radius:12px;
+}
+.ht-head { width:22px; height:22px; border-radius:50%; background:rgba(255,51,102,0.18); border:1.5px solid var(--red); }
+.ht-cross { position:absolute; background:rgba(255,51,102,0.45); }
+.ht-cross-h { width:50px; height:1px; }
+.ht-cross-v { width:1px; height:50px; }
+.ht-ring { position:absolute; width:32px; height:32px; border-radius:50%; border:1.5px solid var(--red); transition:all .3s; }
+@keyframes ht-pulse { 0%,100%{opacity:.35;transform:scale(1)} 50%{opacity:1;transform:scale(1.18)} }
+.headlock-right { flex:1; }
+.headlock-toggle-row { display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; }
+.headlock-lvl-row { display:flex; gap:6px; margin-top:8px; }
+.hl-lvl-btn {
+  flex:1; padding:7px 4px; border-radius:8px; cursor:pointer;
+  font-family:var(--font-main); font-size:9px; letter-spacing:1px;
+  background:var(--card2); border:1px solid var(--border); color:var(--text3); transition:all .2s;
+}
+.hl-lvl-btn.active { background:rgba(255,51,102,0.1); border-color:var(--red); color:var(--red); }
+.headlock-stats { margin-top:12px; }
+.hs-item {
+  display:flex; justify-content:space-between;
+  font-family:var(--font-mono); font-size:10px; color:var(--text3);
+  padding:5px 0; border-bottom:1px solid rgba(255,255,255,0.04);
+}
+.hs-item:last-child { border-bottom:none; }
+.hs-val { color:var(--red); font-weight:600; }
+.gyro-mode-lbl { font-family:var(--font-mono); font-size:10px; color:var(--text3); margin-bottom:6px; }
+.gyro-mode-row { margin-top:12px; }
+.gyro-mode-btns { display:flex; gap:6px; }
+.headlock-lvl-wrap {}
+
+/* Touch latency */
+.tl-gauge-row { display:flex; align-items:center; gap:16px; margin-bottom:14px; }
+.tl-gauge { position:relative; display:flex; flex-direction:column; align-items:center; }
+.tl-gauge-val { font-family:var(--font-main); font-size:14px; font-weight:700; color:var(--cyan); text-align:center; margin-top:4px; }
+.tl-info-title { font-family:var(--font-main); font-size:12px; color:var(--text); letter-spacing:1px; margin-bottom:4px; }
+.tl-info-sub { font-family:var(--font-mono); font-size:11px; color:var(--green); letter-spacing:1px; margin-bottom:10px; }
+.tl-optimize-btn {
+  padding:8px 14px; border-radius:8px; cursor:pointer; border:none;
+  font-family:var(--font-main); font-size:9px; letter-spacing:1px;
+  background:linear-gradient(135deg, var(--cyan), var(--cyan2));
+  color:#000; font-weight:700; box-shadow:0 0 12px rgba(0,245,255,0.38);
+}
+.tl-options { border-top:1px solid var(--border); padding-top:12px; display:flex; flex-direction:column; gap:10px; }
+.tl-opt-row { display:flex; align-items:center; justify-content:space-between; font-family:var(--font-mono); font-size:11px; color:var(--text2); }
+
+/* Layout buttons */
+.layout-grid { display:flex; gap:10px; margin-bottom:12px; }
+.layout-btn {
+  flex:1; display:flex; flex-direction:column; align-items:center; gap:8px;
+  background:var(--card); border:1px solid var(--border); border-radius:14px;
+  padding:14px 8px; cursor:pointer; transition:all .2s;
+}
+.layout-btn.active { background:rgba(0,245,255,0.07); border-color:var(--cyan); box-shadow:0 0 12px rgba(0,245,255,0.14); }
+.layout-fingers { display:flex; justify-content:center; gap:4px; height:28px; align-items:flex-end; }
+.finger { width:9px; border-radius:4px 4px 0 0; background:rgba(0,245,255,0.25); border:1px solid rgba(0,245,255,0.4); }
+.f-thumb-l,.f-thumb-r { height:20px; }
+.f-index,.f-index-l,.f-index-r { height:26px; background:rgba(255,0,110,0.25); border-color:rgba(255,0,110,0.4); }
+.layout-name { font-family:var(--font-main); font-size:11px; color:var(--text); letter-spacing:1px; }
+.layout-desc { font-family:var(--font-mono); font-size:9px; color:var(--text3); }
+.layout-tips { background:rgba(0,245,255,0.03); border:1px solid var(--border); border-radius:10px; padding:12px; margin-bottom:4px; }
+.tip-title { font-family:var(--font-main); font-size:10px; color:var(--cyan); letter-spacing:1px; margin-bottom:4px; }
+.tip-text { font-family:var(--font-mono); font-size:10px; color:var(--text3); line-height:1.6; }
+.aim-apply-btn-full {
+  width:100%; display:flex; align-items:center; justify-content:center; gap:10px;
+  background:linear-gradient(135deg, var(--pink), var(--purple));
+  border:none; border-radius:16px; padding:18px; cursor:pointer;
+  font-family:var(--font-main); font-size:13px; font-weight:700; color:#fff; letter-spacing:2px; margin-top:16px;
+  box-shadow:0 0 26px rgba(255,0,110,0.4), 0 0 52px rgba(124,0,255,0.18);
+  transition:all .2s;
+}
+.aim-apply-btn-full:active { transform:scale(.97); }
+
+/* ══════════════════════════════════════════════════
+   SETTINGS
+══════════════════════════════════════════════════ */
+.settings-group { background:var(--card); border:1px solid var(--border); border-radius:16px; overflow:hidden; margin-bottom:12px; }
 .settings-group-title {
-  font-family: var(--font-main); font-size: 9px; color: var(--text3);
-  letter-spacing: 2px; padding: 10px 14px 6px;
-  border-bottom: 1px solid var(--border);
+  padding:10px 16px;
+  font-family:var(--font-main); font-size:9px; color:var(--text3); letter-spacing:3px;
+  background:rgba(0,245,255,0.025); border-bottom:1px solid var(--border);
 }
 .settings-item {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 14px; border-bottom: 1px solid var(--border);
+  display:flex; align-items:center; justify-content:space-between;
+  padding:14px 16px; border-bottom:1px solid var(--border);
 }
-.settings-item:last-child { border-bottom: none; }
-.settings-item.static {}
-.settings-item-name { font-family: var(--font-body); font-weight: 600; font-size: 14px; color: var(--text); }
-.settings-item-desc { font-family: var(--font-body); font-size: 11px; color: var(--text3); margin-top: 2px; }
-.settings-item-val { font-family: var(--font-mono); font-size: 12px; color: var(--g); }
+.settings-item:last-child { border-bottom:none; }
+.settings-item-name { font-family:var(--font-main); font-size:12px; color:var(--text); letter-spacing:1px; margin-bottom:2px; }
+.settings-item-desc { font-family:var(--font-mono); font-size:10px; color:var(--text3); }
+.settings-item-val { font-family:var(--font-mono); font-size:11px; color:var(--cyan); }
+.settings-item-info { flex:1; }
 
-/* BOTTOM NAV */
+/* ══════════════════════════════════════════════════
+   BOTTOM NAV
+══════════════════════════════════════════════════ */
 .bottom-nav {
-  height: calc(var(--nav-h) + var(--safe-bottom));
-  padding-bottom: var(--safe-bottom);
-  background: var(--bg2); border-top: 1px solid var(--border2);
-  display: flex; align-items: stretch;
+  position:fixed; bottom:0; left:0; right:0;
+  height:calc(var(--nav-h) + var(--safe-bottom));
+  padding-bottom:var(--safe-bottom);
+  display:flex; align-items:center;
+  background:linear-gradient(0deg, rgba(5,8,18,0.99) 0%, rgba(8,13,26,0.96) 100%);
+  border-top:1px solid var(--border);
+  z-index:500;
+}
+.bottom-nav::before {
+  content:''; position:absolute; top:0; left:8%; right:8%; height:1px;
+  background:linear-gradient(90deg, transparent, var(--pink3), var(--cyan3), transparent);
+  opacity:.6;
 }
 .bnav-btn {
-  flex: 1; display: flex; flex-direction: column; align-items: center;
-  justify-content: center; gap: 4px; background: none; border: none;
-  color: var(--text3); cursor: pointer; transition: all .2s; position: relative;
+  flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:4px; background:none; border:none; cursor:pointer;
+  color:var(--text3); padding:6px 2px; transition:all .2s; position:relative;
 }
-.bnav-btn span { font-family: var(--font-body); font-size: 9px; font-weight: 500; letter-spacing: .5px; }
-.bnav-btn.active { color: var(--g); }
-.bnav-btn.active::before {
-  content: ''; position: absolute; top: 0; left: 20%; right: 20%;
-  height: 2px; background: var(--g);
-  box-shadow: 0 0 8px var(--g); border-radius: 0 0 2px 2px;
+.bnav-btn::before {
+  content:''; position:absolute; top:-1px; left:22%; right:22%; height:2px;
+  border-radius:0 0 3px 3px; background:var(--cyan);
+  transform:scaleX(0); transition:transform .25s cubic-bezier(.34,1.56,.64,1);
+  box-shadow:0 0 8px var(--cyan);
 }
-.bnav-btn:active { transform: scale(.92); }
+.bnav-btn.active { color:var(--cyan); }
+.bnav-btn.active::before { transform:scaleX(1); }
+.bnav-btn svg { transition:filter .2s; }
+.bnav-btn.active svg { filter:drop-shadow(0 0 5px var(--cyan)); }
+.bnav-btn span { font-family:var(--font-main); font-size:8px; letter-spacing:1px; }
 
-/* TOAST */
+/* ══════════════════════════════════════════════════
+   TOAST
+══════════════════════════════════════════════════ */
 .toast {
-  position: fixed; bottom: calc(var(--nav-h) + 16px + var(--safe-bottom));
-  left: 50%; transform: translateX(-50%) translateY(20px);
-  background: var(--bg4); border: 1px solid var(--border2);
-  color: var(--text); font-family: var(--font-body); font-size: 13px;
-  padding: 10px 20px; border-radius: 20px;
-  opacity: 0; pointer-events: none; transition: all .25s;
-  white-space: nowrap; z-index: 999;
+  position:fixed; bottom:calc(var(--nav-h) + var(--safe-bottom) + 12px);
+  left:50%; transform:translateX(-50%) translateY(18px);
+  background:rgba(8,13,26,0.96); border:1px solid var(--border2);
+  color:var(--text); padding:10px 22px; border-radius:30px;
+  font-family:var(--font-mono); font-size:11px; letter-spacing:1px;
+  white-space:nowrap; z-index:9000; opacity:0;
+  transition:all .3s cubic-bezier(.34,1.56,.64,1);
+  box-shadow:0 0 22px rgba(0,245,255,0.18); backdrop-filter:blur(12px);
 }
-.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+.toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
 
-/* BOOST OVERLAY */
+/* ══════════════════════════════════════════════════
+   BOOST OVERLAY
+══════════════════════════════════════════════════ */
 .boost-overlay {
-  position: fixed; inset: 0; z-index: 998;
-  background: #020e08ee;
+  position:fixed; inset:0; z-index:9990;
+  background:rgba(5,8,18,0.96);
+  display:flex; align-items:center; justify-content:center;
+  backdrop-filter:blur(14px);
+}
+.boost-overlay-inner { text-align:center; }
+.boost-overlay-ring {
+  width:100px; height:100px; border-radius:50%; margin:0 auto 26px;
+  border:2px solid transparent;
+  background:linear-gradient(var(--bg), var(--bg)) padding-box,
+             linear-gradient(135deg, var(--cyan), var(--pink)) border-box;
+  animation:overlaySpin 1s linear infinite;
+  box-shadow:0 0 30px rgba(0,245,255,0.28), 0 0 60px rgba(255,0,110,0.18);
+}
+@keyframes overlaySpin { to{transform:rotate(360deg)} }
+.boost-overlay-text { font-family:var(--font-main); font-size:12px; color:var(--text2); letter-spacing:3px; margin-bottom:14px; }
+.boost-overlay-percent {
+  font-family:var(--font-main); font-size:44px; font-weight:900;
+  background:linear-gradient(135deg, var(--cyan), var(--pink));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+  filter:drop-shadow(0 0 18px var(--cyan));
+}
+
+/* ══════════════════════════════════════════════════
+   KEY MODAL — REDESIGNED
+══════════════════════════════════════════════════ */
+#key-modal {
+  position:fixed; inset:0; z-index:9999;
+  display:none; align-items:center; justify-content:center;
+  background:rgba(5,8,18,0.97); backdrop-filter:blur(22px);
+}
+#key-modal::before {
+  content:''; position:absolute; inset:0; pointer-events:none;
+  background:
+    radial-gradient(ellipse 70% 50% at 25% 40%, rgba(0,245,255,0.04) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 75% 60%, rgba(255,0,110,0.04) 0%, transparent 60%);
+}
+#key-modal::after {
+  content:''; position:absolute; inset:0; pointer-events:none;
+  background-image:
+    linear-gradient(rgba(0,245,255,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,245,255,0.025) 1px, transparent 1px);
+  background-size:44px 44px;
+}
+.key-modal-box {
+  position:relative; z-index:1; width:88%; max-width:360px;
+  background:linear-gradient(160deg, rgba(10,15,30,0.99) 0%, rgba(14,21,38,0.99) 100%);
+  border:1px solid rgba(0,245,255,0.22);
+  border-radius:22px; padding:34px 24px; text-align:center;
+  box-shadow:
+    0 0 0 1px rgba(0,245,255,0.04),
+    0 0 50px rgba(0,245,255,0.1),
+    0 0 100px rgba(255,0,110,0.05),
+    0 24px 60px rgba(0,0,0,0.85);
+  animation:modalIn .4s cubic-bezier(.34,1.56,.64,1);
+}
+@keyframes modalIn { 0%{opacity:0;transform:scale(.82) translateY(22px)} 100%{opacity:1;transform:scale(1) translateY(0)} }
+.key-modal-box::before {
+  content:''; position:absolute; top:0; left:15%; right:15%; height:1px;
+  background:linear-gradient(90deg, transparent, var(--cyan), var(--pink), transparent);
+}
+.key-modal-box::after {
+  content:''; position:absolute; bottom:0; left:25%; right:25%; height:1px;
+  background:linear-gradient(90deg, transparent, rgba(0,245,255,0.28), transparent);
+}
+
+/* Corner accents */
+.key-modal-box .corner { position:absolute; width:14px; height:14px; }
+.key-modal-box .corner-tl { top:10px; left:10px; border-top:1.5px solid var(--cyan); border-left:1.5px solid var(--cyan); }
+.key-modal-box .corner-tr { top:10px; right:10px; border-top:1.5px solid var(--pink); border-right:1.5px solid var(--pink); }
+.key-modal-box .corner-bl { bottom:10px; left:10px; border-bottom:1.5px solid var(--cyan); border-left:1.5px solid var(--cyan); }
+.key-modal-box .corner-br { bottom:10px; right:10px; border-bottom:1.5px solid var(--pink); border-right:1.5px solid var(--pink); }
+
+.key-modal-icon { font-size:46px; margin-bottom:12px; filter:drop-shadow(0 0 22px #ffd700); display:block; }
+.key-modal-title {
+  font-family:var(--font-main); font-size:16px; font-weight:700; letter-spacing:4px; margin-bottom:6px;
+  background:linear-gradient(135deg, var(--cyan), var(--pink));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+}
+.key-modal-sub { font-family:var(--font-mono); font-size:10px; color:var(--text3); letter-spacing:2px; margin-bottom:26px; }
+
+#key-input {
+  width:100%; padding:14px 16px; border-radius:12px;
+  background:rgba(0,245,255,0.04); border:1px solid var(--border2);
+  color:var(--text); font-family:var(--font-mono); font-size:13px; letter-spacing:2px;
+  outline:none; margin-bottom:10px; transition:all .2s; box-sizing:border-box;
+}
+#key-input:focus {
+  border-color:var(--cyan); background:rgba(0,245,255,0.07);
+  box-shadow:0 0 18px rgba(0,245,255,0.14), inset 0 0 12px rgba(0,245,255,0.025);
+}
+#key-input::placeholder { color:var(--text3); }
+#key-msg { font-family:var(--font-mono); font-size:11px; min-height:18px; margin-bottom:14px; letter-spacing:1px; color:var(--text3); }
+#activate-btn {
+  width:100%; padding:16px; border-radius:14px; cursor:pointer; border:none; position:relative; overflow:hidden;
+  font-family:var(--font-main); font-size:13px; font-weight:700; letter-spacing:3px; color:#000; margin-bottom:14px;
+  background:linear-gradient(135deg, #00f5ff 0%, #00d4e8 50%, #00ffcc 100%);
+  box-shadow:0 0 24px rgba(0,245,255,0.45), 0 0 48px rgba(0,245,255,0.15);
+  transition:all .2s;
+}
+#activate-btn::after {
+  content:''; position:absolute; inset:-2px;
+  background:linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.3) 50%, transparent 100%);
+  transform:translateX(-120%); transition:transform .7s ease;
+}
+#activate-btn:not(:disabled):hover::after { transform:translateX(120%); }
+#activate-btn:disabled { opacity:.45; cursor:not-allowed; }
+#activate-btn:not(:disabled):active { transform:scale(.96); }
+
+.key-modal-lock {
+  display:flex; align-items:center; justify-content:center; gap:8px;
+  font-family:var(--font-mono); font-size:9px; color:var(--text3); letter-spacing:2px;
+}
+.key-modal-lock::before,.key-modal-lock::after {
+  content:''; flex:1; height:1px;
+  background:linear-gradient(90deg, transparent, rgba(0,245,255,0.1));
+}
+.key-modal-lock::after { background:linear-gradient(270deg, transparent, rgba(0,245,255,0.1)); }
+
+/* ══════════════════════════════════════════════════
+   VIP BANNER
+══════════════════════════════════════════════════ */
+#vip-banner {
+  background:linear-gradient(90deg, rgba(255,215,0,0.05), rgba(255,140,0,0.07), rgba(255,215,0,0.05));
+  border-bottom:1px solid rgba(255,215,0,0.14);
+  color:#ffd700; padding:7px 16px; text-align:center;
+  font-family:var(--font-main); font-size:10px; font-weight:700; letter-spacing:2px;
+  text-shadow:0 0 12px rgba(255,215,0,0.5);
+}
+
+/* ══════════════════════════════════════════════════
+   PAGE TRANSITIONS
+══════════════════════════════════════════════════ */
+@keyframes fadeUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+.page.active .page-scroll > * { animation:fadeUp .28s ease forwards; }
+
+/* ══════════════════════════════════════════════════
+   RIPPLE EFFECT
+══════════════════════════════════════════════════ */
+button, .bnav-btn, .qa-btn, .aimlock-btn, .sens-preset-btn, .layout-btn {
+  position: relative;
+  overflow: hidden;
+}
+.ripple-wave {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(0,255,136,0.35);
+  transform: translate(-50%, -50%) scale(0);
+  animation: ripple-anim 0.6s ease-out forwards;
+  width: 80px; height: 80px;
+  pointer-events: none;
+  z-index: 10;
+}
+@keyframes ripple-anim {
+  to { transform: translate(-50%,-50%) scale(4); opacity: 0; }
+}
+
+/* ══════════════════════════════════════════════════
+   BUTTON HIGHLIGHT ENHANCEMENTS
+══════════════════════════════════════════════════ */
+
+/* Bottom nav — glow on active */
+.bnav-btn {
+  transition: all 0.2s ease;
+}
+.bnav-btn.active {
+  filter: drop-shadow(0 0 8px var(--accent));
+}
+.bnav-btn:not(.active):hover {
+  transform: translateY(-2px);
+  color: var(--accent);
+}
+
+/* Quick action buttons — neon glow on hover/active */
+.qa-btn {
+  transition: all 0.2s ease;
+  border: 1px solid rgba(0,255,136,0.15) !important;
+}
+.qa-btn:hover {
+  background: rgba(0,255,136,0.15) !important;
+  border-color: rgba(0,255,136,0.5) !important;
+  box-shadow: 0 0 16px rgba(0,255,136,0.3), inset 0 0 12px rgba(0,255,136,0.05) !important;
+  transform: translateY(-2px) scale(1.03);
+}
+.qa-btn:active {
+  transform: scale(0.96);
+  box-shadow: 0 0 24px rgba(0,255,136,0.5) !important;
+}
+
+/* Aim lock buttons */
+.aimlock-btn {
+  transition: all 0.2s ease;
+}
+.aimlock-btn:not(.active):hover {
+  border-color: rgba(0,255,136,0.5) !important;
+  background: rgba(0,255,136,0.08) !important;
+  transform: scale(1.04);
+  box-shadow: 0 0 12px rgba(0,255,136,0.2);
+}
+.aimlock-btn.active {
+  box-shadow: 0 0 20px rgba(0,255,136,0.4), inset 0 0 10px rgba(0,255,136,0.1) !important;
+  border-color: var(--accent) !important;
+  animation: pulse-border 2s infinite;
+}
+@keyframes pulse-border {
+  0%,100% { box-shadow: 0 0 16px rgba(0,255,136,0.35), inset 0 0 8px rgba(0,255,136,0.08); }
+  50%      { box-shadow: 0 0 28px rgba(0,255,136,0.6), inset 0 0 14px rgba(0,255,136,0.15); }
+}
+
+/* Sensitivity preset buttons */
+.sens-preset-btn {
+  transition: all 0.2s ease;
+}
+.sens-preset-btn:not(.active):hover {
+  border-color: rgba(0,255,136,0.4) !important;
+  background: rgba(0,255,136,0.07) !important;
+  transform: translateY(-2px);
+}
+.sens-preset-btn.active {
+  box-shadow: 0 0 18px rgba(0,255,136,0.35) !important;
+  animation: pulse-border 2.5s infinite;
+}
+
+/* Layout buttons */
+.layout-btn {
+  transition: all 0.2s ease;
+}
+.layout-btn:not(.active):hover {
+  border-color: rgba(0,255,136,0.45) !important;
+  transform: translateY(-2px) scale(1.03);
+  background: rgba(0,255,136,0.06) !important;
+}
+.layout-btn.active {
+  box-shadow: 0 0 16px rgba(0,255,136,0.35) !important;
+}
+
+/* Assist / gyro / headlock mode buttons */
+.assist-lvl, .assist-target, .assist-when, .gyro-mode-btn, .hl-lvl-btn, .smooth-pre-btn {
+  transition: all 0.18s ease;
+}
+.assist-lvl:hover, .assist-target:hover, .assist-when:hover,
+.gyro-mode-btn:hover, .hl-lvl-btn:hover, .smooth-pre-btn:hover {
+  background: rgba(0,255,136,0.15) !important;
+  box-shadow: 0 0 10px rgba(0,255,136,0.25);
+  transform: scale(1.05);
+}
+.assist-lvl.active, .assist-target.active, .assist-when.active,
+.gyro-mode-btn.active, .hl-lvl-btn.active, .smooth-pre-btn.active {
+  box-shadow: 0 0 14px rgba(0,255,136,0.4) !important;
+}
+
+/* BOOST button — pulsing glow */
+.boost-btn {
+  box-shadow: 0 0 24px rgba(0,255,136,0.4), 0 4px 20px rgba(0,0,0,0.4) !important;
+  animation: boost-glow 2s ease-in-out infinite !important;
+}
+@keyframes boost-glow {
+  0%,100% { box-shadow: 0 0 24px rgba(0,255,136,0.4), 0 4px 20px rgba(0,0,0,0.4); }
+  50%      { box-shadow: 0 0 40px rgba(0,255,136,0.7), 0 4px 28px rgba(0,0,0,0.5); }
+}
+.boost-btn:hover {
+  transform: scale(1.05) !important;
+}
+.boost-btn:active { transform: scale(0.97) !important; }
+
+/* Apply button — neon highlight */
+.aim-apply-btn-full {
+  box-shadow: 0 0 20px rgba(0,255,136,0.35) !important;
+  transition: all 0.2s ease !important;
+}
+.aim-apply-btn-full:hover {
+  box-shadow: 0 0 36px rgba(0,255,136,0.6) !important;
+  transform: translateY(-2px) !important;
+}
+.aim-apply-btn-full:active { transform: scale(0.97) !important; }
+
+/* Touch latency optimize btn */
+.tl-optimize-btn {
+  transition: all 0.2s ease;
+}
+.tl-optimize-btn:hover {
+  box-shadow: 0 0 16px rgba(0,255,136,0.4) !important;
+  transform: scale(1.05);
+}
+
+/* VIP CTA button */
+.vip-cta-btn {
+  transition: all 0.2s ease !important;
+  box-shadow: 0 0 20px rgba(0,255,136,0.3) !important;
+}
+.vip-cta-btn:hover {
+  box-shadow: 0 0 36px rgba(0,255,136,0.55) !important;
+  transform: translateY(-2px) !important;
+}
+
+/* upgrade-mini-btn */
+.upgrade-mini-btn {
+  transition: all 0.18s ease !important;
+}
+.upgrade-mini-btn:hover {
+  box-shadow: 0 0 12px rgba(0,255,136,0.4) !important;
+  transform: scale(1.06) !important;
+}
+
+/* Activate key button */
+#activate-btn:not(:disabled) {
+  box-shadow: 0 0 18px rgba(0,255,136,0.3) !important;
+}
+#activate-btn:not(:disabled):hover {
+  box-shadow: 0 0 30px rgba(0,255,136,0.55) !important;
+}
+
+/* Aim mini apply btn */
+.aim-apply-btn-mini {
+  transition: all 0.18s ease !important;
+}
+.aim-apply-btn-mini:hover {
+  box-shadow: 0 0 14px rgba(0,255,136,0.4) !important;
+  transform: scale(1.06) !important;
+}
+
+/* ══════════════════════════════════════════════════
+   ADMIN PAGE
+══════════════════════════════════════════════════ */
+
+/* Hero header */
+.admin-hero {
+  position: relative;
+  padding: 28px 20px 20px;
+  overflow: hidden;
+  text-align: center;
+}
+.admin-hero-bg {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 50% 0%, rgba(0,255,136,0.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+.admin-scan-line {
+  position: absolute; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(0,255,136,0.5), transparent);
+  animation: scan-move 3s linear infinite;
+  pointer-events: none;
+}
+@keyframes scan-move {
+  0%   { top: 0; opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { top: 100%; opacity: 0; }
+}
+.admin-badge-tag {
+  display: inline-block;
+  font-family: var(--font-main);
+  font-size: 9px; letter-spacing: 3px; font-weight: 700;
+  color: var(--accent); border: 1px solid rgba(0,255,136,0.3);
+  padding: 3px 12px; border-radius: 20px;
+  margin-bottom: 10px;
+  background: rgba(0,255,136,0.06);
+}
+.admin-page-title {
+  font-family: var(--font-main);
+  font-size: 26px; font-weight: 900; letter-spacing: 3px;
+  line-height: 1.1;
+  color: #fff;
+  text-shadow: 0 0 24px rgba(0,255,136,0.4);
+}
+.admin-page-title span { color: var(--accent); }
+
+/* Avatar card */
+.admin-avatar-card {
+  position: relative;
+  margin: 0 16px 20px;
+  background: linear-gradient(160deg, rgba(0,255,136,0.04), rgba(0,0,0,0.3));
+  border: 1px solid rgba(0,255,136,0.15);
+  border-radius: 20px;
+  padding: 28px 20px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  overflow: hidden;
+}
+
+/* Rotating rings behind avatar */
+.admin-avatar-ring-outer,
+.admin-avatar-ring-mid {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border-radius: 50%;
+  border: 1px solid rgba(0,255,136,0.12);
+  transform: translate(-50%, calc(-50% - 30px));
+  pointer-events: none;
+}
+.admin-avatar-ring-outer {
+  width: 160px; height: 160px;
+  animation: ring-spin 12s linear infinite;
+  border-color: rgba(0,255,136,0.1);
+  border-style: dashed;
+}
+.admin-avatar-ring-mid {
+  width: 130px; height: 130px;
+  animation: ring-spin 8s linear infinite reverse;
+  border-color: rgba(0,255,136,0.15);
+}
+@keyframes ring-spin { to { transform: translate(-50%, calc(-50% - 30px)) rotate(360deg); } }
+
+/* Frame */
+.admin-avatar-frame {
+  position: relative;
+  width: 100px; height: 100px;
+  border-radius: 50%;
+  padding: 3px;
+  background: conic-gradient(from 0deg, #00ff88, #00aaff, #aa88ff, #00ff88);
+  animation: spin-border 4s linear infinite;
+  margin-bottom: 14px;
+}
+@keyframes spin-border { to { filter: hue-rotate(360deg); } }
+
+.admin-avatar-inner {
+  width: 100%; height: 100%;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #001a0e;
   display: flex; align-items: center; justify-content: center;
 }
-.boost-overlay-inner { text-align: center; position: relative; }
-.boost-overlay-ring {
-  width: 120px; height: 120px; border-radius: 50%;
-  border: 3px solid var(--g); border-top-color: transparent;
-  animation: spin 1s linear infinite;
-  margin: 0 auto 16px;
-  box-shadow: 0 0 20px var(--g);
+.admin-avatar-inner img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
 }
-@keyframes spin { to { transform: rotate(360deg); } }
-.boost-overlay-text {
-  font-family: var(--font-main); font-size: 16px; font-weight: 700;
-  color: var(--g); letter-spacing: 4px;
+.admin-avatar-fallback {
+  align-items: center; justify-content: center;
+  width: 100%; height: 100%;
 }
-.boost-overlay-percent {
-  font-family: var(--font-main); font-size: 32px; font-weight: 900;
-  color: var(--text); margin-top: 8px;
+
+/* Corner decorations */
+.admin-corner {
+  position: absolute;
+  width: 14px; height: 14px;
+  border-color: rgba(0,255,136,0.4);
+  border-style: solid;
+}
+.admin-corner-tl { top: 10px; left: 10px; border-width: 2px 0 0 2px; border-radius: 4px 0 0 0; }
+.admin-corner-tr { top: 10px; right: 10px; border-width: 2px 2px 0 0; border-radius: 0 4px 0 0; }
+.admin-corner-bl { bottom: 10px; left: 10px; border-width: 0 0 2px 2px; border-radius: 0 0 0 4px; }
+.admin-corner-br { bottom: 10px; right: 10px; border-width: 0 2px 2px 0; border-radius: 0 0 4px 0; }
+
+/* Name block */
+.admin-name-block { text-align: center; }
+.admin-name {
+  font-family: var(--font-main);
+  font-size: 20px; font-weight: 700; letter-spacing: 2px;
+  color: #fff;
+  text-shadow: 0 0 14px rgba(0,255,136,0.35);
+  margin-bottom: 6px;
+}
+.admin-status-row {
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  margin-bottom: 10px;
+}
+.admin-online-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: #00ff88;
+  box-shadow: 0 0 8px #00ff88;
+  animation: dot-pulse 2s ease-in-out infinite;
+}
+@keyframes dot-pulse {
+  0%,100% { box-shadow: 0 0 6px #00ff88; }
+  50%      { box-shadow: 0 0 14px #00ff88, 0 0 24px rgba(0,255,136,0.4); }
+}
+.admin-online-txt {
+  font-family: var(--font-mono); font-size: 10px;
+  color: rgba(0,255,136,0.75); letter-spacing: 1px;
+}
+.admin-role-badge {
+  display: inline-block;
+  font-family: var(--font-main); font-size: 9px; font-weight: 700;
+  letter-spacing: 2px;
+  padding: 4px 14px; border-radius: 20px;
+  background: linear-gradient(135deg, rgba(0,255,136,0.15), rgba(0,170,255,0.1));
+  border: 1px solid rgba(0,255,136,0.25);
+  color: var(--accent);
+}
+
+/* Contact section label */
+.admin-contact-label {
+  font-family: var(--font-main); font-size: 9px; font-weight: 700;
+  letter-spacing: 3px; color: var(--text3);
+  text-align: center; margin: 0 0 12px;
+}
+
+/* Contact cards */
+.admin-contacts {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0 16px 20px;
+}
+
+.admin-contact-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.03);
+  text-decoration: none;
+  overflow: hidden;
+  transition: all 0.25s ease;
+  cursor: pointer;
+}
+.admin-contact-card:active { transform: scale(0.97); }
+.admin-contact-card:hover { transform: translateX(4px); border-color: rgba(255,255,255,0.15); }
+
+/* Platform-specific accents */
+.zalo-card:hover  { border-color: rgba(0,104,255,0.4); background: rgba(0,104,255,0.05); }
+.fb-card:hover    { border-color: rgba(24,119,242,0.4); background: rgba(24,119,242,0.05); }
+.tg-card:hover    { border-color: rgba(34,158,217,0.4); background: rgba(34,158,217,0.05); }
+
+.acc-icon-wrap {
+  width: 46px; height: 46px;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.zalo-icon { background: rgba(0,104,255,0.12); border: 1px solid rgba(0,104,255,0.25); }
+.fb-icon   { background: rgba(24,119,242,0.12); border: 1px solid rgba(24,119,242,0.25); }
+.tg-icon   { background: rgba(34,158,217,0.12); border: 1px solid rgba(34,158,217,0.25); }
+
+.acc-info { flex: 1; min-width: 0; }
+.acc-platform {
+  font-family: var(--font-main); font-size: 13px; font-weight: 700;
+  color: #fff; letter-spacing: 1px; margin-bottom: 2px;
+}
+.acc-handle {
+  font-family: var(--font-mono); font-size: 11px;
+  color: var(--accent); margin-bottom: 2px;
+}
+.acc-desc {
+  font-size: 10px; color: var(--text3);
+  font-family: var(--font-mono);
+}
+
+.acc-arrow { color: rgba(255,255,255,0.25); flex-shrink: 0; transition: all 0.2s; }
+.admin-contact-card:hover .acc-arrow { color: rgba(255,255,255,0.6); transform: translateX(4px); }
+
+/* Subtle glow behind each card */
+.acc-glow {
+  position: absolute; inset: 0; border-radius: 14px;
+  opacity: 0; transition: opacity 0.3s;
+  pointer-events: none;
+}
+.zalo-glow { background: radial-gradient(ellipse at left, rgba(0,104,255,0.08), transparent 70%); }
+.fb-glow   { background: radial-gradient(ellipse at left, rgba(24,119,242,0.08), transparent 70%); }
+.tg-glow   { background: radial-gradient(ellipse at left, rgba(34,158,217,0.08), transparent 70%); }
+.admin-contact-card:hover .acc-glow { opacity: 1; }
+
+/* Stats row */
+.admin-stats-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  margin: 0 16px 16px;
+  background: rgba(0,255,136,0.04);
+  border: 1px solid rgba(0,255,136,0.1);
+  border-radius: 14px;
+  padding: 14px 0;
+}
+.admin-stat-item {
+  flex: 1; text-align: center;
+}
+.admin-stat-val {
+  font-family: var(--font-main); font-size: 18px; font-weight: 700;
+  color: var(--accent);
+  text-shadow: 0 0 10px rgba(0,255,136,0.4);
+  letter-spacing: 1px;
+}
+.admin-stat-lbl {
+  font-family: var(--font-mono); font-size: 9px;
+  color: var(--text3); letter-spacing: 1px; margin-top: 2px;
+}
+.admin-stat-divider {
+  width: 1px; height: 36px;
+  background: rgba(0,255,136,0.12);
+}
+
+/* Note */
+.admin-note {
+  margin: 0 16px 24px;
+  display: flex; gap: 8px; align-items: flex-start;
+  background: rgba(0,255,136,0.04);
+  border: 1px solid rgba(0,255,136,0.1);
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-family: var(--font-mono); font-size: 10px;
+  color: var(--text3); line-height: 1.6;
 }
 </style>
 </head>
@@ -673,7 +1511,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
         <div class="feat-group-label vip-group">
           <span class="badge-vip">VIP</span>
           <span>Advanced Features</span>
-          <button class="upgrade-mini-btn" onclick="switchPage('vip')">UPGRADE</button>
+          <button class="upgrade-mini-btn" onclick="showKeyModal()">NHẬP KEY</button>
         </div>
         <div class="feature-list locked" id="feature-list-vip">
           <!-- injected by JS -->
@@ -773,7 +1611,9 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
         <div class="vip-hero">
           <div class="vip-hero-bg"></div>
           <div class="vip-hero-content">
-            <div class="vip-crown">👑</div>
+            <div class="vip-crown">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none"><path d="M2 19h20M3 9l4 4 5-8 5 8 4-4-2 10H5L3 9z" stroke="#FFD700" stroke-width="2" stroke-linejoin="round" fill="#FFD70022"/><circle cx="3" cy="9" r="1.5" fill="#FFD700"/><circle cx="12" cy="5" r="1.5" fill="#FFD700"/><circle cx="21" cy="9" r="1.5" fill="#FFD700"/></svg>
+            </div>
             <div class="vip-hero-title">SPERNEW VIP</div>
             <div class="vip-hero-sub">Unlock full AI optimization power</div>
             <div class="vip-hero-sub vi">Mở khóa toàn bộ sức mạnh AI</div>
@@ -782,32 +1622,32 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
 
         <div class="vip-features-grid">
           <div class="vip-feat-card">
-            <div class="vip-feat-icon">🎯</div>
+            <div class="vip-feat-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#00ff88" stroke-width="1.5"/><circle cx="12" cy="12" r="5" stroke="#00ff88" stroke-width="1.5"/><circle cx="12" cy="12" r="2" fill="#00ff88"/><line x1="12" y1="3" x2="12" y2="6" stroke="#00ff88" stroke-width="2"/><line x1="12" y1="18" x2="12" y2="21" stroke="#00ff88" stroke-width="2"/><line x1="3" y1="12" x2="6" y2="12" stroke="#00ff88" stroke-width="2"/><line x1="18" y1="12" x2="21" y2="12" stroke="#00ff88" stroke-width="2"/></svg></div>
             <div class="vip-feat-title">AI AIM ENGINE</div>
             <div class="vip-feat-desc">Tối ưu độ chính xác điều khiển theo AI</div>
           </div>
           <div class="vip-feat-card">
-            <div class="vip-feat-icon">⚡</div>
+            <div class="vip-feat-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="#FFD700" stroke-width="2" stroke-linejoin="round" fill="#FFD70022"/></svg></div>
             <div class="vip-feat-title">TURBO FRAME</div>
             <div class="vip-feat-desc">Tăng FPS tối đa, giảm drop frame</div>
           </div>
           <div class="vip-feat-card">
-            <div class="vip-feat-icon">🛡️</div>
+            <div class="vip-feat-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M12 2L3 7v6c0 5 4 9 9 10 5-1 9-5 9-10V7L12 2z" stroke="#00aaff" stroke-width="2" fill="#00aaff11"/><path d="M9 12l2 2 4-4" stroke="#00aaff" stroke-width="2" stroke-linecap="round"/></svg></div>
             <div class="vip-feat-title">THERMAL AI</div>
             <div class="vip-feat-desc">Kiểm soát nhiệt độ thông minh 24/7</div>
           </div>
           <div class="vip-feat-card">
-            <div class="vip-feat-icon">🌐</div>
+            <div class="vip-feat-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#00ff88" stroke-width="1.5"/><path d="M12 3c-2 3-3 6-3 9s1 6 3 9M12 3c2 3 3 6 3 9s-1 6-3 9M3 12h18" stroke="#00ff88" stroke-width="1.5"/></svg></div>
             <div class="vip-feat-title">NET ACCELERATOR</div>
             <div class="vip-feat-desc">Giảm ping, tối ưu kết nối game</div>
           </div>
           <div class="vip-feat-card">
-            <div class="vip-feat-icon">🔊</div>
+            <div class="vip-feat-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M11 5L6 9H2v6h4l5 4V5z" stroke="#ff6b35" stroke-width="2" fill="#ff6b3522"/><path d="M15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14" stroke="#ff6b35" stroke-width="2" stroke-linecap="round"/></svg></div>
             <div class="vip-feat-title">SOUND ENHANCER</div>
             <div class="vip-feat-desc">Nâng cao âm thanh định hướng</div>
           </div>
           <div class="vip-feat-card">
-            <div class="vip-feat-icon">📊</div>
+            <div class="vip-feat-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M18 20V10M12 20V4M6 20v-6" stroke="#aa88ff" stroke-width="2.5" stroke-linecap="round"/></svg></div>
             <div class="vip-feat-title">DEEP ANALYTICS</div>
             <div class="vip-feat-desc">Phân tích hiệu năng chuyên sâu</div>
           </div>
@@ -818,11 +1658,295 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
             <span class="price-label">VIP ACCESS</span>
             <span class="price-val">LIÊN HỆ ADMIN</span>
           </div>
-          <button class="vip-cta-btn" onclick="showToast('Liên hệ admin để nâng cấp VIP!')">
-            <span>UPGRADE TO VIP</span>
+          <button class="vip-cta-btn" onclick="showKeyModal()">
+            <span>NHẬP KEY KÍCH HOẠT VIP</span>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2"/></svg>
           </button>
         </div>
+      </div>
+    </div>
+
+    <!-- PAGE: AIM LAB -->
+    <div class="page" id="page-aimlab">
+      <div class="page-scroll">
+        <div class="section-header">
+          <div class="section-title-lg">AIM LAB</div>
+          <div class="section-sub">Hỗ trợ kéo tâm Free Fire</div>
+        </div>
+
+        <!-- STATUS CARD -->
+        <div class="aim-status-card">
+          <div class="aim-crosshair-wrap">
+            <div class="aim-crosshair" id="aim-crosshair-preview">
+              <div class="ch-ring"></div>
+              <div class="ch-h"></div><div class="ch-v"></div><div class="ch-dot"></div>
+            </div>
+          </div>
+          <div class="aim-status-info">
+            <div class="aim-status-badge" id="aim-status-badge">● READY</div>
+            <div class="aim-mode-label" id="aim-mode-label">Chế độ: Cân bằng</div>
+            <div class="aim-score-row">
+              <span class="aim-score-lbl">AIM SCORE</span>
+              <span class="aim-score-val" id="aim-score-val">78</span>
+            </div>
+          </div>
+          <button class="aim-apply-btn-mini" onclick="applyAimSettings()">APPLY</button>
+        </div>
+
+        <!-- 1. AIM LOCK v1–v4 -->
+        <div class="aim-section-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;margin-right:6px"><rect x="3" y="11" width="18" height="11" rx="2" stroke="#00ff88" stroke-width="2" fill="#00ff8811"/><path d="M7 11V7a5 5 0 0110 0v4" stroke="#00ff88" stroke-width="2"/></svg>Aim Lock — Khoá tâm</div>
+        <div class="aimlock-grid">
+          <button class="aimlock-btn" id="al-v1" onclick="setAimLock(this,'v1')">
+            <span class="al-ver">v1</span><span class="al-name">Nhẹ</span><span class="al-desc">Hỗ trợ nhẹ</span>
+          </button>
+          <button class="aimlock-btn" id="al-v2" onclick="setAimLock(this,'v2')">
+            <span class="al-ver">v2</span><span class="al-name">Vừa</span><span class="al-desc">Cân bằng</span>
+          </button>
+          <button class="aimlock-btn active" id="al-v3" onclick="setAimLock(this,'v3')">
+            <span class="al-ver">v3</span><span class="al-name">Mạnh</span><span class="al-desc">Bám tốt</span>
+          </button>
+          <button class="aimlock-btn" id="al-v4" onclick="setAimLock(this,'v4')">
+            <span class="al-ver">v4</span><span class="al-name">MAX</span><span class="al-desc">Pro lock</span>
+          </button>
+        </div>
+        <div class="aimlock-detail" id="aimlock-detail">
+          <div class="ald-row"><span>Phạm vi khóa (Lock radius)</span><span class="ald-val" id="al-radius">35px</span></div>
+          <div class="ald-row"><span>Tốc độ bám (Track speed)</span><span class="ald-val" id="al-speed">Medium</span></div>
+          <div class="ald-row"><span>Ưu tiên (Priority)</span><span class="ald-val" id="al-priority">Đầu + Ngực</span></div>
+        </div>
+
+        <!-- 2. NHẸ TÂM -->
+        <div class="aim-section-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;margin-right:6px"><path d="M20.24 12.24a6 6 0 00-8.49-8.49L5 10.5V19h8.5l6.74-6.76z" stroke="#00ff88" stroke-width="2"/><path d="M16 8L2 22M17.5 15H9" stroke="#00ff88" stroke-width="2"/></svg>Nhẹ tâm — Smooth Aim</div>
+        <div class="smooth-card">
+          <div class="smooth-preview-row">
+            <div class="smooth-bar-wrap">
+              <div class="smooth-bar-track">
+                <div class="smooth-bar-fill" id="smooth-fill" style="width:60%"></div>
+              </div>
+              <div class="smooth-labels"><span>Cứng</span><span>Mượt</span></div>
+            </div>
+            <span class="smooth-pct" id="smooth-pct">60%</span>
+          </div>
+          <input type="range" min="0" max="100" value="60" class="sens-slider smooth-slider" oninput="updateSmooth(this.value)">
+          <div class="smooth-presets">
+            <button class="smooth-pre-btn" onclick="setSmooth(this,20)">Chắc tay</button>
+            <button class="smooth-pre-btn active" onclick="setSmooth(this,60)">Cân bằng</button>
+            <button class="smooth-pre-btn" onclick="setSmooth(this,85)">Siêu mượt</button>
+          </div>
+        </div>
+
+        <!-- 3. AIM ASSIST -->
+        <div class="aim-section-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;margin-right:6px"><rect x="3" y="8" width="18" height="13" rx="2" stroke="#00ff88" stroke-width="2"/><path d="M8 8V6a4 4 0 018 0v2" stroke="#00ff88" stroke-width="2"/><circle cx="9" cy="14" r="1.5" fill="#00ff88"/><circle cx="15" cy="14" r="1.5" fill="#00ff88"/><path d="M9 18h6" stroke="#00ff88" stroke-width="2" stroke-linecap="round"/></svg>Aim Assist — Hỗ trợ ngắm</div>
+        <div class="assist-card">
+          <div class="assist-toggle-row">
+            <div><div class="assist-title">Aim Assist</div><div class="assist-sub">Hỗ trợ kéo tâm tự nhiên khi ngắm</div></div>
+            <label class="toggle"><input type="checkbox" id="assist-toggle" checked onchange="toggleAssist(this)"><span class="toggle-track"></span></label>
+          </div>
+          <div class="assist-options" id="assist-options">
+            <div class="assist-opt-row">
+              <span>Phạm vi hỗ trợ</span>
+              <div class="assist-lvl-btns">
+                <button class="assist-lvl active" onclick="setAssistLevel(this,'low')">Thấp</button>
+                <button class="assist-lvl" onclick="setAssistLevel(this,'mid')">Trung</button>
+                <button class="assist-lvl" onclick="setAssistLevel(this,'high')">Cao</button>
+              </div>
+            </div>
+            <div class="assist-opt-row">
+              <span>Ưu tiên mục tiêu</span>
+              <div class="assist-lvl-btns">
+                <button class="assist-target active" onclick="setAssistTarget(this,'head')">Đầu</button>
+                <button class="assist-target" onclick="setAssistTarget(this,'body')">Ngực</button>
+                <button class="assist-target" onclick="setAssistTarget(this,'auto')">Auto</button>
+              </div>
+            </div>
+            <div class="assist-opt-row">
+              <span>Kích hoạt khi</span>
+              <div class="assist-lvl-btns">
+                <button class="assist-when active" onclick="setAssistWhen(this,'ads')">ADS</button>
+                <button class="assist-when" onclick="setAssistWhen(this,'always')">Luôn</button>
+                <button class="assist-when" onclick="setAssistWhen(this,'scope')">Scope</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. AIM HOLD -->
+        <div class="aim-section-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;margin-right:6px"><path d="M18 11V8a2 2 0 10-4 0v3M14 11V6a2 2 0 10-4 0v5M10 11V8a2 2 0 10-4 0v8a6 6 0 0012 0v-5a2 2 0 10-4 0v2" stroke="#00ff88" stroke-width="2" stroke-linecap="round"/></svg>Aim Hold — Giữ tâm</div>
+        <div class="hold-card">
+          <div class="hold-toggle-row">
+            <div><div class="hold-title">Aim Hold Mode</div><div class="hold-sub">Giữ tâm ổn định khi bắn liên tục</div></div>
+            <label class="toggle"><input type="checkbox" id="hold-toggle" onchange="toggleHold(this)"><span class="toggle-track"></span></label>
+          </div>
+          <div class="hold-options" id="hold-options" style="display:none;">
+            <div class="sens-row" style="margin-top:12px;">
+              <span class="sens-label">Độ giữ (Hold strength) <span class="sens-val" id="sv-hold">70</span></span>
+              <input type="range" min="0" max="100" value="70" class="sens-slider" oninput="updateSens('hold',this.value)">
+            </div>
+            <div class="hold-mode-row">
+              <span class="gyro-mode-lbl">Chế độ giữ:</span>
+              <div class="gyro-mode-btns">
+                <button class="gyro-mode-btn active" onclick="setHoldMode(this,'tap')">Nhấn giữ</button>
+                <button class="gyro-mode-btn" onclick="setHoldMode(this,'toggle')">Bật/Tắt</button>
+                <button class="gyro-mode-btn" onclick="setHoldMode(this,'auto')">Tự động</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5. SENSITIVITY (nhạy) -->
+        <div class="aim-section-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;margin-right:6px"><path d="M4 6h16M4 12h16M4 18h16" stroke="#00ff88" stroke-width="2" stroke-linecap="round"/><circle cx="8" cy="6" r="2" fill="#00ff88"/><circle cx="16" cy="12" r="2" fill="#00ff88"/><circle cx="10" cy="18" r="2" fill="#00ff88"/></svg>Nhạy — Sensitivity Tuning</div>
+        <div class="sens-preset-grid">
+          <button class="sens-preset-btn active" onclick="applySensPreset(this,'balanced')">
+            <span class="sp-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 3v18M5 8l7-5 7 5M3 12h4l2 6H5M15 12h4l2 6h-4" stroke="#00ff88" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="sp-name">Cân bằng</span><span class="sp-desc">Balanced</span>
+          </button>
+          <button class="sens-preset-btn" onclick="applySensPreset(this,'sniper')">
+            <span class="sp-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#00ff88" stroke-width="1.5"/><circle cx="12" cy="12" r="5" stroke="#00ff88" stroke-width="1.5"/><circle cx="12" cy="12" r="2" fill="#00ff88"/></svg></span><span class="sp-name">Sniper</span><span class="sp-desc">Ít giật</span>
+          </button>
+          <button class="sens-preset-btn" onclick="applySensPreset(this,'rush')">
+            <span class="sp-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="#FFD700" stroke-width="2" fill="#FFD70022"/></svg></span><span class="sp-name">Rush</span><span class="sp-desc">Phản xạ nhanh</span>
+          </button>
+          <button class="sens-preset-btn" onclick="applySensPreset(this,'pro')">
+            <span class="sp-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M2 19h20M3 9l4 4 5-8 5 8 4-4-2 10H5L3 9z" stroke="#FFD700" stroke-width="2" stroke-linejoin="round"/></svg></span><span class="sp-name">Pro</span><span class="sp-desc">Kéo tâm chuẩn</span>
+          </button>
+        </div>
+        <div class="sens-sliders">
+          <div class="sens-row">
+            <span class="sens-label">Tổng quát <span class="sens-val" id="sv-general">100</span></span>
+            <input type="range" min="1" max="200" value="100" id="sr-general" class="sens-slider" oninput="updateSens('general',this.value)">
+          </div>
+          <div class="sens-row">
+            <span class="sens-label">ADS <span class="sens-val" id="sv-ads">80</span></span>
+            <input type="range" min="1" max="200" value="80" id="sr-ads" class="sens-slider" oninput="updateSens('ads',this.value)">
+          </div>
+          <div class="sens-row">
+            <span class="sens-label">Scope 2x <span class="sens-val" id="sv-scope2">65</span></span>
+            <input type="range" min="1" max="200" value="65" id="sr-scope2" class="sens-slider" oninput="updateSens('scope2',this.value)">
+          </div>
+          <div class="sens-row">
+            <span class="sens-label">Scope 4x <span class="sens-val" id="sv-scope4">50</span></span>
+            <input type="range" min="1" max="200" value="50" id="sr-scope4" class="sens-slider" oninput="updateSens('scope4',this.value)">
+          </div>
+          <div class="sens-row">
+            <span class="sens-label">Scope 8x <span class="sens-val" id="sv-scope8">35</span></span>
+            <input type="range" min="1" max="200" value="35" id="sr-scope8" class="sens-slider" oninput="updateSens('scope8',this.value)">
+          </div>
+        </div>
+
+        <!-- 6. BÁM ĐẦU / HEAD LOCK -->
+        <div class="aim-section-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;margin-right:6px"><circle cx="12" cy="10" r="6" stroke="#ff4d6a" stroke-width="2"/><path d="M9 10a1 1 0 102 0 1 1 0 00-2 0zM13 10a1 1 0 102 0 1 1 0 00-2 0z" fill="#ff4d6a"/><path d="M9 14h2v2H9zM13 14h2v2h-2zM8 20h8" stroke="#ff4d6a" stroke-width="2" stroke-linecap="round"/></svg>Bám đầu — Head Tracking</div>
+        <div class="headlock-card">
+          <div class="headlock-visual">
+            <div class="headlock-target" id="headlock-target">
+              <div class="ht-head"></div>
+              <div class="ht-cross ht-cross-h"></div>
+              <div class="ht-cross ht-cross-v"></div>
+              <div class="ht-ring" id="ht-ring"></div>
+            </div>
+            <div class="headlock-right">
+              <div class="headlock-toggle-row">
+                <div>
+                  <div class="hold-title">Head Lock</div>
+                  <div class="hold-sub">Khoá tâm vào đầu đối thủ</div>
+                </div>
+                <label class="toggle"><input type="checkbox" id="headlock-toggle" onchange="toggleHeadLock(this)"><span class="toggle-track"></span></label>
+              </div>
+              <div class="headlock-lvl-wrap" id="headlock-lvl-wrap">
+                <div class="gyro-mode-lbl" style="margin-top:10px;">Cấp độ bám:</div>
+                <div class="headlock-lvl-row">
+                  <button class="hl-lvl-btn active" onclick="setHeadLockLevel(this,1)">Lv1</button>
+                  <button class="hl-lvl-btn" onclick="setHeadLockLevel(this,2)">Lv2</button>
+                  <button class="hl-lvl-btn" onclick="setHeadLockLevel(this,3)">Lv3</button>
+                  <button class="hl-lvl-btn" onclick="setHeadLockLevel(this,4)">Lv4</button>
+                  <button class="hl-lvl-btn" onclick="setHeadLockLevel(this,5)">MAX</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="headlock-stats" id="headlock-stats">
+            <div class="hs-item"><span>Vùng bắt đầu (Zone)</span><span class="hs-val" id="hl-zone">±20px</span></div>
+            <div class="hs-item"><span>Tốc độ bám (Speed)</span><span class="hs-val" id="hl-speed">Nhẹ</span></div>
+            <div class="hs-item"><span>Độ chính xác (Accuracy)</span><span class="hs-val" id="hl-acc">85%</span></div>
+          </div>
+        </div>
+
+        <!-- 7. GYROSCOPE -->
+        <div class="aim-section-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;margin-right:6px"><path d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c-2 0-4-4-4-9s2-9 4-9m0 18c2 0 4-4 4-9s-2-9-4-9m-9 9a9 9 0 019-9" stroke="#00aaff" stroke-width="2"/></svg>Gyroscope — Con quay hồi chuyển</div>
+        <div class="gyro-card">
+          <div class="gyro-toggle-row">
+            <div><div class="gyro-title">Bật Gyroscope Aim</div><div class="gyro-sub">Nghiêng máy để kéo tâm</div></div>
+            <label class="toggle"><input type="checkbox" id="gyro-toggle" onchange="toggleGyro(this)"><span class="toggle-track"></span></label>
+          </div>
+          <div class="gyro-options" id="gyro-options" style="display:none;">
+            <div class="sens-row">
+              <span class="sens-label">Nhạy dọc <span class="sens-val" id="sv-gyro-v">60</span></span>
+              <input type="range" min="1" max="150" value="60" id="sr-gyro-v" class="sens-slider gyro-slider" oninput="updateSens('gyro-v',this.value)">
+            </div>
+            <div class="sens-row">
+              <span class="sens-label">Nhạy ngang <span class="sens-val" id="sv-gyro-h">55</span></span>
+              <input type="range" min="1" max="150" value="55" id="sr-gyro-h" class="sens-slider gyro-slider" oninput="updateSens('gyro-h',this.value)">
+            </div>
+            <div class="gyro-mode-row">
+              <span class="gyro-mode-lbl">Kích hoạt:</span>
+              <div class="gyro-mode-btns">
+                <button class="gyro-mode-btn active" onclick="setGyroMode(this,'always')">Luôn bật</button>
+                <button class="gyro-mode-btn" onclick="setGyroMode(this,'ads')">Khi ADS</button>
+                <button class="gyro-mode-btn" onclick="setGyroMode(this,'scope')">Khi scope</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 8. TOUCH LATENCY -->
+        <div class="aim-section-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;margin-right:6px"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="#FFD700" stroke-width="2" fill="#FFD70022"/></svg>Touch Latency — Giảm lag chạm</div>
+        <div class="touch-latency-card">
+          <div class="tl-gauge-row">
+            <div class="tl-gauge">
+              <svg viewBox="0 0 80 50" width="90">
+                <path d="M10 45 A35 35 0 0 1 70 45" fill="none" stroke="#1a1a1a" stroke-width="7" stroke-linecap="round"/>
+                <path d="M10 45 A35 35 0 0 1 70 45" fill="none" stroke="#00ff88" stroke-width="7" stroke-linecap="round"
+                  stroke-dasharray="110" id="tl-gauge-arc" stroke-dashoffset="40"/>
+              </svg>
+              <div class="tl-gauge-val" id="tl-gauge-val">12ms</div>
+            </div>
+            <div class="tl-info">
+              <div class="tl-info-title">Touch Latency</div>
+              <div class="tl-info-sub" id="tl-status-text">TỐT — Good</div>
+              <button class="tl-optimize-btn" onclick="optimizeTouchLatency()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;margin-right:4px"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="currentColor" stroke-width="2" fill="currentColor" fill-opacity="0.4"/></svg>TỐI ƯU NGAY</button>
+            </div>
+          </div>
+          <div class="tl-options">
+            <div class="tl-opt-row"><span>Multi-touch nhanh</span><label class="toggle"><input type="checkbox" checked onchange="showToast('Multi-touch '+(this.checked?'bật':'tắt'))"><span class="toggle-track"></span></label></div>
+            <div class="tl-opt-row"><span>Lọc chạm nhầm</span><label class="toggle"><input type="checkbox" checked onchange="showToast('Lọc chạm '+(this.checked?'bật':'tắt'))"><span class="toggle-track"></span></label></div>
+            <div class="tl-opt-row"><span>Tăng tốc điểm chạm</span><label class="toggle"><input type="checkbox" onchange="showToast('Touch boost '+(this.checked?'bật':'tắt'))"><span class="toggle-track"></span></label></div>
+          </div>
+        </div>
+
+        <!-- 9. LAYOUT NGÓN -->
+        <div class="aim-section-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;margin-right:6px"><path d="M18 11V8a2 2 0 10-4 0v3M14 11V6a2 2 0 10-4 0v5M10 11V8a2 2 0 10-4 0v8a6 6 0 0012 0v-5a2 2 0 10-4 0v2" stroke="#00ff88" stroke-width="2" stroke-linecap="round"/></svg>Layout Ngón Tay</div>
+        <div class="layout-grid">
+          <button class="layout-btn" onclick="selectLayout(this,'2')">
+            <div class="layout-fingers"><div class="finger f-thumb-l"></div><div class="finger f-thumb-r"></div></div>
+            <span class="layout-name">2 Ngón</span><span class="layout-desc">Người mới</span>
+          </button>
+          <button class="layout-btn" onclick="selectLayout(this,'3')">
+            <div class="layout-fingers"><div class="finger f-thumb-l"></div><div class="finger f-index"></div><div class="finger f-thumb-r"></div></div>
+            <span class="layout-name">3 Ngón</span><span class="layout-desc">Phổ biến</span>
+          </button>
+          <button class="layout-btn active" onclick="selectLayout(this,'4')">
+            <div class="layout-fingers"><div class="finger f-thumb-l"></div><div class="finger f-index-l"></div><div class="finger f-index-r"></div><div class="finger f-thumb-r"></div></div>
+            <span class="layout-name">4 Ngón</span><span class="layout-desc">Pro aim</span>
+          </button>
+        </div>
+        <div class="layout-tips" id="layout-tips">
+          <div class="tip-title">💡 Mẹo 4 ngón:</div>
+          <div class="tip-text">Ngón cái trái: di chuyển · Ngón cái phải: bắn · Trỏ trái: nhảy/crouch · Trỏ phải: scope — Kéo tâm mượt hơn 40%</div>
+        </div>
+
+        <!-- APPLY BUTTON -->
+        <button class="aim-apply-btn-full" onclick="applyAimSettings()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+          ÁP DỤNG TẤT CẢ CÀI ĐẶT AIM
+        </button>
       </div>
     </div>
 
@@ -895,6 +2019,149 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
       </div>
     </div>
 
+
+    <!-- PAGE: ADMIN INFO -->
+    <div class="page" id="page-admin">
+      <div class="page-scroll">
+
+        <!-- HERO HEADER -->
+        <div class="admin-hero">
+          <div class="admin-hero-bg"></div>
+          <div class="admin-scan-line"></div>
+          <div class="admin-title-wrap">
+            <div class="admin-badge-tag">ADMIN · SPERNEW</div>
+            <div class="admin-page-title">THÔNG TIN<br><span>ADMIN</span></div>
+          </div>
+        </div>
+
+        <!-- AVATAR CARD -->
+        <div class="admin-avatar-card">
+          <div class="admin-avatar-ring-outer"></div>
+          <div class="admin-avatar-ring-mid"></div>
+          <div class="admin-avatar-frame">
+            <div class="admin-avatar-inner">
+              <!-- Ảnh admin: thay src bên dưới bằng link ảnh thật -->
+              <img id="admin-avatar-img"
+                src="https://sf-static.upanhlaylink.com/img/image_2026032908b0dc0c6571f1e01cbd954b962b09d1.jpg"
+                alt="Admin"
+                onerror="this.style.display='none';document.getElementById('admin-avatar-fallback').style.display='flex'"
+              />
+              <div id="admin-avatar-fallback" style="display:none" class="admin-avatar-fallback">
+                <svg width="60" height="60" viewBox="0 0 24 24" fill="none">
+                  <circle cx="12" cy="8" r="4" stroke="#00ff88" stroke-width="2"/>
+                  <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="#00ff88" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+          <div class="admin-corner admin-corner-tl"></div>
+          <div class="admin-corner admin-corner-tr"></div>
+          <div class="admin-corner admin-corner-bl"></div>
+          <div class="admin-corner admin-corner-br"></div>
+
+          <!-- Name + Status -->
+          <div class="admin-name-block">
+            <div class="admin-name">SperNew Admin</div>
+            <div class="admin-status-row">
+              <span class="admin-online-dot"></span>
+              <span class="admin-online-txt">Online · Phản hồi nhanh</span>
+            </div>
+            <div class="admin-role-badge">⚡ OWNER &amp; DEVELOPER</div>
+          </div>
+        </div>
+
+        <!-- CONTACT CARDS -->
+        <div class="admin-contact-label">LIÊN HỆ · CONTACT</div>
+
+        <div class="admin-contacts">
+
+          <!-- ZALO -->
+          <a class="admin-contact-card zalo-card" href="https://zalo.me/0336854208" target="_blank" onclick="playSound('click')">
+            <div class="acc-icon-wrap zalo-icon">
+              <svg width="26" height="26" viewBox="0 0 50 50" fill="none">
+                <rect width="50" height="50" rx="12" fill="#0068FF"/>
+                <text x="50%" y="58%" dominant-baseline="middle" text-anchor="middle" fill="white" font-size="22" font-weight="bold" font-family="Arial">Z</text>
+              </svg>
+            </div>
+            <div class="acc-info">
+              <div class="acc-platform">Zalo</div>
+              <div class="acc-handle">@SpernewAdmin</div>
+              <div class="acc-desc">Chat trực tiếp · Mua key VIP</div>
+            </div>
+            <div class="acc-arrow">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            </div>
+            <div class="acc-glow zalo-glow"></div>
+          </a>
+
+          <!-- FACEBOOK -->
+          <a class="admin-contact-card fb-card" href="https://www.facebook.com/share/1CjgQCh4n2/?mibextid=wwXIfr" target="_blank" onclick="playSound('click')">
+            <div class="acc-icon-wrap fb-icon">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+                <rect width="24" height="24" rx="6" fill="#1877F2"/>
+                <path d="M16 4h-2a4 4 0 00-4 4v2H8v3h2v7h3v-7h2.5l.5-3h-3V8a1 1 0 011-1h2V4z" fill="white"/>
+              </svg>
+            </div>
+            <div class="acc-info">
+              <div class="acc-platform">Facebook</div>
+              <div class="acc-handle">SperNew Official</div>
+              <div class="acc-desc">Fanpage · Tin tức · Update</div>
+            </div>
+            <div class="acc-arrow">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            </div>
+            <div class="acc-glow fb-glow"></div>
+          </a>
+
+          <!-- TELEGRAM -->
+          <a class="admin-contact-card tg-card" href="https://t.me/spernew" target="_blank" onclick="playSound('click')">
+            <div class="acc-icon-wrap tg-icon">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+                <rect width="24" height="24" rx="6" fill="#229ED9"/>
+                <path d="M20 4L3 11l6 2 2 6 3-4 5 3 1-14z" fill="white" opacity="0.9"/>
+                <path d="M9 13l1 5 3-4" fill="#229ED9"/>
+              </svg>
+            </div>
+            <div class="acc-info">
+              <div class="acc-platform">Telegram</div>
+              <div class="acc-handle">@SpernewAdmin</div>
+              <div class="acc-desc">Kênh thông báo · Support</div>
+            </div>
+            <div class="acc-arrow">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            </div>
+            <div class="acc-glow tg-glow"></div>
+          </a>
+
+        </div>
+
+        <!-- STATS ROW -->
+        <div class="admin-stats-row">
+          <div class="admin-stat-item">
+            <div class="admin-stat-val">500+</div>
+            <div class="admin-stat-lbl">Người dùng</div>
+          </div>
+          <div class="admin-stat-divider"></div>
+          <div class="admin-stat-item">
+            <div class="admin-stat-val">24/7</div>
+            <div class="admin-stat-lbl">Hỗ trợ</div>
+          </div>
+          <div class="admin-stat-divider"></div>
+          <div class="admin-stat-item">
+            <div class="admin-stat-val">v3.0</div>
+            <div class="admin-stat-lbl">Phiên bản</div>
+          </div>
+        </div>
+
+        <!-- NOTE -->
+        <div class="admin-note">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="9" stroke="#00ff88" stroke-width="2"/><path d="M12 8v4M12 16h.01" stroke="#00ff88" stroke-width="2" stroke-linecap="round"/></svg>
+          <span>Liên hệ admin để mua key VIP, báo lỗi hoặc yêu cầu tính năng mới. Phản hồi trong vòng 1–6 giờ.</span>
+        </div>
+
+      </div>
+    </div>
+
   </div><!-- end pages-container -->
 
   <!-- BOTTOM NAV -->
@@ -914,6 +2181,14 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
     <button class="bnav-btn" data-page="vip" onclick="switchPage('vip')">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z" stroke="currentColor" stroke-width="2"/></svg>
       <span>VIP</span>
+    </button>
+    <button class="bnav-btn" data-page="aimlab" onclick="switchPage('aimlab')">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="2"/><line x1="12" y1="3" x2="12" y2="7" stroke="currentColor" stroke-width="2"/><line x1="12" y1="17" x2="12" y2="21" stroke="currentColor" stroke-width="2"/><line x1="3" y1="12" x2="7" y2="12" stroke="currentColor" stroke-width="2"/><line x1="17" y1="12" x2="21" y2="12" stroke="currentColor" stroke-width="2"/></svg>
+      <span>AIM LAB</span>
+    </button>
+    <button class="bnav-btn" data-page="admin" onclick="switchPage('admin')">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="2"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      <span>Admin</span>
     </button>
     <button class="bnav-btn" data-page="settings" onclick="switchPage('settings')">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z" stroke="currentColor" stroke-width="2"/></svg>
@@ -935,6 +2210,24 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
 
 </div><!-- end app -->
 
+<!-- KEY MODAL -->
+<div id="key-modal">
+  <div class="key-modal-box">
+    <div class="corner corner-tl"></div>
+    <div class="corner corner-tr"></div>
+    <div class="corner corner-bl"></div>
+    <div class="corner corner-br"></div>
+    <span class="key-modal-icon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none"><rect x="3" y="11" width="18" height="11" rx="2" stroke="#00ff88" stroke-width="2" fill="#00ff8811"/><path d="M7 11V7a5 5 0 0110 0v4" stroke="#00ff88" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="16" r="1.5" fill="#00ff88"/></svg></span>
+    <div class="key-modal-title">NHẬP KEY VIP</div>
+    <div class="key-modal-sub">Liên hệ admin để lấy key kích hoạt</div>
+    <input id="key-input" placeholder="Nhập access key của bạn..."
+      onkeydown="if(event.key==='Enter')activateKey()">
+    <div id="key-msg"></div>
+    <button id="activate-btn" onclick="activateKey()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;margin-right:6px"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="currentColor" stroke-width="2" fill="currentColor" fill-opacity="0.3"/></svg>KÍCH HOẠT</button>
+    <div class="key-modal-lock"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;margin-right:4px"><rect x="3" y="11" width="18" height="11" rx="2" stroke="currentColor" stroke-width="2"/><path d="M7 11V7a5 5 0 0110 0v4" stroke="currentColor" stroke-width="2"/></svg>1 KEY — 1 THIẾT BỊ</div>
+  </div>
+</div>
+
 <script>// ============================================================
 //   SPERNEW OPTIMIZE — script.js
 // ============================================================
@@ -950,6 +2243,133 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
       e.preventDefault();
   }, { passive: false });
 })();
+
+// ============================================================
+//   SOUND ENGINE — Web Audio API
+// ============================================================
+const AudioCtx = window.AudioContext || window.webkitAudioContext;
+let audioCtx = null;
+
+function getAudioCtx() {
+  if (!audioCtx) audioCtx = new AudioCtx();
+  return audioCtx;
+}
+
+function playSound(type) {
+  try {
+    const s = document.getElementById('s-sound');
+    if (s && !s.checked) return;
+    const ctx = getAudioCtx();
+    const g = ctx.createGain();
+    g.connect(ctx.destination);
+
+    if (type === 'click') {
+      // Short neon tick
+      const o = ctx.createOscillator();
+      o.type = 'sine';
+      o.frequency.setValueAtTime(880, ctx.currentTime);
+      o.frequency.exponentialRampToValueAtTime(440, ctx.currentTime + 0.08);
+      g.gain.setValueAtTime(0.15, ctx.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.1);
+      o.connect(g);
+      o.start(ctx.currentTime);
+      o.stop(ctx.currentTime + 0.1);
+    } else if (type === 'toggle-on') {
+      const o = ctx.createOscillator();
+      o.type = 'square';
+      o.frequency.setValueAtTime(600, ctx.currentTime);
+      o.frequency.exponentialRampToValueAtTime(900, ctx.currentTime + 0.12);
+      g.gain.setValueAtTime(0.08, ctx.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.15);
+      o.connect(g);
+      o.start(); o.stop(ctx.currentTime + 0.15);
+    } else if (type === 'toggle-off') {
+      const o = ctx.createOscillator();
+      o.type = 'square';
+      o.frequency.setValueAtTime(500, ctx.currentTime);
+      o.frequency.exponentialRampToValueAtTime(250, ctx.currentTime + 0.1);
+      g.gain.setValueAtTime(0.07, ctx.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.12);
+      o.connect(g);
+      o.start(); o.stop(ctx.currentTime + 0.12);
+    } else if (type === 'boost') {
+      // Power up sweep
+      const o = ctx.createOscillator();
+      o.type = 'sawtooth';
+      o.frequency.setValueAtTime(200, ctx.currentTime);
+      o.frequency.exponentialRampToValueAtTime(1200, ctx.currentTime + 0.5);
+      g.gain.setValueAtTime(0.12, ctx.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.5);
+      o.connect(g);
+      o.start(); o.stop(ctx.currentTime + 0.5);
+    } else if (type === 'success') {
+      // Dual chord
+      [523, 659, 784].forEach((f, i) => {
+        const o = ctx.createOscillator();
+        o.type = 'sine'; o.frequency.value = f;
+        const gg = ctx.createGain();
+        gg.gain.setValueAtTime(0, ctx.currentTime + i * 0.08);
+        gg.gain.linearRampToValueAtTime(0.1, ctx.currentTime + i * 0.08 + 0.04);
+        gg.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.08 + 0.2);
+        o.connect(gg); gg.connect(ctx.destination);
+        o.start(ctx.currentTime + i * 0.08);
+        o.stop(ctx.currentTime + i * 0.08 + 0.25);
+      });
+    } else if (type === 'nav') {
+      const o = ctx.createOscillator();
+      o.type = 'sine';
+      o.frequency.setValueAtTime(440, ctx.currentTime);
+      o.frequency.exponentialRampToValueAtTime(660, ctx.currentTime + 0.06);
+      g.gain.setValueAtTime(0.1, ctx.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.08);
+      o.connect(g); o.start(); o.stop(ctx.currentTime + 0.08);
+    } else if (type === 'error') {
+      const o = ctx.createOscillator();
+      o.type = 'sawtooth';
+      o.frequency.setValueAtTime(300, ctx.currentTime);
+      o.frequency.exponentialRampToValueAtTime(150, ctx.currentTime + 0.2);
+      g.gain.setValueAtTime(0.1, ctx.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.22);
+      o.connect(g); o.start(); o.stop(ctx.currentTime + 0.22);
+    }
+  } catch(e) {}
+}
+
+// ── RIPPLE effect on buttons ──────────────────────────────────
+function addRipple(btn, e) {
+  const existing = btn.querySelector('.ripple-wave');
+  if (existing) existing.remove();
+  const rect = btn.getBoundingClientRect();
+  const x = (e.clientX || rect.left + rect.width/2) - rect.left;
+  const y = (e.clientY || rect.top + rect.height/2) - rect.top;
+  const r = document.createElement('span');
+  r.className = 'ripple-wave';
+  r.style.cssText = `left:${x}px;top:${y}px`;
+  btn.appendChild(r);
+  setTimeout(() => r.remove(), 600);
+}
+
+// Global click sound + ripple for all buttons
+document.addEventListener('click', function(e) {
+  const btn = e.target.closest('button, .bnav-btn, .qa-btn, .aimlock-btn, .sens-preset-btn, .layout-btn, .assist-lvl, .assist-target, .assist-when, .gyro-mode-btn, .hl-lvl-btn, .smooth-pre-btn, .tl-optimize-btn');
+  if (!btn) return;
+  if (btn.classList.contains('bnav-btn')) {
+    playSound('nav');
+  } else if (btn.id === 'boost-btn' || btn.classList.contains('aim-apply-btn-full') || btn.classList.contains('aim-apply-btn-mini')) {
+    playSound('boost');
+  } else {
+    playSound('click');
+  }
+  addRipple(btn, e);
+}, true);
+
+// Toggle sound
+document.addEventListener('change', function(e) {
+  if (e.target.type === 'checkbox') {
+    playSound(e.target.checked ? 'toggle-on' : 'toggle-off');
+  }
+}, true);
+
 
 // ============ SPLASH ============
 const splashMessages = [
@@ -1020,6 +2440,7 @@ function initApp() {
   animateScoreRing(78);
   document.getElementById('perf-score').textContent = '78';
   document.getElementById('perf-grade').textContent = 'GOOD — Tốt';
+  checkSavedKey();
 }
 
 // ============ PAGE NAV ============
@@ -1032,20 +2453,34 @@ function switchPage(id) {
 }
 
 // ============ FEATURES ============
+const svgIcon = {
+  fps: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="#00ff88" stroke-width="2" fill="#00ff8822"/></svg>`,
+  ram: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="2" y="7" width="20" height="10" rx="2" stroke="#00aaff" stroke-width="2" fill="#00aaff11"/><path d="M6 7V5M10 7V5M14 7V5M18 7V5M6 17v2M10 17v2M14 17v2M18 17v2" stroke="#00aaff" stroke-width="2" stroke-linecap="round"/></svg>`,
+  thermal: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M14 14.76V3.5a2.5 2.5 0 00-5 0v11.26a4.5 4.5 0 105 0z" stroke="#ff6b35" stroke-width="2" fill="#ff6b3511"/></svg>`,
+  network: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M1 6s4-4 11-4 11 4 11 4M5 10s2.5-2.5 7-2.5S19 10 19 10M9 14s1-1 3-1 3 1 3 1M12 18v1" stroke="#aa88ff" stroke-width="2" stroke-linecap="round"/></svg>`,
+  battery: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="2" y="7" width="16" height="10" rx="2" stroke="#00ff88" stroke-width="2" fill="#00ff8811"/><path d="M22 11v2" stroke="#00ff88" stroke-width="3" stroke-linecap="round"/><path d="M6 12h8" stroke="#00ff88" stroke-width="2" stroke-linecap="round"/></svg>`,
+  aim: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#00ff88" stroke-width="1.5"/><circle cx="12" cy="12" r="4" stroke="#00ff88" stroke-width="1.5"/><circle cx="12" cy="12" r="1.5" fill="#00ff88"/></svg>`,
+  turbo: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="#FFD700" stroke-width="2" fill="#FFD70022"/></svg>`,
+  shield: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 2L3 7v6c0 5 4 9 9 10 5-1 9-5 9-10V7L12 2z" stroke="#00aaff" stroke-width="2" fill="#00aaff11"/><path d="M9 12l2 2 4-4" stroke="#00aaff" stroke-width="2" stroke-linecap="round"/></svg>`,
+  globe: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#00ff88" stroke-width="1.5"/><path d="M12 3c-2 3-3 6-3 9s1 6 3 9M12 3c2 3 3 6 3 9s-1 6-3 9M3 12h18" stroke="#00ff88" stroke-width="1.5"/></svg>`,
+  sound: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M11 5L6 9H2v6h4l5 4V5z" stroke="#ff6b35" stroke-width="2" fill="#ff6b3511"/><path d="M15.54 8.46a5 5 0 010 7.07" stroke="#ff6b35" stroke-width="2" stroke-linecap="round"/></svg>`,
+  chart: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M18 20V10M12 20V4M6 20v-6" stroke="#aa88ff" stroke-width="2.5" stroke-linecap="round"/></svg>`,
+};
+
 const freeFeatures = [
-  { icon: '⚡', name: 'FPS Stabilizer', desc: 'Ổn định khung hình / Frame stabilization', id: 'fps-stab' },
-  { icon: '🧹', name: 'RAM Cleaner', desc: 'Dọn RAM nhanh / Quick memory clean', id: 'ram-clean' },
-  { icon: '🌡️', name: 'Thermal Monitor', desc: 'Theo dõi nhiệt độ / Temperature tracking', id: 'thermal' },
-  { icon: '📶', name: 'Network Monitor', desc: 'Theo dõi mạng / Network tracking', id: 'net-mon' },
-  { icon: '🔋', name: 'Battery Saver', desc: 'Tiết kiệm pin / Battery optimization', id: 'bat-save' },
+  { icon: svgIcon.fps, name: 'FPS Stabilizer', desc: 'Ổn định khung hình / Frame stabilization', id: 'fps-stab' },
+  { icon: svgIcon.ram, name: 'RAM Cleaner', desc: 'Dọn RAM nhanh / Quick memory clean', id: 'ram-clean' },
+  { icon: svgIcon.thermal, name: 'Thermal Monitor', desc: 'Theo dõi nhiệt độ / Temperature tracking', id: 'thermal' },
+  { icon: svgIcon.network, name: 'Network Monitor', desc: 'Theo dõi mạng / Network tracking', id: 'net-mon' },
+  { icon: svgIcon.battery, name: 'Battery Saver', desc: 'Tiết kiệm pin / Battery optimization', id: 'bat-save' },
 ];
 const vipFeatures = [
-  { icon: '🎯', name: 'AI Aim Engine', desc: 'Tối ưu điều khiển AI / AI control optimizer', id: 'aim-eng' },
-  { icon: '🚀', name: 'Turbo Frame', desc: 'Tăng FPS tối đa / Maximum FPS boost', id: 'turbo' },
-  { icon: '🛡️', name: 'Thermal AI Guard', desc: 'Kiểm soát nhiệt AI / AI thermal control', id: 'therm-ai' },
-  { icon: '🌐', name: 'Net Accelerator', desc: 'Giảm ping / Ping reducer', id: 'net-acc' },
-  { icon: '🔊', name: 'Sound Enhancer', desc: 'Tăng âm thanh định hướng / Directional audio', id: 'sound-en' },
-  { icon: '📊', name: 'Deep Analytics', desc: 'Phân tích chuyên sâu / Deep analytics', id: 'analytics' },
+  { icon: svgIcon.aim, name: 'AI Aim Engine', desc: 'Tối ưu điều khiển AI / AI control optimizer', id: 'aim-eng' },
+  { icon: svgIcon.turbo, name: 'Turbo Frame', desc: 'Tăng FPS tối đa / Maximum FPS boost', id: 'turbo' },
+  { icon: svgIcon.shield, name: 'Thermal AI Guard', desc: 'Kiểm soát nhiệt AI / AI thermal control', id: 'therm-ai' },
+  { icon: svgIcon.globe, name: 'Net Accelerator', desc: 'Giảm ping / Ping reducer', id: 'net-acc' },
+  { icon: svgIcon.sound, name: 'Sound Enhancer', desc: 'Tăng âm thanh định hướng / Directional audio', id: 'sound-en' },
+  { icon: svgIcon.chart, name: 'Deep Analytics', desc: 'Phân tích chuyên sâu / Deep analytics', id: 'analytics' },
 ];
 
 function buildFeatures() {
@@ -1061,7 +2496,7 @@ function buildFeatList(containerId, features, isVip) {
     const item = document.createElement('div');
     item.className = 'feat-item';
     item.innerHTML = `
-      <div class="feat-icon">${f.icon}</div>
+      <div class="feat-icon" style="display:flex;align-items:center;justify-content:center">${f.icon}</div>
       <div class="feat-info">
         <div class="feat-name">${f.name}</div>
         <div class="feat-desc">${f.desc}</div>
@@ -1212,6 +2647,7 @@ function animateScoreRing(score) {
 
 // ============ BOOST ============
 function runBoost() {
+  playSound('boost');
   const overlay = document.getElementById('boost-overlay');
   const text = document.getElementById('boost-overlay-text');
   const pct = document.getElementById('boost-overlay-pct');
@@ -1259,6 +2695,432 @@ function showToast(msg) {
 function applySettings() {
   // Dark mode always on for now
   showToast('Settings saved / Đã lưu cài đặt');
+}
+
+
+// ============================================================
+//   AIM LAB — Hỗ trợ kéo tâm Free Fire
+// ============================================================
+
+// ── 1. AIM LOCK v1–v4 ────────────────────────────────────────
+const aimlockData = {
+  v1: { radius:'15px', speed:'Rất nhẹ',  priority:'Ngực',       label:'AimLock v1 — Nhẹ'  },
+  v2: { radius:'25px', speed:'Nhẹ',      priority:'Đầu + Ngực', label:'AimLock v2 — Vừa'  },
+  v3: { radius:'35px', speed:'Medium',   priority:'Đầu + Ngực', label:'AimLock v3 — Mạnh' },
+  v4: { radius:'55px', speed:'Nhanh',    priority:'Đầu (MAX)',  label:'AimLock v4 — MAX'  },
+};
+
+function setAimLock(btn, ver) {
+  document.querySelectorAll('.aimlock-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const d = aimlockData[ver];
+  document.getElementById('al-radius').textContent   = d.radius;
+  document.getElementById('al-speed').textContent    = d.speed;
+  document.getElementById('al-priority').textContent = d.priority;
+  document.getElementById('aim-mode-label').textContent = d.label;
+  updateAimScore();
+  showToast('🔒 ' + d.label + ' đã chọn');
+}
+
+// ── 2. NHẸ TÂM (Smooth) ──────────────────────────────────────
+function updateSmooth(val) {
+  document.getElementById('smooth-fill').style.width = val + '%';
+  document.getElementById('smooth-pct').textContent  = val + '%';
+  updateAimScore();
+}
+function setSmooth(btn, val) {
+  document.querySelectorAll('.smooth-pre-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const slider = document.querySelector('.smooth-slider');
+  if (slider) { slider.value = val; updateSmooth(val); }
+  showToast('🪶 Smooth aim: ' + btn.textContent);
+}
+
+// ── 3. AIM ASSIST ─────────────────────────────────────────────
+function toggleAssist(el) {
+  showToast(el.checked ? '🤖 Aim Assist đã bật' : '🤖 Aim Assist đã tắt');
+  updateAimScore();
+}
+function setAssistLevel(btn, lvl) {
+  document.querySelectorAll('.assist-lvl').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  showToast('Aim Assist: ' + btn.textContent);
+}
+function setAssistTarget(btn, t) {
+  document.querySelectorAll('.assist-target').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  showToast('Target: ' + btn.textContent);
+}
+function setAssistWhen(btn, w) {
+  document.querySelectorAll('.assist-when').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  showToast('Kích hoạt: ' + btn.textContent);
+}
+
+// ── 4. AIM HOLD ───────────────────────────────────────────────
+function toggleHold(el) {
+  document.getElementById('hold-options').style.display = el.checked ? 'block' : 'none';
+  showToast(el.checked ? '🖐️ Aim Hold bật' : '🖐️ Aim Hold tắt');
+}
+function setHoldMode(btn, mode) {
+  document.querySelectorAll('.gyro-mode-btn').forEach(b => {
+    if (b.closest('#hold-options')) b.classList.remove('active');
+  });
+  btn.classList.add('active');
+  showToast('Hold mode: ' + btn.textContent);
+}
+
+// ── 5. SENSITIVITY ────────────────────────────────────────────
+const sensPresets = {
+  balanced: { general:100, ads:80, scope2:65, scope4:50, scope8:35, label:'Chế độ: Cân bằng' },
+  sniper:   { general:55,  ads:42, scope2:32, scope4:26, scope8:18, label:'Chế độ: Sniper'   },
+  rush:     { general:155, ads:120,scope2:100,scope4:80, scope8:55, label:'Chế độ: Rush'      },
+  pro:      { general:88,  ads:70, scope2:58, scope4:44, scope8:30, label:'Chế độ: Pro Aim'   },
+};
+
+function applySensPreset(btn, preset) {
+  document.querySelectorAll('.sens-preset-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const p = sensPresets[preset];
+  ['general','ads','scope2','scope4','scope8'].forEach(k => {
+    const sl = document.getElementById('sr-' + k);
+    const vl = document.getElementById('sv-' + k);
+    if (sl) sl.value = p[k];
+    if (vl) vl.textContent = p[k];
+  });
+  document.getElementById('aim-mode-label').textContent = p.label;
+  showToast('✅ Preset: ' + btn.querySelector('.sp-name').textContent);
+}
+
+function updateSens(key, val) {
+  const el = document.getElementById('sv-' + key);
+  if (el) el.textContent = val;
+}
+
+// ── 6. HEAD LOCK / BÁM ĐẦU ───────────────────────────────────
+const headLockData = [
+  { zone:'±10px', speed:'Rất nhẹ', acc:'70%' },
+  { zone:'±18px', speed:'Nhẹ',     acc:'78%' },
+  { zone:'±26px', speed:'Trung',   acc:'85%' },
+  { zone:'±36px', speed:'Nhanh',   acc:'91%' },
+  { zone:'±50px', speed:'Tối đa',  acc:'97%' },
+];
+
+function toggleHeadLock(el) {
+  const ring = document.getElementById('ht-ring');
+  if (el.checked) {
+    ring.style.animation = 'ht-pulse 1s infinite';
+    ring.style.borderColor = '#ff4d6a';
+    showToast('💀 Head Lock đã bật');
+  } else {
+    ring.style.animation = 'none';
+    ring.style.borderColor = '#333';
+    showToast('💀 Head Lock đã tắt');
+  }
+  updateAimScore();
+}
+
+function setHeadLockLevel(btn, lv) {
+  document.querySelectorAll('.hl-lvl-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const d = headLockData[lv - 1];
+  document.getElementById('hl-zone').textContent  = d.zone;
+  document.getElementById('hl-speed').textContent = d.speed;
+  document.getElementById('hl-acc').textContent   = d.acc;
+  showToast('💀 Head Lock Lv' + lv + ' — ' + d.acc);
+  updateAimScore();
+}
+
+// ── 7. GYROSCOPE ─────────────────────────────────────────────
+function toggleGyro(el) {
+  document.getElementById('gyro-options').style.display = el.checked ? 'block' : 'none';
+  showToast(el.checked ? '🔄 Gyroscope bật' : '🔄 Gyroscope tắt');
+}
+function setGyroMode(btn, mode) {
+  const parent = btn.closest('.gyro-mode-btns');
+  parent.querySelectorAll('.gyro-mode-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const lbl = { always:'Luôn bật', ads:'Khi ADS', scope:'Khi scope' };
+  showToast('Gyro: ' + lbl[mode]);
+}
+
+// ── 8. TOUCH LATENCY ─────────────────────────────────────────
+let currentLatency = 12;
+function optimizeTouchLatency() {
+  const arc = document.getElementById('tl-gauge-arc');
+  const valEl = document.getElementById('tl-gauge-val');
+  const txt   = document.getElementById('tl-status-text');
+  let lat = currentLatency;
+  showToast('⚡ Đang tối ưu touch latency...');
+  const iv = setInterval(() => {
+    lat = Math.max(3, lat - Math.random() * 3);
+    const offset = 110 - ((lat / 50) * 110);
+    if (arc)   arc.style.strokeDashoffset = offset;
+    if (valEl) valEl.textContent = Math.round(lat) + 'ms';
+    if (lat <= 4) {
+      clearInterval(iv);
+      currentLatency = Math.round(lat);
+      arc.style.stroke = '#00ff88';
+      txt.textContent  = 'SIÊU NHANH — Xuất sắc';
+      showToast('✅ Latency tối ưu: ' + currentLatency + 'ms');
+    }
+  }, 180);
+}
+
+// ── 9. LAYOUT ─────────────────────────────────────────────────
+const layoutTips = {
+  '2': { t:'💡 Mẹo 2 ngón:', d:'Cả 2 ngón cái điều khiển tất cả · Đơn giản · Phù hợp người mới bắt đầu' },
+  '3': { t:'💡 Mẹo 3 ngón:', d:'Ngón cái trái: di chuyển · Ngón cái phải: nhìn · Ngón trỏ: bắn — Cân bằng tốt' },
+  '4': { t:'💡 Mẹo 4 ngón:', d:'Cái trái: di chuyển · Cái phải: bắn · Trỏ trái: nhảy/crouch · Trỏ phải: scope — Kéo tâm mượt hơn 40%' },
+};
+function selectLayout(btn, f) {
+  document.querySelectorAll('.layout-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const t = layoutTips[f];
+  const el = document.getElementById('layout-tips');
+  if (el && t) el.innerHTML = `<div class="tip-title">${t.t}</div><div class="tip-text">${t.d}</div>`;
+  showToast('✋ Layout ' + f + ' ngón');
+}
+
+// ── AIM SCORE ─────────────────────────────────────────────────
+function updateAimScore() {
+  const base = 60;
+  const al  = document.querySelector('.aimlock-btn.active');
+  const hlT = document.getElementById('headlock-toggle');
+  const asT = document.getElementById('assist-toggle');
+  const hoT = document.getElementById('hold-toggle');
+  let score = base;
+  if (al) { const v = al.id; score += v==='v4'?18:v==='v3'?12:v==='v2'?7:3; }
+  if (hlT && hlT.checked) score += 10;
+  if (asT && asT.checked) score += 8;
+  if (hoT && hoT.checked) score += 4;
+  score = Math.min(99, score);
+  const el = document.getElementById('aim-score-val');
+  if (el) el.textContent = score;
+}
+
+// ── APPLY ALL ─────────────────────────────────────────────────
+function applyAimSettings() {
+  const overlay = document.getElementById('boost-overlay');
+  const text    = document.getElementById('boost-overlay-text');
+  const pct     = document.getElementById('boost-overlay-pct');
+  overlay.style.display = 'flex';
+  let p = 0;
+  const msgs = ['LOADING AIM CONFIG...','CALIBRATING AIM LOCK...','APPLYING HEAD TRACKING...','TUNING SENSITIVITY...','AIM OPTIMIZED!'];
+  const iv = setInterval(() => {
+    p += rand(10, 20);
+    if (p > 100) p = 100;
+    pct.textContent  = p + '%';
+    text.textContent = msgs[Math.min(Math.floor((p/100)*(msgs.length-1)), msgs.length-1)];
+    if (p >= 100) {
+      clearInterval(iv);
+      setTimeout(() => {
+        overlay.style.display = 'none';
+        const badge = document.getElementById('aim-status-badge');
+        if (badge) { badge.textContent = '● OPTIMIZED'; badge.style.color = '#00ff88'; }
+        showToast('🎯 Tất cả cài đặt AIM đã áp dụng! Chúc rank cao!');
+        updateAimScore();
+      }, 400);
+    }
+  }, 200);
+}
+
+// ⚠️ Điền 2 dòng này sau khi tạo project Supabase
+const SUPABASE_URL = 'https://pjhdnvbssbcmbhepevcn.supabase.co';  // ← dán URL project vào đây
+const SUPABASE_KEY        = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBqaGRudmJzc2JjbWJoZXBldmNuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ2NTk4MzMsImV4cCI6MjA5MDIzNTgzM30.00MnFaNSNOJEHJO_OPbsMu45EftknC9o4_ukx5UHaE4';       // ← anon key (dùng để đọc)
+const SUPABASE_WRITE_KEY  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBqaGRudmJzc2JjbWJoZXBldmNuIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NDY1OTgzMywiZXhwIjoyMDkwMjM1ODMzfQ.63NAUMk4y-25eyjy9n96BhK3grB0b_64Ng04wIsSDVM';      // ← service_role key (dùng để bind device)
+
+// ============ DEVICE ID ============
+function getDeviceId() {
+  // Lấy ID đã lưu từ localStorage (ổn định, không đổi trừ khi xóa cache)
+  let id = localStorage.getItem('device_id');
+  if (!id) {
+    // Tạo fingerprint từ thông tin thiết bị — KHÔNG dùng rand để ID ổn định
+    const ua = navigator.userAgent;
+    const scr = `${window.screen.width}x${window.screen.height}x${window.screen.colorDepth}`;
+    const lang = navigator.language;
+    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const cores = navigator.hardwareConcurrency || 0;
+    const mem = navigator.deviceMemory || 0;
+    const raw = `${ua}|${scr}|${lang}|${tz}|${cores}|${mem}`;
+    let hash = 0;
+    for (let i = 0; i < raw.length; i++) {
+      hash = ((hash << 5) - hash) + raw.charCodeAt(i);
+      hash |= 0;
+    }
+    id = 'dev_' + Math.abs(hash).toString(16);
+    localStorage.setItem('device_id', id);
+  }
+  return id;
+}
+
+function showKeyModal() {
+  document.getElementById('key-modal').style.display = 'flex';
+  document.getElementById('key-input').value = '';
+  document.getElementById('key-msg').textContent = '';
+  setTimeout(() => document.getElementById('key-input').focus(), 100);
+}
+
+// Không cho phép đóng modal nếu chưa kích hoạt
+function hideKeyModal() {
+  const isVip = localStorage.getItem('vip_key') && localStorage.getItem('vip_expires')
+    && new Date(localStorage.getItem('vip_expires')) > new Date();
+  if (!isVip) {
+    showToast('⚠️ Vui lòng nhập key để tiếp tục!');
+    return;
+  }
+  document.getElementById('key-modal').style.display = 'none';
+}
+
+async function activateKey() {
+  const key = document.getElementById('key-input').value.trim();
+  const msgEl = document.getElementById('key-msg');
+  const btn = document.getElementById('activate-btn');
+  const deviceId = getDeviceId();
+
+  if (!key) { msgEl.style.color = '#ff4d6a'; msgEl.textContent = '⚠️ Vui lòng nhập key!'; return; }
+
+  btn.textContent = 'ĐANG KIỂM TRA...';
+  btn.disabled = true;
+  msgEl.style.color = '#aaa';
+  msgEl.textContent = 'Đang xác thực...';
+
+  try {
+    // Lấy thông tin key bao gồm device_id đã bind
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/keys?key=eq.${encodeURIComponent(key)}&select=expires_at,is_active,device_id`,
+      { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }
+    );
+    const data = await res.json();
+
+    if (!data.length) {
+      msgEl.style.color = '#ff4d6a'; msgEl.textContent = '❌ Key không tồn tại';
+    } else {
+      const { expires_at, is_active, device_id: boundDevice } = data[0];
+
+      if (!is_active) {
+        msgEl.style.color = '#ff4d6a'; msgEl.textContent = '❌ Key đã bị thu hồi';
+      } else if (new Date(expires_at) < new Date()) {
+        msgEl.style.color = '#ff4d6a'; msgEl.textContent = '❌ Key đã hết hạn';
+      } else if (boundDevice && boundDevice !== deviceId) {
+        // Key đã được bind vào thiết bị khác
+        msgEl.style.color = '#ff4d6a'; msgEl.textContent = '❌ Key này đã được dùng trên thiết bị khác';
+      } else {
+        // Nếu chưa bind thì bind device_id vào key này
+        if (!boundDevice) {
+          // Dùng service_role key để đảm bảo ghi được dù Supabase RLS bật
+          const bindRes = await fetch(
+            `${SUPABASE_URL}/rest/v1/keys?key=eq.${encodeURIComponent(key)}`,
+            {
+              method: 'PATCH',
+              headers: {
+                apikey: SUPABASE_WRITE_KEY,
+                Authorization: `Bearer ${SUPABASE_WRITE_KEY}`,
+                'Content-Type': 'application/json',
+                Prefer: 'return=minimal'
+              },
+              body: JSON.stringify({ device_id: deviceId })
+            }
+          );
+          if (!bindRes.ok) {
+            msgEl.style.color = '#ff4d6a';
+            msgEl.textContent = '❌ Không thể bind thiết bị, thử lại sau';
+            btn.textContent = 'KÍCH HOẠT'; btn.disabled = false;
+            return;
+          }
+        }
+        const exp = expires_at.slice(0, 10);
+        localStorage.setItem('vip_key', key);
+        localStorage.setItem('vip_expires', exp);
+        msgEl.style.color = '#00ff88';
+        msgEl.textContent = '✅ Kích hoạt thành công!'; playSound('success');
+        setTimeout(() => {
+          document.getElementById('key-modal').style.display = 'none';
+          unlockVIP(exp);
+        }, 900);
+      }
+    }
+  } catch (e) {
+    msgEl.style.color = '#ff4d6a';
+    msgEl.textContent = '❌ Không kết nối được Supabase';
+  }
+
+  btn.textContent = 'KÍCH HOẠT';
+  btn.disabled = false;
+}
+
+function unlockVIP(expiresAt) {
+  // Mở khoá tất cả VIP toggles
+  const vipList = document.getElementById('feature-list-vip');
+  if (vipList) {
+    vipList.classList.remove('locked');
+    vipList.querySelectorAll('input[type=checkbox]').forEach(el => {
+      el.disabled = false;
+      el.onchange = function () {
+        onFeatureToggle(this, this.closest('.feat-item').querySelector('.feat-name').textContent);
+      };
+    });
+  }
+
+  // Đổi nút UPGRADE → đã kích hoạt
+  document.querySelectorAll('.upgrade-mini-btn').forEach(btn => {
+    btn.textContent = '👑 VIP';
+    btn.style.background = 'linear-gradient(135deg,#ffe94d,#ff9800)';
+    btn.style.color = '#000';
+    btn.onclick = null;
+  });
+
+  // Banner VIP ở đầu app
+  if (!document.getElementById('vip-banner')) {
+    const banner = document.createElement('div');
+    banner.id = 'vip-banner';
+    banner.style.cssText = 'background:linear-gradient(90deg,#00ff8811,#00ff8822);border-bottom:1px solid #00ff8833;color:#00ff88;padding:7px 16px;text-align:center;font-size:11px;font-weight:700;letter-spacing:1px;';
+    banner.innerHTML = `👑 VIP ACTIVE &nbsp;|&nbsp; Hết hạn: ${expiresAt}`;
+    document.getElementById('app').prepend(banner);
+  }
+
+  showToast('👑 VIP kích hoạt thành công! Hết hạn ' + expiresAt);
+}
+
+async function checkSavedKey() {
+  const key = localStorage.getItem('vip_key');
+  const exp = localStorage.getItem('vip_expires');
+
+  // Không có key trong localStorage → bắt nhập ngay
+  if (!key || !exp || new Date(exp) <= new Date()) {
+    localStorage.removeItem('vip_key');
+    localStorage.removeItem('vip_expires');
+    showKeyModal();
+    return;
+  }
+
+  // Có key → verify lại với Supabase mỗi lần mở app
+  try {
+    const deviceId = getDeviceId();
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/keys?key=eq.${encodeURIComponent(key)}&select=expires_at,is_active,device_id`,
+      { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }
+    );
+    const data = await res.json();
+
+    if (
+      !data.length ||
+      !data[0].is_active ||
+      new Date(data[0].expires_at) < new Date() ||
+      (data[0].device_id && data[0].device_id !== deviceId)
+    ) {
+      localStorage.removeItem('vip_key');
+      localStorage.removeItem('vip_expires');
+      showKeyModal();
+      return;
+    }
+
+    unlockVIP(data[0].expires_at.slice(0, 10));
+
+  } catch (e) {
+    // Mất mạng → cho vào tạm dựa trên localStorage
+    unlockVIP(exp);
+  }
 }
 </script>
 </body>
