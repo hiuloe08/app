@@ -1,5 +1,949 @@
 /**
 
+- ⚡ SPERNEW OPTIMIZE — EXTRA SCRIPTS PACK
+- ~40 script tối ưu bổ sung, tương thích hoàn toàn với app
+- Dán vào cuối <script> hiện tại hoặc import riêng
+  */
+
+// ============================================================
+// [1] SCROLL MOMENTUM STOPPER
+// Dừng quán tính scroll ngay lập tức khi touch end
+// (Giảm CPU vô ích khi scroll xong)
+// ============================================================
+(function ScrollOptimizer() {
+let scrollEls = [];
+function registerScrollEl(el) {
+if (!el || scrollEls.includes(el)) return;
+scrollEls.push(el);
+let startY, startScroll;
+el.addEventListener(‘touchstart’, e => {
+startY = e.touches[0].clientY;
+startScroll = el.scrollTop;
+}, { passive: true });
+el.addEventListener(‘touchend’, () => {
+// Force recalculate — flush pending paint
+el.style.overflow = ‘hidden’;
+requestAnimationFrame(() => { el.style.overflow = ‘’; });
+}, { passive: true });
+}
+// Đăng ký tất cả page-scroll
+document.querySelectorAll(’.page-scroll’).forEach(registerScrollEl);
+// Observer để catch dynamic pages
+new MutationObserver(() => {
+document.querySelectorAll(’.page-scroll’).forEach(registerScrollEl);
+}).observe(document.body, { childList: true, subtree: true });
+})();
+
+// ============================================================
+// [2] FRAME BUDGET MANAGER
+// Giới hạn JS chạy trong mỗi frame ≤ 8ms để giữ 60FPS
+// ============================================================
+const FrameBudget = {
+_tasks: [],
+_running: false,
+BUDGET_MS: 8,
+
+add(task, priority = 0) {
+this._tasks.push({ task, priority });
+this._tasks.sort((a, b) => b.priority - a.priority);
+if (!this._running) this._run();
+},
+
+_run() {
+this._running = true;
+requestAnimationFrame((timestamp) => {
+const deadline = timestamp + this.BUDGET_MS;
+while (this._tasks.length && performance.now() < deadline) {
+this._tasks.shift().task();
+}
+if (this._tasks.length) {
+this._run(); // Còn task → frame tiếp theo
+} else {
+this._running = false;
+}
+});
+}
+};
+
+// ============================================================
+// [3] DOM MUTATION BATCHER
+// Gom mọi thay đổi DOM vào 1 lần, tránh reflow liên tục
+// ============================================================
+const DOMBatcher = {
+_reads: [],
+_writes: [],
+_scheduled: false,
+
+read(fn)  { this._reads.push(fn);  this._schedule(); },
+write(fn) { this._writes.push(fn); this._schedule(); },
+
+_schedule() {
+if (this._scheduled) return;
+this._scheduled = true;
+requestAnimationFrame(() => {
+// All reads first (avoid forced reflow)
+this._reads.forEach(fn => fn());
+this._reads = [];
+// Then all writes
+this._writes.forEach(fn => fn());
+this._writes = [];
+this._scheduled = false;
+});
+}
+};
+
+// ============================================================
+// [4] PASSIVE EVENT AUTO-PATCHER
+// Tự động thêm passive:true cho mọi scroll/touch listener
+// (Xử lý cả listeners được thêm sau này)
+// ============================================================
+(function PassivePatcher() {
+const orig = EventTarget.prototype.addEventListener;
+const passiveEvents = new Set([‘touchstart’,‘touchmove’,‘touchend’,‘scroll’,‘wheel’,‘mousewheel’]);
+EventTarget.prototype.addEventListener = function(type, fn, options) {
+if (passiveEvents.has(type)) {
+if (typeof options === ‘boolean’) options = { capture: options, passive: true };
+else if (!options) options = { passive: true };
+else if (options.passive === undefined) options = { …options, passive: true };
+}
+return orig.call(this, type, fn, options);
+};
+})();
+
+// ============================================================
+// [5] IMAGE LAZY LOADER (cho avatar & icon)
+// ============================================================
+(function LazyImages() {
+if (!(‘IntersectionObserver’ in window)) return;
+const obs = new IntersectionObserver(entries => {
+entries.forEach(e => {
+if (!e.isIntersecting) return;
+const img = e.target;
+if (img.dataset.src) { img.src = img.dataset.src; img.removeAttribute(‘data-src’); }
+obs.unobserve(img);
+});
+}, { rootMargin: ‘150px’ });
+document.querySelectorAll(‘img[data-src]’).forEach(img => obs.observe(img));
+})();
+
+// ============================================================
+// [6] CSS CONTAINMENT INJECTOR
+// Thêm contain: layout style paint cho cards — giảm repaint
+// ============================================================
+(function ContainmentInjector() {
+const style = document.createElement(‘style’);
+style.textContent = `.stat-card, .rt-card, .feat-item, .vip-feat-card, .aimlock-btn, .sens-preset-btn, .admin-contact-card { contain: layout style paint; } .page { contain: strict; } .bottom-nav { contain: layout style; }`;
+document.head.appendChild(style);
+})();
+
+// ============================================================
+// [7] ANIMATION PAUSE ON HIDDEN TAB
+// Dừng toàn bộ CSS animation khi tab bị ẩn
+// ============================================================
+(function AnimPauseOnHidden() {
+const style = document.createElement(‘style’);
+style.id = ‘**tab_hidden_anim**’;
+document.addEventListener(‘visibilitychange’, () => {
+if (document.visibilityState === ‘hidden’) {
+style.textContent = ‘*, *::before, *::after { animation-play-state: paused !important; }’;
+document.head.appendChild(style);
+} else {
+style.textContent = ‘’;
+}
+});
+})();
+
+// ============================================================
+// [8] TOGGLE DEBOUNCE GUARD
+// Ngăn user spam toggle quá nhanh gây race condition
+// ============================================================
+(function ToggleDebounce() {
+let lastToggle = 0;
+document.addEventListener(‘change’, e => {
+if (e.target.type !== ‘checkbox’) return;
+const now = Date.now();
+if (now - lastToggle < 80) {
+e.preventDefault();
+e.stopImmediatePropagation();
+return;
+}
+lastToggle = now;
+}, true);
+})();
+
+// ============================================================
+// [9] SLIDER PERFORMANCE BOOST
+// Throttle slider oninput ở 60fps thay vì every-pixel
+// ============================================================
+(function SliderThrottle() {
+let lastSlider = 0;
+const LIMIT = 16; // ~60fps
+document.addEventListener(‘input’, e => {
+if (e.target.type !== ‘range’) return;
+const now = performance.now();
+if (now - lastSlider < LIMIT) {
+e.stopImmediatePropagation();
+// Schedule deferred update
+requestAnimationFrame(() => e.target.dispatchEvent(new Event(‘input’, { bubbles: true })));
+}
+lastSlider = now;
+}, true);
+})();
+
+// ============================================================
+// [10] FONT DISPLAY SWAP INJECTOR
+// Thêm font-display:swap vào Google Font requests
+// ============================================================
+(function FontDisplaySwap() {
+document.querySelectorAll(‘link[href*=“fonts.googleapis.com”]’).forEach(link => {
+if (!link.href.includes(‘display=swap’)) {
+link.href += (link.href.includes(’?’) ? ‘&’ : ‘?’) + ‘display=swap’;
+}
+});
+})();
+
+// ============================================================
+// [11] MODAL FOCUS TRAP + ESC CLOSE
+// Key modal: giữ focus bên trong, ESC để đóng nếu đã VIP
+// ============================================================
+(function ModalFocusTrap() {
+const modal = document.getElementById(‘key-modal’);
+if (!modal) return;
+const focusable = ‘button:not(:disabled), input, [tabindex]:not([tabindex=”-1”])’;
+
+document.addEventListener(‘keydown’, e => {
+if (modal.style.display !== ‘flex’) return;
+if (e.key === ‘Escape’) { hideKeyModal?.(); return; }
+if (e.key !== ‘Tab’) return;
+const els = […modal.querySelectorAll(focusable)];
+if (!els.length) return;
+const first = els[0], last = els[els.length - 1];
+if (e.shiftKey) { if (document.activeElement === first) { e.preventDefault(); last.focus(); } }
+else { if (document.activeElement === last) { e.preventDefault(); first.focus(); } }
+});
+})();
+
+// ============================================================
+// [12] SCROLL TO TOP ON PAGE SWITCH
+// Khi chuyển page, scroll về đầu ngay lập tức
+// ============================================================
+(function ScrollTopOnSwitch() {
+const orig = window.switchPage;
+if (typeof orig !== ‘function’) return;
+window.switchPage = function(id) {
+orig(id);
+requestAnimationFrame(() => {
+const page = document.getElementById(‘page-’ + id);
+const scroll = page?.querySelector(’.page-scroll’);
+if (scroll) scroll.scrollTop = 0;
+});
+};
+})();
+
+// ============================================================
+// [13] NETWORK-AWARE IMAGE QUALITY
+// Giảm chất lượng ảnh khi mạng yếu
+// ============================================================
+(function NetworkAwareImages() {
+const conn = navigator.connection || navigator.mozConnection;
+if (!conn) return;
+if ([‘slow-2g’,‘2g’].includes(conn.effectiveType) || conn.saveData) {
+const style = document.createElement(‘style’);
+style.textContent = ‘img { image-rendering: pixelated; filter: contrast(0.95); }’;
+document.head.appendChild(style);
+console.log(’[SperNew] Mạng yếu — chất lượng ảnh giảm để tiết kiệm băng thông’);
+}
+})();
+
+// ============================================================
+// [14] REALTIME CLOCK OPTIMIZER
+// Gộp mọi interval đếm thời gian vào 1 RAF loop duy nhất
+// ============================================================
+const ClockOptimizer = {
+_cbs: new Map(),
+_running: false,
+_last: {},
+
+register(id, fn, intervalMs) {
+this._cbs.set(id, { fn, intervalMs, last: 0 });
+if (!this._running) this._start();
+},
+
+unregister(id) { this._cbs.delete(id); },
+
+_start() {
+this._running = true;
+const loop = (now) => {
+this._cbs.forEach((entry, id) => {
+if (now - entry.last >= entry.intervalMs) {
+entry.fn();
+entry.last = now;
+}
+});
+if (this._cbs.size) requestAnimationFrame(loop);
+else this._running = false;
+};
+requestAnimationFrame(loop);
+}
+};
+
+// Ví dụ: đăng ký stats update vào ClockOptimizer
+// ClockOptimizer.register(‘stats’, updateStats, 1200);
+
+// ============================================================
+// [15] TOAST QUEUE MANAGER
+// Ngăn toast chồng lên nhau khi gọi liên tục
+// ============================================================
+(function ToastQueueManager() {
+const orig = window.showToast;
+if (typeof orig !== ‘function’) return;
+const queue = [];
+let busy = false;
+
+window.showToast = function(msg) {
+queue.push(msg);
+if (!busy) flush();
+};
+
+function flush() {
+if (!queue.length) { busy = false; return; }
+busy = true;
+orig(queue.shift());
+setTimeout(flush, 2400);
+}
+})();
+
+// ============================================================
+// [16] BUTTON DOUBLE-CLICK GUARD
+// Ngăn double-click vô tình kích hoạt boost 2 lần
+// ============================================================
+(function DoubleClickGuard() {
+const LIMIT_MS = 600;
+const lastClick = new WeakMap();
+document.addEventListener(‘click’, e => {
+const btn = e.target.closest(‘button’);
+if (!btn) return;
+const now = Date.now();
+const last = lastClick.get(btn) || 0;
+if (now - last < LIMIT_MS) {
+e.stopImmediatePropagation();
+e.preventDefault();
+return;
+}
+lastClick.set(btn, now);
+}, true);
+})();
+
+// ============================================================
+// [17] CANVAS PIXEL RATIO OPTIMIZER
+// Tự fix canvas blur trên màn hình retina
+// ============================================================
+function fixCanvasDPR(canvas) {
+const dpr = Math.min(window.devicePixelRatio || 1, 2); // Cap ở 2x
+const rect = canvas.getBoundingClientRect();
+canvas.width  = Math.floor(rect.width  * dpr);
+canvas.height = Math.floor(rect.height * dpr);
+canvas.style.width  = rect.width  + ‘px’;
+canvas.style.height = rect.height + ‘px’;
+const ctx = canvas.getContext(‘2d’);
+ctx.scale(dpr, dpr);
+return ctx;
+}
+
+// ============================================================
+// [18] MEMORY LEAK DETECTOR (Dev mode)
+// Phát hiện event listener bị quên không remove
+// ============================================================
+const LeakDetector = {
+_counts: new Map(),
+warn_threshold: 20,
+
+patch() {
+const orig = EventTarget.prototype.addEventListener;
+const self = this;
+EventTarget.prototype.addEventListener = function(type) {
+const key = type;
+self._counts.set(key, (self._counts.get(key) || 0) + 1);
+if (self._counts.get(key) > self.warn_threshold) {
+console.warn(`[SperNew LeakDetector] ⚠️ Có ${self._counts.get(key)} listeners cho sự kiện "${type}" — kiểm tra memory leak`);
+}
+return orig.apply(this, arguments);
+};
+},
+
+report() {
+const sorted = […this._counts.entries()].sort((a, b) => b[1] - a[1]);
+console.table(Object.fromEntries(sorted.slice(0, 10)));
+}
+};
+// LeakDetector.patch(); // Uncomment khi debug
+
+// ============================================================
+// [19] GPU LAYER MANAGER
+// Tự động bật/tắt GPU layer cho animated elements
+// ============================================================
+(function GPULayerManager() {
+// Bật GPU layer cho elements quan trọng
+const promote = [
+‘#splash-screen’,
+‘.boost-overlay’,
+‘#key-modal’,
+‘.bottom-nav’,
+‘#virtual-crosshair’,
+‘.score-ring’,
+];
+promote.forEach(sel => {
+document.querySelectorAll(sel).forEach(el => {
+el.style.willChange = ‘transform, opacity’;
+el.style.transform = ‘translateZ(0)’;
+});
+});
+
+// Tắt GPU layer sau khi splash xong (giải phóng VRAM)
+window.addEventListener(‘load’, () => {
+setTimeout(() => {
+const splash = document.getElementById(‘splash-screen’);
+if (splash) {
+splash.style.willChange = ‘auto’;
+splash.style.transform = ‘’;
+}
+}, 3000);
+});
+})();
+
+// ============================================================
+// [20] STORAGE AUTO-COMPRESS
+// Tự xóa localStorage key cũ khi sắp đầy
+// ============================================================
+const StorageGuard = {
+MAX_USAGE: 0.8, // 80% quota
+
+async check() {
+if (!navigator.storage?.estimate) return;
+const { usage, quota } = await navigator.storage.estimate();
+if (usage / quota > this.MAX_USAGE) {
+this.cleanup();
+}
+},
+
+cleanup() {
+const keys = Object.keys(localStorage).filter(k =>
+![‘vip_key’,‘vip_expires’,‘device_id’].includes(k)
+);
+keys.slice(0, Math.floor(keys.length / 2)).forEach(k => localStorage.removeItem(k));
+console.log(’[SperNew] 🧹 Storage cleaned —’, keys.length, ‘keys removed’);
+}
+};
+StorageGuard.check();
+
+// ============================================================
+// [21] IDLE TASK SCHEDULER
+// Chạy task nặng khi browser rảnh (không block UI)
+// ============================================================
+const IdleScheduler = {
+_queue: [],
+
+add(task, label = ‘task’) {
+this._queue.push({ task, label });
+this._run();
+},
+
+_run() {
+if (‘requestIdleCallback’ in window) {
+requestIdleCallback(deadline => {
+while (deadline.timeRemaining() > 5 && this._queue.length) {
+const { task, label } = this._queue.shift();
+try { task(); } catch(e) { console.warn(’[IdleScheduler]’, label, e); }
+}
+if (this._queue.length) this._run();
+}, { timeout: 3000 });
+} else {
+setTimeout(() => {
+const item = this._queue.shift();
+if (item) { try { item.task(); } catch(e) {} }
+if (this._queue.length) this._run();
+}, 100);
+}
+}
+};
+
+// ============================================================
+// [22] PERFORMANCE MARK SYSTEM (tích hợp vào app)
+// ============================================================
+const PerfMark = {
+marks: {},
+start(label) { this.marks[label] = performance.now(); },
+end(label) {
+const d = performance.now() - (this.marks[label] || 0);
+delete this.marks[label];
+if (d > 16) console.warn(`[PerfMark] ⚠️ "${label}" took ${d.toFixed(1)}ms — cần tối ưu`);
+return d;
+}
+};
+
+// Hook vào boost để đo thời gian
+(function PatchBoost() {
+const orig = window.runBoost;
+if (typeof orig !== ‘function’) return;
+window.runBoost = function() {
+PerfMark.start(‘boost’);
+orig();
+setTimeout(() => PerfMark.end(‘boost’), 3000);
+};
+})();
+
+// ============================================================
+// [23] OVERSCROLL LOCK (Android scroll chained)
+// Ngăn overscroll parent khi đang scroll trong card
+// ============================================================
+(function OverscrollLock() {
+document.querySelectorAll(’.page-scroll, .sens-sliders, .aimlock-detail’).forEach(el => {
+el.style.overscrollBehavior = ‘contain’;
+});
+// Dùng MutationObserver để áp dụng cho elements thêm sau
+new MutationObserver(mutations => {
+mutations.forEach(m => m.addedNodes.forEach(n => {
+if (n.nodeType !== 1) return;
+if (n.matches?.(’.page-scroll, .sens-sliders’)) n.style.overscrollBehavior = ‘contain’;
+n.querySelectorAll?.(’.page-scroll, .sens-sliders’).forEach(el => {
+el.style.overscrollBehavior = ‘contain’;
+});
+}));
+}).observe(document.body, { childList: true, subtree: true });
+})();
+
+// ============================================================
+// [24] CRITICAL CSS PRELOADER
+// Inline critical CSS trước khi font load xong
+// ============================================================
+(function CriticalCSS() {
+const style = document.createElement(‘style’);
+style.textContent = `/* Critical path — render ngay không cần font */ body { visibility: visible !important; } .topbar, .bottom-nav { display: flex !important; } #splash-screen { display: flex !important; }`;
+style.setAttribute(‘data-critical’, ‘1’);
+document.head.prepend(style);
+// Xóa sau khi font load xong
+document.fonts?.ready.then(() => {
+document.querySelector(’[data-critical]’)?.remove();
+});
+})();
+
+// ============================================================
+// [25] POINTER EVENT OPTIMIZER
+// Tắt pointer-events trên decorative elements
+// ============================================================
+(function PointerEventOptimizer() {
+const style = document.createElement(‘style’);
+style.textContent = `.splash-bg, .splash-grid, .splash-particles, .vip-hero-bg, .admin-hero-bg, .admin-scan-line, .hero-section::before, .hero-section::after, .stat-card::before, .stat-card::after, body::after { pointer-events: none !important; }`;
+document.head.appendChild(style);
+})();
+
+// ============================================================
+// [26] SVG ICON CACHER
+// Cache SVG string để không parse lại DOM mỗi lần render
+// ============================================================
+const SVGCache = {
+_cache: new Map(),
+get(key, svgString) {
+if (!this._cache.has(key)) {
+const tmpl = document.createElement(‘template’);
+tmpl.innerHTML = svgString.trim();
+this._cache.set(key, tmpl.content.firstChild.cloneNode(true));
+}
+return this._cache.get(key).cloneNode(true);
+}
+};
+
+// ============================================================
+// [27] TOUCH PRESSURE DETECT
+// Detect 3D Touch / Force Touch để trigger boost nhanh hơn
+// ============================================================
+(function TouchPressure() {
+const boostBtn = document.getElementById(‘boost-btn’);
+if (!boostBtn) return;
+boostBtn.addEventListener(‘touchstart’, e => {
+const touch = e.touches[0];
+if (touch.force && touch.force > 0.8) {
+showToast(‘⚡ Force Touch — Instant Boost!’);
+runBoost?.();
+}
+}, { passive: true });
+})();
+
+// ============================================================
+// [28] FPS ADAPTIVE INTERVAL
+// Tự điều chỉnh interval của stat update theo FPS thực tế
+// ============================================================
+(function FPSAdaptiveInterval() {
+let measureCount = 0;
+let lastFrameTime = performance.now();
+let sumDelta = 0;
+
+function measure(now) {
+sumDelta += now - lastFrameTime;
+lastFrameTime = now;
+measureCount++;
+
+```
+if (measureCount >= 30) {
+  const avgFPS = 1000 / (sumDelta / measureCount);
+  measureCount = 0;
+  sumDelta = 0;
+
+  // Giảm update rate nếu FPS thấp
+  if (avgFPS < 30 && window.statsInterval) {
+    clearInterval(window.statsInterval);
+    window.statsInterval = setInterval(updateStats, 2000); // Chậm hơn
+    console.log('[SperNew] FPS thấp — giảm stat update rate xuống 2s');
+  } else if (avgFPS >= 50 && window.statsInterval) {
+    clearInterval(window.statsInterval);
+    window.statsInterval = setInterval(updateStats, 1200); // Normal
+  }
+}
+requestAnimationFrame(measure);
+```
+
+}
+requestAnimationFrame(measure);
+})();
+
+// ============================================================
+// [29] DARK MODE SYSTEM SYNC
+// Tự động sync với dark mode hệ thống
+// ============================================================
+(function DarkModeSync() {
+const mediaQuery = window.matchMedia(’(prefers-color-scheme: dark)’);
+function apply(isDark) {
+const toggle = document.getElementById(‘s-dark’);
+if (toggle) toggle.checked = isDark;
+// App luôn dark, nhưng điều chỉnh độ tương phản
+document.documentElement.style.filter = isDark ? ‘none’ : ‘brightness(1.05)’;
+}
+apply(mediaQuery.matches);
+mediaQuery.addEventListener(‘change’, e => apply(e.matches));
+})();
+
+// ============================================================
+// [30] REDUCE MOTION SUPPORT
+// Respect prefers-reduced-motion của hệ thống
+// ============================================================
+(function ReducedMotionSupport() {
+if (!window.matchMedia(’(prefers-reduced-motion: reduce)’).matches) return;
+const style = document.createElement(‘style’);
+style.textContent = `@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; } }`;
+document.head.appendChild(style);
+console.log(’[SperNew] Reduced motion detected — animations disabled’);
+})();
+
+// ============================================================
+// [31] SUPABASE REQUEST CACHE
+// Cache Supabase fetch 30s để không verify key mỗi giây
+// ============================================================
+const SupabaseCache = {
+_store: new Map(),
+TTL: 30000, // 30 giây
+
+set(url, data) { this._store.set(url, { data, ts: Date.now() }); },
+get(url) {
+const item = this._store.get(url);
+if (!item) return null;
+if (Date.now() - item.ts > this.TTL) { this._store.delete(url); return null; }
+return item.data;
+},
+
+async fetch(url, options) {
+const cached = this.get(url);
+if (cached) return cached;
+const res = await fetch(url, options);
+const data = await res.json();
+this.set(url, data);
+return data;
+}
+};
+
+// ============================================================
+// [32] BATTERY-AWARE GRAPH UPDATE
+// Giảm đồ thị realtime khi pin yếu
+// ============================================================
+(async function BatteryGraphManager() {
+if (!navigator.getBattery) return;
+const bat = await navigator.getBattery();
+function check() {
+const isLow = bat.level < 0.2 && !bat.charging;
+const graphs = document.querySelectorAll(’.rt-graph’);
+graphs.forEach(g => {
+g.style.display = isLow ? ‘none’ : ‘’; // Ẩn graph bars khi pin yếu
+});
+if (isLow) console.log(’[SperNew] 🔋 Pin yếu — tắt đồ thị realtime’);
+}
+bat.addEventListener(‘levelchange’, check);
+bat.addEventListener(‘chargingchange’, check);
+check();
+})();
+
+// ============================================================
+// [33] NETWORK STATUS INDICATOR
+// Hiện trạng thái online/offline ngay trên status bar
+// ============================================================
+(function NetworkStatusIndicator() {
+function updateStatus() {
+const dot  = document.getElementById(‘status-dot’);
+const text = document.getElementById(‘status-text’);
+if (!dot || !text) return;
+
+```
+if (!navigator.onLine) {
+  dot.style.background = '#ff4d6a';
+  dot.style.boxShadow  = '0 0 8px #ff4d6a';
+  text.textContent = 'OFFLINE';
+  text.style.color = '#ff4d6a';
+  showToast('⚠️ Mất kết nối mạng');
+} else {
+  const conn = navigator.connection;
+  const type = conn?.effectiveType || '4g';
+  if (['slow-2g','2g'].includes(type)) {
+    dot.style.background = '#ffe94d';
+    dot.style.boxShadow  = '0 0 8px #ffe94d';
+    text.textContent = 'WEAK';
+    text.style.color = '#ffe94d';
+  } else {
+    dot.style.background = '#00ff88';
+    dot.style.boxShadow  = '0 0 8px #00ff88';
+    text.textContent = 'ACTIVE';
+    text.style.color = '#00ff88';
+  }
+}
+```
+
+}
+
+window.addEventListener(‘online’,  updateStatus);
+window.addEventListener(‘offline’, updateStatus);
+navigator.connection?.addEventListener(‘change’, updateStatus);
+updateStatus();
+})();
+
+// ============================================================
+// [34] DEVICE RAM DISPLAY
+// Hiện RAM thiết bị thực ở stats card
+// ============================================================
+(function DeviceRAMDisplay() {
+const ramEl = document.getElementById(‘status-ram’);
+if (!ramEl || !navigator.deviceMemory) return;
+const ram = navigator.deviceMemory; // GB
+const lowRAM = ram <= 3;
+if (lowRAM) {
+ramEl.textContent = `RAM ${ram}GB — Thấp`;
+ramEl.style.color = ‘#ff4d6a’;
+}
+})();
+
+// ============================================================
+// [35] KEYBOARD SHORTCUT MANAGER
+// Phím tắt nhanh cho desktop/controller
+// ============================================================
+(function KeyboardShortcuts() {
+const map = {
+‘h’: () => switchPage?.(‘home’),
+‘f’: () => switchPage?.(‘features’),
+‘s’: () => switchPage?.(‘stats’),
+‘a’: () => switchPage?.(‘aimlab’),
+‘b’: () => runBoost?.(),
+‘k’: () => showKeyModal?.(),
+};
+document.addEventListener(‘keydown’, e => {
+if ([‘INPUT’,‘TEXTAREA’].includes(document.activeElement.tagName)) return;
+const fn = map[e.key.toLowerCase()];
+if (fn) { fn(); e.preventDefault(); }
+});
+})();
+
+// ============================================================
+// [36] TOUCH VELOCITY TRACKER
+// Đo tốc độ vuốt để phân biệt flick vs slow scroll
+// ============================================================
+const TouchVelocity = {
+_start: { x:0, y:0, t:0 },
+_vel: { x:0, y:0 },
+
+init(el) {
+el.addEventListener(‘touchstart’, e => {
+const t = e.touches[0];
+this._start = { x: t.clientX, y: t.clientY, t: Date.now() };
+}, { passive: true });
+
+```
+el.addEventListener('touchend', e => {
+  const t = e.changedTouches[0];
+  const dt = Date.now() - this._start.t;
+  if (dt === 0) return;
+  this._vel = {
+    x: (t.clientX - this._start.x) / dt,
+    y: (t.clientY - this._start.y) / dt,
+  };
+}, { passive: true });
+```
+
+},
+
+get() { return this._vel; },
+isFlick() { return Math.abs(this._vel.y) > 0.5; }
+};
+
+// ============================================================
+// [37] CSS VARIABLE UPDATER (Tối ưu batch)
+// Batch update CSS variables thay vì ghi từng cái
+// ============================================================
+const CSSVarBatcher = {
+_pending: {},
+_scheduled: false,
+
+set(varName, value) {
+this._pending[varName] = value;
+if (!this._scheduled) {
+this._scheduled = true;
+requestAnimationFrame(() => {
+const root = document.documentElement;
+Object.entries(this._pending).forEach(([k, v]) => root.style.setProperty(k, v));
+this._pending = {};
+this._scheduled = false;
+});
+}
+}
+};
+// Dùng: CSSVarBatcher.set(’–cyan’, ‘#00ffaa’);
+
+// ============================================================
+// [38] INTERSECTION OBSERVER POOL
+// Tái sử dụng 1 IntersectionObserver cho nhiều elements
+// ============================================================
+const IOPool = {
+_io: null,
+_callbacks: new WeakMap(),
+
+observe(el, fn, options = {}) {
+if (!this._io) {
+this._io = new IntersectionObserver(entries => {
+entries.forEach(e => {
+const cb = this._callbacks.get(e.target);
+if (cb) cb(e);
+});
+}, options);
+}
+this._callbacks.set(el, fn);
+this._io.observe(el);
+},
+
+unobserve(el) {
+this._io?.unobserve(el);
+this._callbacks.delete(el);
+}
+};
+
+// Áp dụng cho stat cards — chỉ animate khi nhìn thấy
+document.querySelectorAll(’.stat-card, .rt-card’).forEach(card => {
+IOPool.observe(card, entry => {
+if (entry.isIntersecting) {
+card.style.opacity = ‘1’;
+card.style.transform = ‘translateY(0)’;
+}
+});
+});
+
+// ============================================================
+// [39] APP STATE SNAPSHOT
+// Lưu state quan trọng vào sessionStorage — khôi phục khi reload
+// ============================================================
+const AppSnapshot = {
+KEYS: [‘vch-toggle’,‘assist-toggle’,‘hold-toggle’,‘gyro-toggle’,‘headlock-toggle’],
+
+save() {
+const state = {};
+this.KEYS.forEach(id => {
+const el = document.getElementById(id);
+if (el) state[id] = el.checked;
+});
+// Save slider values
+document.querySelectorAll(’.sens-slider’).forEach(sl => {
+if (sl.id) state[‘slider_’ + sl.id] = sl.value;
+});
+sessionStorage.setItem(‘spernew_state’, JSON.stringify(state));
+},
+
+restore() {
+try {
+const state = JSON.parse(sessionStorage.getItem(‘spernew_state’) || ‘{}’);
+this.KEYS.forEach(id => {
+const el = document.getElementById(id);
+if (el && state[id] !== undefined) {
+el.checked = state[id];
+el.dispatchEvent(new Event(‘change’));
+}
+});
+Object.entries(state).forEach(([k, v]) => {
+if (k.startsWith(‘slider_’)) {
+const el = document.getElementById(k.replace(‘slider_’, ‘’));
+if (el) { el.value = v; el.dispatchEvent(new Event(‘input’)); }
+}
+});
+} catch(e) {}
+}
+};
+
+// Auto save khi thay đổi
+document.addEventListener(‘change’, () => {
+clearTimeout(AppSnapshot._saveTimer);
+AppSnapshot._saveTimer = setTimeout(() => AppSnapshot.save(), 500);
+});
+
+// Restore sau khi app init
+(function() {
+const origInit = window.initApp;
+window.initApp = function() {
+origInit?.();
+setTimeout(() => AppSnapshot.restore(), 800);
+};
+})();
+
+// ============================================================
+// [40] GLOBAL ERROR BOUNDARY
+// Bắt mọi JS error — ngăn app crash, hiện toast thay vì die
+// ============================================================
+(function GlobalErrorBoundary() {
+window.addEventListener(‘error’, e => {
+console.error(’[SperNew Error]’, e.message, e.filename, e.lineno);
+// Không hiện toast mọi error — chỉ critical
+if (e.message?.includes(‘fetch’) || e.message?.includes(‘network’)) {
+showToast?.(‘⚠️ Lỗi kết nối, thử lại sau’);
+}
+return true; // Prevent default error dialog
+});
+
+window.addEventListener(‘unhandledrejection’, e => {
+console.error(’[SperNew Promise Error]’, e.reason);
+if (String(e.reason)?.includes(‘fetch’) || String(e.reason)?.includes(‘Failed to fetch’)) {
+showToast?.(‘⚠️ Mất kết nối Supabase’);
+}
+e.preventDefault();
+});
+})();
+
+// ============================================================
+// AUTO INIT — Chạy các tối ưu sau khi app sẵn sàng
+// ============================================================
+window.addEventListener(‘load’, () => {
+// Idle tasks — không ảnh hưởng load time
+IdleScheduler.add(() => StorageGuard.check(), ‘storage-check’);
+IdleScheduler.add(() => {
+document.querySelectorAll(’.page-scroll’).forEach(el => {
+TouchVelocity.init(el);
+});
+}, ‘touch-velocity-init’);
+
+console.log(’%c⚡ SperNew Extra Scripts — 40 modules loaded’,
+‘color:#00ff88;font-family:monospace;font-weight:bold;font-size:13px’);
+});
+/**
+
 - ⚡ PERFORMANCE OPTIMIZER SCRIPTS
 - Tối ưu CPU, Memory, Rendering cho HTML App
 - Thêm vào <script> cuối </body> hoặc import vào app
