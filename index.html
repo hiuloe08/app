@@ -1296,29 +1296,37 @@ dmGo(id, lbl[id] || id.toUpperCase());
 }
 
 // ── SPLASH ────────────────────────────
-(function () {
-const fill = document.getElementById(‘sp-fill’);
+window.addEventListener(‘DOMContentLoaded’, function () {
+const fill   = document.getElementById(‘sp-fill’);
 const status = document.getElementById(‘sp-status’);
-const msgs = [‘BOOT SEQUENCE…’, ‘LOAD AI ENGINE…’, ‘INIT SENSORS…’, ‘CALIBRATE CORE…’, ‘BLOODCORE READY!’];
+const msgs   = [‘BOOT SEQUENCE…’, ‘LOAD AI ENGINE…’, ‘INIT SENSORS…’, ‘CALIBRATE CORE…’, ‘BLOODCORE READY!’];
+if (!fill || !status) { hideSplash(); return; } // safety fallback
 let p = 0;
 const iv = setInterval(() => {
-p += Math.random() * 18 + 4;
+p += Math.random() * 22 + 8; // nhanh hơn
 if (p > 100) p = 100;
 fill.style.width = p + ‘%’;
 status.textContent = msgs[Math.min(Math.floor(p / 22), 4)];
 if (p >= 100) {
 clearInterval(iv);
+status.textContent = ‘BLOODCORE READY!’;
+setTimeout(hideSplash, 400);
+}
+}, 150);
+});
+
+function hideSplash() {
+const splash = document.getElementById(‘splash’);
+const app    = document.getElementById(‘app’);
+if (!splash || !app) return;
+splash.style.transition = ‘opacity .5s’;
+splash.style.opacity = ‘0’;
 setTimeout(() => {
-document.getElementById(‘splash’).style.opacity = ‘0’;
-setTimeout(() => {
-document.getElementById(‘splash’).style.display = ‘none’;
-document.getElementById(‘app’).style.display = ‘flex’;
+splash.style.display = ‘none’;
+app.style.display = ‘flex’;
 initApp();
 }, 500);
-}, 350);
 }
-}, 190);
-})();
 
 // ── APP INIT ─────────────────────────
 let sim = { fps: 62, cpu: 34, ram: 55, tmp: 48 };
@@ -2038,6 +2046,7 @@ async function checkSavedKey() {
 const key = localStorage.getItem(‘elite_key’);
 const exp = localStorage.getItem(‘elite_expires’);
 
+// Không có key hoặc hết hạn → hiện modal ngay, không đợi network
 if (!key || !exp || new Date(exp) <= new Date()) {
 localStorage.removeItem(‘elite_key’);
 localStorage.removeItem(‘elite_expires’);
@@ -2045,28 +2054,38 @@ showKey();
 return;
 }
 
+// Có key hợp lệ trong localStorage → unlock ngay, verify Supabase ngầm
+unlockElite(exp);
+
+// Verify ngầm với Supabase (không block UI)
 try {
 const devId = getDeviceId();
+const ctrl  = new AbortController();
+setTimeout(() => ctrl.abort(), 6000); // timeout 6s
 const res = await fetch(
 `${SUPABASE_URL}/rest/v1/keys?key=eq.${encodeURIComponent(key)}&select=expires_at,is_active,device_id`,
-{ headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }
+{ headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` }, signal: ctrl.signal }
 );
 const data = await res.json();
 
 ```
 if (!data.length || !data[0].is_active || new Date(data[0].expires_at) < new Date()
     || (data[0].device_id && data[0].device_id !== devId)) {
+  // Key không hợp lệ → thu hồi và bắt nhập lại
   localStorage.removeItem('elite_key');
   localStorage.removeItem('elite_expires');
+  // Xoá banner nếu có
+  const banner = document.getElementById('elite-banner');
+  if (banner) banner.remove();
+  const badge = document.getElementById('tier-badge');
+  if (badge) { badge.textContent = 'FREE'; badge.className = 'tb-badge'; }
   showKey();
-  return;
 }
-unlockElite(data[0].expires_at.slice(0, 10));
+// Nếu valid → đã unlock rồi, không cần làm gì thêm
 ```
 
 } catch (e) {
-// Mất mạng → cho vào tạm theo localStorage
-unlockElite(exp);
+// Mất mạng hoặc timeout → giữ nguyên trạng thái đã unlock
 }
 }
 
