@@ -1,517 +1,17 @@
 <!DOCTYPE html>
+
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <title>BloodCore — Elite Optimizer</title>
 <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=DM+Mono:wght@300;400;500&family=Exo+2:wght@300;400;600;700;900&display=swap" rel="stylesheet">
-<style>/* ═══════════════════════════════════════
-   BLOODCORE OPTIMIZER — style.css v4.0
-═══════════════════════════════════════ */
-:root{
-  --r0:#ff0000;--r1:#ff1a1a;--r2:#ff3333;--r3:#ff5555;--r4:#ff8080;
-  --rg:rgba(255,0,0,.65);--rg2:rgba(255,0,0,.3);--rg3:rgba(255,0,0,.12);--rg4:rgba(255,0,0,.05);
-  --ink:#050000;--ink2:#0d0000;--ink3:#160000;--ink4:#1e0000;
-  --border:rgba(255,30,30,.22);--border2:rgba(255,30,30,.1);
-  --txt:#fff;--txt2:rgba(255,255,255,.72);--txt3:rgba(255,255,255,.38);--txt4:rgba(255,255,255,.16);
-  --gold:#ffc400;--cyan:#00e5ff;--lime:#39ff14;--purple:#c084fc;
-  --h:calc(100dvh);
-}
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{width:100%;height:var(--h);overflow:hidden;background:var(--ink);font-family:'Exo 2',sans-serif;color:var(--txt)}
-::-webkit-scrollbar{width:2px}::-webkit-scrollbar-thumb{background:var(--rg3)}
-
-/* ═══ SPLASH ═══ */
-#splash{position:fixed;inset:0;z-index:9000;background:var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .5s}
-.sp-noise{position:absolute;inset:0;opacity:.04;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:200px}
-.sp-grid{position:absolute;inset:0;background-image:linear-gradient(var(--rg3) 1px,transparent 1px),linear-gradient(90deg,var(--rg3) 1px,transparent 1px);background-size:44px 44px;animation:gPulse 3s ease-in-out infinite}
-@keyframes gPulse{0%,100%{opacity:.4}50%{opacity:1}}
-.sp-vignette{position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 40%,var(--ink) 100%)}
-.sp-logo{position:relative;z-index:1;margin-bottom:28px;width:110px;height:110px;display:flex;align-items:center;justify-content:center}
-.sp-hex{animation:hexRot 12s linear infinite;filter:drop-shadow(0 0 18px var(--r1))}
-.sp-hex-inner{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;animation:hexRot 8s linear infinite reverse}
-@keyframes hexRot{from{transform:rotate(0)}to{transform:rotate(360deg)}}
-.sp-rings{position:absolute;inset:-22px;pointer-events:none}
-.sp-ring{position:absolute;border-radius:50%;border:1px solid var(--r1);animation:rExpand 2.4s ease-out infinite}
-.sp-ring:nth-child(1){inset:22px;animation-delay:0s}
-.sp-ring:nth-child(2){inset:8px;animation-delay:.5s}
-.sp-ring:nth-child(3){inset:-6px;animation-delay:1s}
-@keyframes rExpand{0%{opacity:.7;transform:scale(.85)}100%{opacity:0;transform:scale(1.3)}}
-.sp-name{position:relative;z-index:1;font-family:'Black Han Sans',sans-serif;font-size:52px;letter-spacing:6px;color:var(--r1);text-shadow:0 0 25px var(--rg),0 0 60px var(--rg2);margin-bottom:2px}
-.sp-tag{position:relative;z-index:1;font-family:'DM Mono',monospace;font-size:11px;color:var(--txt3);letter-spacing:5px;margin-bottom:36px}
-.sp-bar-wrap{position:relative;z-index:1;width:210px}
-.sp-bar{height:2px;background:var(--ink3);border-radius:1px;overflow:hidden;margin-bottom:10px}
-.sp-fill{height:100%;background:linear-gradient(90deg,#800000,var(--r1),#ff4400);background-size:300% 100%;animation:bFlow .7s linear infinite;width:0%;transition:width .15s linear}
-@keyframes bFlow{0%{background-position:300% 0}100%{background-position:0 0}}
-.sp-status{font-family:'DM Mono',monospace;font-size:10px;color:var(--txt3);letter-spacing:2px;text-align:center}
-
-/* ═══ APP SHELL ═══ */
-#app{width:100%;height:var(--h);display:none;flex-direction:column;position:relative;background:var(--ink)}
-#app::before{content:'';position:absolute;inset:0;pointer-events:none;z-index:5;background:repeating-linear-gradient(transparent,transparent 3px,rgba(0,0,0,.022) 3px,rgba(0,0,0,.022) 4px)}
-
-/* ═══ TOPBAR ═══ */
-.topbar{height:50px;flex-shrink:0;display:flex;align-items:center;padding:0 14px;gap:0;background:linear-gradient(to bottom,var(--ink2),var(--ink));border-bottom:1px solid var(--border);position:relative;z-index:100}
-.topbar::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--r1),transparent);box-shadow:0 0 8px var(--rg2)}
-.tb-logo{display:flex;align-items:center;gap:8px;flex:1}
-.tb-logo-icon svg{filter:drop-shadow(0 0 5px var(--r1))}
-.tb-logo-text{font-family:'Black Han Sans',sans-serif;font-size:20px;letter-spacing:3px;color:var(--r1);text-shadow:0 0 12px var(--rg)}
-.tb-badge{padding:3px 9px;border-radius:20px;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;background:var(--rg3);border:1px solid var(--border);color:var(--r2)}
-.tb-badge.elite{background:rgba(255,196,0,.12);border-color:rgba(255,196,0,.35);color:var(--gold)}
-.tb-right{display:flex;align-items:center;gap:6px;margin-left:10px}
-.live-dot{width:6px;height:6px;border-radius:50%;background:var(--lime);box-shadow:0 0 7px rgba(57,255,20,.8);animation:ldot 1.8s ease-in-out infinite}
-@keyframes ldot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.7)}}
-.live-txt{font-family:'DM Mono',monospace;font-size:9px;color:var(--txt3);letter-spacing:1px}
-
-/* ═══ HAMBURGER ═══ */
-.hbg{width:40px;height:40px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;background:none;border:1px solid var(--border);border-radius:9px;cursor:pointer;transition:.2s;position:relative;overflow:hidden;flex-shrink:0;margin-right:12px}
-.hbg.open{border-color:var(--r1);box-shadow:0 0 12px var(--rg2)}
-.hbg-line{width:18px;height:2px;background:var(--txt2);border-radius:1px;transition:all .25s;transform-origin:center}
-.hbg.open .hbg-line:nth-child(1){transform:translateY(7px) rotate(45deg);background:var(--r1)}
-.hbg.open .hbg-line:nth-child(2){opacity:0;transform:scaleX(0)}
-.hbg.open .hbg-line:nth-child(3){transform:translateY(-7px) rotate(-45deg);background:var(--r1)}
-
-/* ═══ PAGES ═══ */
-.pages{flex:1;overflow:hidden;position:relative}
-.page{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;opacity:0;pointer-events:none;transition:opacity .22s,transform .22s;transform:translateY(8px)}
-.page.active{opacity:1;pointer-events:all;transform:translateY(0)}
-.pscroll{padding:14px 12px 80px}
-
-/* ═══ BOTTOM BAR ═══ */
-.nav{height:50px;flex-shrink:0;background:linear-gradient(to top,var(--ink2),var(--ink));border-top:1px solid var(--border);display:flex;align-items:center;padding:0 18px;position:relative;z-index:100}
-.nav::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--r1),transparent);box-shadow:0 0 5px var(--rg2)}
-.nav-cur{display:flex;align-items:center;gap:8px}
-.nav-cur-dot{width:6px;height:6px;border-radius:50%;background:var(--r1);box-shadow:0 0 7px var(--rg)}
-.nav-cur-name{font-family:'DM Mono',monospace;font-size:11px;color:var(--txt3);letter-spacing:2px}
-
-/* ═══ DRAWER ═══ */
-.drawer-backdrop{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,0);pointer-events:none;transition:background .3s}
-.drawer-backdrop.open{background:rgba(0,0,0,.7);pointer-events:all}
-.drawer{position:fixed;bottom:0;left:0;right:0;z-index:201;background:var(--ink2);border:1px solid var(--border);border-bottom:none;border-radius:22px 22px 0 0;padding:0 0 12px;transform:translateY(100%);transition:transform .32s cubic-bezier(.32,1,.5,1)}
-.drawer::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--r1),transparent);border-radius:22px 22px 0 0}
-.drawer.open{transform:translateY(0)}
-.drawer-handle{width:36px;height:4px;background:var(--border);border-radius:2px;margin:12px auto 14px}
-.drawer-title{font-family:'DM Mono',monospace;font-size:9px;color:var(--txt3);letter-spacing:3px;text-align:center;margin-bottom:14px}
-.drawer-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:0 14px 4px}
-.dm-btn{display:flex;flex-direction:column;align-items:center;gap:5px;padding:13px 8px;border-radius:12px;border:1px solid var(--border2);background:var(--ink3);cursor:pointer;transition:.18s;position:relative;overflow:hidden}
-.dm-btn:active{transform:scale(.96)}
-.dm-btn.dm-on{border-color:var(--r1);background:var(--rg4)}
-.dm-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:var(--ink4);margin-bottom:2px;transition:.2s}
-.dm-icon svg{width:20px;height:20px}
-.dm-name{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1px;color:var(--txt3);text-align:center;transition:.2s}
-.dm-btn.dm-on .dm-name{color:var(--r2)}
-.dm-active-bar{position:absolute;bottom:0;left:15%;right:15%;height:2px;background:var(--r1);border-radius:1px;opacity:0;box-shadow:0 0 6px var(--rg)}
-.dm-btn.dm-on .dm-active-bar{opacity:1}
-
-/* ═══ SHARED ═══ */
-.pg-head{margin-bottom:14px}
-.pg-title{font-family:'Black Han Sans',sans-serif;font-size:28px;letter-spacing:2px;color:var(--r1);text-shadow:0 0 15px var(--rg2);line-height:1}
-.pg-sub{font-family:'DM Mono',monospace;font-size:10px;color:var(--txt3);letter-spacing:2px;margin-top:3px}
-.divider{height:1px;background:linear-gradient(90deg,var(--r1),var(--rg3),transparent);margin:12px 0;box-shadow:0 0 4px var(--rg3)}
-.sec-lbl{font-family:'DM Mono',monospace;font-size:9px;color:var(--txt3);letter-spacing:2px;margin:14px 0 8px;text-transform:uppercase;display:flex;align-items:center;gap:8px}
-.sec-lbl::after{content:'';flex:1;height:1px;background:var(--border2)}
-.toggle{position:relative;width:42px;height:22px;display:inline-flex;cursor:pointer}
-.toggle input{opacity:0;width:0;height:0}
-.ttrack{width:42px;height:22px;background:var(--ink4);border-radius:11px;border:1px solid var(--border2);transition:.25s;position:relative}
-.ttrack::after{content:'';position:absolute;top:3px;left:3px;width:14px;height:14px;border-radius:50%;background:var(--txt3);transition:.25s}
-.toggle input:checked~.ttrack{background:var(--rg3);border-color:var(--r1);box-shadow:0 0 8px var(--rg2)}
-.toggle input:checked~.ttrack::after{transform:translateX(20px);background:var(--r1)}
-input[type=range]{width:100%;height:3px;appearance:none;background:var(--ink4);border-radius:2px;outline:none;cursor:pointer}
-input[type=range]::-webkit-slider-thumb{appearance:none;width:15px;height:15px;border-radius:50%;background:var(--r1);border:2px solid var(--ink);box-shadow:0 0 8px var(--rg);cursor:pointer}
-.sr{margin-bottom:10px}
-.sr-top{display:flex;justify-content:space-between;margin-bottom:5px}
-.sr-lbl{font-size:11px;color:var(--txt3)}
-.sr-val{font-family:'DM Mono',monospace;font-size:11px;color:var(--r1);font-weight:500}
-
-/* ═══ DASH PAGE ═══ */
-.hero{padding:14px;margin-bottom:12px;background:linear-gradient(135deg,var(--ink3),var(--ink2));border-radius:12px;border:1px solid var(--border2);position:relative;overflow:hidden}
-.hero::before{content:'';position:absolute;top:0;left:0;right:0;height:1.5px;background:linear-gradient(90deg,var(--r1),transparent)}
-.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 80% 20%,var(--rg4),transparent 70%);pointer-events:none}
-.hero-corner{position:absolute;width:11px;height:11px;border-color:var(--r2);border-style:solid}
-.hero-corner.tl{top:7px;left:7px;border-width:1.5px 0 0 1.5px}.hero-corner.tr{top:7px;right:7px;border-width:1.5px 1.5px 0 0}
-.hero-corner.bl{bottom:7px;left:7px;border-width:0 0 1.5px 1.5px}.hero-corner.br{bottom:7px;right:7px;border-width:0 1.5px 1.5px 0}
-.hero-title{font-family:'Black Han Sans',sans-serif;font-size:28px;letter-spacing:2px;line-height:1.1;margin-bottom:5px}
-.hero-title b{color:var(--r1);text-shadow:0 0 15px var(--rg)}
-.hero-desc{font-size:11px;color:var(--txt3);letter-spacing:.5px;margin-bottom:12px}
-.ignite-btn{display:flex;align-items:center;justify-content:center;gap:10px;padding:12px;border-radius:8px;border:none;cursor:pointer;background:linear-gradient(135deg,#990000,var(--r1));color:#fff;font-family:'Black Han Sans',sans-serif;font-size:18px;letter-spacing:3px;box-shadow:0 0 22px var(--rg),0 4px 20px rgba(0,0,0,.5);transition:.18s;width:100%;position:relative;overflow:hidden}
-.ignite-btn::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.08),transparent);transform:translateX(-100%);transition:.4s}
-.ignite-btn:hover::before{transform:translateX(100%)}
-.ignite-btn:active{transform:scale(.98)}
-
-/* STAT GRID */
-.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
-.sc{padding:10px 12px;border-radius:10px;background:var(--ink2);border:1px solid var(--border2);position:relative;overflow:hidden}
-.sc::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:var(--r1);opacity:.4}
-.sc-lbl{font-family:'DM Mono',monospace;font-size:9px;color:var(--txt3);letter-spacing:2px;margin-bottom:3px}
-.sc-val{font-family:'Black Han Sans',sans-serif;font-size:30px;line-height:1;color:var(--txt)}
-.sc-val.hot{color:var(--r1);text-shadow:0 0 10px var(--rg)}
-.sc-val sup{font-size:12px;opacity:.6}
-.sc-bar{height:2px;background:var(--ink4);border-radius:1px;margin:5px 0 4px;overflow:hidden}
-.sc-fill{height:100%;border-radius:1px;transition:width .9s ease}
-.fill-r{background:linear-gradient(90deg,#880000,var(--r1));box-shadow:0 0 5px var(--rg)}
-.fill-o{background:linear-gradient(90deg,#884400,#ff8800)}
-.fill-b{background:linear-gradient(90deg,#004488,#0099ff)}
-.fill-g{background:linear-gradient(90deg,#004400,#00cc44)}
-.sc-status{font-size:9px;color:var(--txt3);font-family:'DM Mono',monospace;letter-spacing:1px}
-
-/* SCORE BAR */
-.score-bar-card{padding:12px;border-radius:10px;background:var(--ink2);border:1px solid var(--border2);position:relative;overflow:hidden;margin-bottom:12px}
-.score-bar-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,var(--r1),var(--rg3))}
-.sb-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
-.sb-label{font-family:'DM Mono',monospace;font-size:10px;color:var(--txt3);letter-spacing:2px}
-.sb-score{font-family:'Black Han Sans',sans-serif;font-size:28px;color:var(--r1);text-shadow:0 0 12px var(--rg);letter-spacing:2px}
-.sb-grade{font-size:11px;color:var(--txt3);letter-spacing:1px}
-.sb-track{height:8px;background:var(--ink4);border-radius:4px;overflow:hidden}
-.sb-progress{height:100%;background:linear-gradient(90deg,#880000,var(--r1),#ff4400);border-radius:4px;transition:width 1.8s cubic-bezier(.2,1,.3,1);box-shadow:0 0 8px var(--rg);position:relative}
-.sb-progress::after{content:'';position:absolute;top:0;bottom:0;right:0;width:3px;background:rgba(255,200,200,.8);border-radius:2px}
-.sb-segs{display:flex;justify-content:space-between;margin-top:5px}
-.sb-segs span{font-family:'DM Mono',monospace;font-size:8px;color:var(--txt4)}
-
-/* QUICK ACTIONS */
-.qa-label{font-family:'DM Mono',monospace;font-size:9px;color:var(--txt3);letter-spacing:2px;margin-bottom:8px;text-transform:uppercase}
-.qa-row{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
-.qa{display:flex;flex-direction:column;align-items:center;gap:5px;padding:10px 6px;border-radius:10px;border:1px solid var(--border2);background:var(--ink2);cursor:pointer;transition:.18s}
-.qa:active{transform:scale(.96)}
-.qa-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;background:var(--rg3)}
-.qa-icon svg{width:16px;height:16px}
-.qa span{font-size:10px;font-weight:700;color:var(--txt2);text-align:center;line-height:1.2}
-.qa:hover{border-color:var(--border);background:var(--ink3)}
-
-/* FF LAUNCH */
-.ff-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:4px}
-.ff-btn{display:flex;flex-direction:column;align-items:center;gap:8px;padding:14px 10px;border-radius:14px;cursor:pointer;transition:.18s;position:relative;overflow:hidden;border:none}
-.ff-btn:active{transform:scale(.97)}
-.ff-btn.ff-normal{border:1px solid rgba(255,140,0,.35);background:linear-gradient(135deg,rgba(180,60,0,.25),rgba(255,100,0,.1))}
-.ff-btn.ff-max{border:1px solid rgba(255,26,26,.45);background:linear-gradient(135deg,rgba(140,0,0,.3),rgba(255,26,26,.12))}
-.ff-top-line{position:absolute;top:0;left:0;right:0;height:1.5px}
-.ff-normal .ff-top-line{background:linear-gradient(90deg,transparent,#ff8c00,transparent)}
-.ff-max .ff-top-line{background:linear-gradient(90deg,transparent,#ff1a1a,transparent)}
-.ff-ico{width:50px;height:50px;border-radius:12px;display:flex;align-items:center;justify-content:center}
-.ff-normal .ff-ico{background:linear-gradient(135deg,#cc4400,#ff6600);box-shadow:0 0 16px rgba(255,100,0,.5)}
-.ff-max .ff-ico{background:linear-gradient(135deg,#880000,#ff1a1a);box-shadow:0 0 16px rgba(255,26,26,.5)}
-.ff-name{font-family:'Black Han Sans',sans-serif;font-size:13px;letter-spacing:1px}
-.ff-normal .ff-name{color:#ff8c00;text-shadow:0 0 8px rgba(255,140,0,.6)}
-.ff-max .ff-name{color:#ff4444;text-shadow:0 0 8px rgba(255,26,26,.7)}
-.ff-tap{font-family:'DM Mono',monospace;font-size:8px;color:var(--txt3);letter-spacing:1px}
-
-/* ═══ MONITOR PAGE ═══ */
-.chart-card{padding:12px;border-radius:10px;background:var(--ink2);border:1px solid var(--border2);margin-bottom:10px;position:relative;overflow:hidden}
-.chart-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,var(--r1),transparent)}
-.cc-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
-.cc-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--txt3)}
-.cc-val{font-family:'Black Han Sans',sans-serif;font-size:24px;letter-spacing:1px}
-.cc-val.rv{color:var(--r1);text-shadow:0 0 10px var(--rg)}
-.cc-val.ov{color:#ff8800;text-shadow:0 0 8px rgba(255,136,0,.5)}
-.cc-val.bv{color:var(--cyan);text-shadow:0 0 8px rgba(0,229,255,.4)}
-.cc-val.gv{color:var(--lime);text-shadow:0 0 8px rgba(57,255,20,.4)}
-canvas{display:block;width:100%;border-radius:4px}
-.cc-stats{display:flex;margin-top:8px;background:var(--ink4);border-radius:6px;overflow:hidden}
-.cs-item{flex:1;text-align:center;padding:6px 4px;border-right:1px solid var(--border2)}
-.cs-item:last-child{border-right:none}
-.cs-lbl{font-family:'DM Mono',monospace;font-size:8px;color:var(--txt3);letter-spacing:1px}
-.cs-val{font-family:'DM Mono',monospace;font-size:11px;color:var(--txt);font-weight:500;margin-top:1px}
-.net-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:10px}
-.net-c{padding:10px;border-radius:10px;background:var(--ink2);border:1px solid var(--border2);text-align:center}
-.net-icon{font-size:16px;margin-bottom:4px}
-.net-v{font-family:'Black Han Sans',sans-serif;font-size:18px;color:var(--txt)}
-.net-l{font-family:'DM Mono',monospace;font-size:8px;color:var(--txt3);letter-spacing:1px}
-
-/* ═══ BOOST PAGE ═══ */
-.bm-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
-.bm{padding:13px;border-radius:12px;border:1px solid var(--border2);background:var(--ink2);cursor:pointer;transition:.18s;position:relative;overflow:hidden;text-align:center}
-.bm.sel{border-color:var(--r1);background:var(--rg4)}
-.bm::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:transparent;transition:.2s}
-.bm.sel::before{background:linear-gradient(90deg,transparent,var(--r1),transparent)}
-.bm-icon{margin-bottom:7px}.bm-icon svg{width:26px;height:26px}
-.bm-name{font-family:'Black Han Sans',sans-serif;font-size:13px;letter-spacing:1px;color:var(--txt)}
-.bm-desc{font-size:10px;color:var(--txt3);margin-top:3px;line-height:1.4}
-.bm-badge{position:absolute;top:6px;right:6px;padding:2px 6px;border-radius:4px;font-size:8px;font-weight:700;letter-spacing:1px}
-.bm-badge.hot{background:var(--rg2);color:var(--r2);border:1px solid var(--border)}
-.bm-badge.new{background:rgba(57,255,20,.15);color:var(--lime);border:1px solid rgba(57,255,20,.3)}
-.pt-list{display:flex;flex-direction:column;gap:1px;border-radius:12px;overflow:hidden;border:1px solid var(--border2)}
-.pt-item{display:flex;align-items:center;gap:12px;padding:11px 14px;background:var(--ink2);border-bottom:1px solid var(--border2);transition:.18s}
-.pt-item:last-child{border-bottom:none}
-.pt-item:hover{background:var(--ink3)}
-.pt-ico{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.pt-ico svg{width:16px;height:16px}
-.pt-info{flex:1}
-.pt-name{font-size:13px;font-weight:600;color:var(--txt)}
-.pt-desc{font-size:10px;color:var(--txt3);margin-top:1px}
-.elite-wall{background:linear-gradient(135deg,var(--ink2),var(--ink3));border:1px solid rgba(255,196,0,.25);border-radius:12px;padding:16px;text-align:center;margin-top:14px;position:relative;overflow:hidden}
-.elite-wall::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
-.ew-icon{font-size:28px;margin-bottom:8px}
-.ew-title{font-family:'Black Han Sans',sans-serif;font-size:20px;letter-spacing:2px;color:var(--gold);text-shadow:0 0 15px rgba(255,196,0,.5)}
-.ew-sub{font-size:11px;color:var(--txt3);margin:6px 0 14px;line-height:1.5}
-.ew-btn{display:inline-flex;align-items:center;gap:8px;padding:10px 22px;border-radius:8px;border:1px solid rgba(255,196,0,.4);background:rgba(255,196,0,.1);color:var(--gold);font-family:'Black Han Sans',sans-serif;font-size:15px;letter-spacing:2px;cursor:pointer;transition:.2s}
-.ew-btn:hover{background:rgba(255,196,0,.2)}
-
-/* ═══ AIM PAGE ═══ */
-.aim-hero{background:var(--ink2);border:1px solid var(--border2);border-radius:12px;padding:16px;text-align:center;margin-bottom:14px;position:relative;overflow:hidden}
-.aim-hero::before{content:'';position:absolute;top:0;left:0;right:0;height:1.5px;background:linear-gradient(90deg,transparent,var(--r1),transparent)}
-.aim-preview{position:relative;width:100px;height:100px;display:flex;align-items:center;justify-content:center;margin:0 auto 14px}
-.ch-o1{position:absolute;width:90px;height:90px;border-radius:50%;border:1px solid var(--rg3);animation:chO 8s linear infinite}
-.ch-o2{position:absolute;width:60px;height:60px;border-radius:50%;border:1px solid var(--r1);opacity:.6}
-.ch-o3{position:absolute;width:30px;height:30px;border-radius:50%;border:1.5px solid var(--r1);box-shadow:0 0 6px var(--rg)}
-@keyframes chO{from{transform:rotate(0)}to{transform:rotate(360deg)}}
-.ch-h{position:absolute;width:72px;height:1.5px;background:linear-gradient(90deg,transparent,var(--r1),transparent)}
-.ch-v{position:absolute;width:1.5px;height:72px;background:linear-gradient(0deg,transparent,var(--r1),transparent)}
-.ch-dot{width:5px;height:5px;border-radius:50%;background:var(--r1);box-shadow:0 0 10px var(--rg),0 0 20px var(--rg2)}
-.aim-metrics{display:flex;gap:20px;justify-content:center}
-.am-item{text-align:center}
-.am-val{font-family:'Black Han Sans',sans-serif;font-size:22px;color:var(--r1);text-shadow:0 0 8px var(--rg)}
-.am-lbl{font-family:'DM Mono',monospace;font-size:9px;color:var(--txt3);letter-spacing:1px;margin-top:2px}
-
-/* LOCK GRID */
-.lock-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-bottom:10px}
-.lb{display:flex;flex-direction:column;align-items:center;padding:9px 5px;border-radius:9px;border:1px solid var(--border2);background:var(--ink2);cursor:pointer;transition:.18s;gap:2px}
-.lb.on{border-color:var(--r1);background:var(--rg4)}
-.lb-ver{font-family:'Black Han Sans',sans-serif;font-size:17px;color:var(--r1)}
-.lb-name{font-size:10px;font-weight:700;color:var(--txt)}
-.lb-sub{font-size:8.5px;color:var(--txt3);font-family:'DM Mono',monospace}
-.lock-info{background:var(--ink3);border:1px solid var(--border2);border-radius:8px;padding:10px;margin-bottom:4px}
-.li-row{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border2)}
-.li-row:last-child{border:none}
-.li-row span:first-child{font-size:11px;color:var(--txt3)}
-.li-val{font-size:11px;font-weight:600;color:var(--r2);font-family:'DM Mono',monospace}
-
-/* SENS WRAP */
-.sens-wrap{background:var(--ink2);border:1px solid var(--border2);border-radius:12px;padding:12px}
-.sens-preset{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:12px}
-.sp-item{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 4px;border-radius:8px;border:1px solid var(--border2);cursor:pointer;transition:.18s;background:var(--ink3)}
-.sp-item.on{border-color:var(--r1);background:var(--rg4)}
-.sp-item svg{width:18px;height:18px}
-.sp-item span{font-size:9px;color:var(--txt3)}
-.sp-item.on span{color:var(--r3)}
-
-/* FINGER LAYOUT */
-.finger-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px}
-.fg-btn{display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 8px;border-radius:10px;border:1px solid var(--border2);background:var(--ink2);cursor:pointer;transition:.18s}
-.fg-btn.on{border-color:var(--r1);background:var(--rg4)}
-.fg-icon{font-size:24px}
-.fg-name{font-family:'Black Han Sans',sans-serif;font-size:13px;color:var(--txt)}
-.fg-desc{font-size:9px;color:var(--txt3);font-family:'DM Mono',monospace;text-align:center;line-height:1.4}
-.fg-btn.on .fg-name{color:var(--r1)}
-
-/* RECOIL CONTROL */
-.recoil-wrap{background:var(--ink2);border:1px solid var(--border2);border-radius:12px;padding:12px}
-.recoil-zone{width:100%;height:90px;background:var(--ink4);border:1px solid var(--border2);border-radius:8px;position:relative;overflow:hidden;margin-bottom:10px}
-.recoil-grid-lines{position:absolute;inset:0}
-.recoil-grid-lines::before{content:'';position:absolute;inset:0;background-image:linear-gradient(var(--border2) 1px,transparent 1px),linear-gradient(90deg,var(--border2) 1px,transparent 1px);background-size:20px 20px}
-.recoil-pattern{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)}
-.recoil-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.rb-btn{padding:9px;border-radius:8px;border:1px solid var(--border2);background:var(--ink3);color:var(--txt2);font-size:11px;font-weight:700;cursor:pointer;transition:.18s;text-align:center;letter-spacing:.5px}
-.rb-btn.on{border-color:var(--r1);color:var(--r1);background:var(--rg4)}
-
-/* HEADSHOT TRAINER */
-.hs-card{background:var(--ink2);border:1px solid var(--border2);border-radius:12px;padding:12px;margin-bottom:4px}
-.hs-scene{width:100%;height:80px;background:var(--ink4);border-radius:8px;position:relative;overflow:hidden;margin-bottom:10px;cursor:crosshair}
-.hs-scene::before{content:'';position:absolute;inset:0;background:linear-gradient(180deg,var(--rg4),transparent)}
-.hs-target{position:absolute;width:32px;height:32px;border-radius:50%;border:2px solid var(--r1);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:transform .1s;animation:hsPop .3s ease-out}
-@keyframes hsPop{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
-.hs-target-inner{width:12px;height:12px;border-radius:50%;background:var(--r1);box-shadow:0 0 8px var(--rg)}
-.hs-stats{display:flex;gap:0;background:var(--ink4);border-radius:8px;overflow:hidden}
-.hs-stat{flex:1;text-align:center;padding:8px 4px;border-right:1px solid var(--border2)}
-.hs-stat:last-child{border:none}
-.hs-stat-val{font-family:'Black Han Sans',sans-serif;font-size:18px;color:var(--r1)}
-.hs-stat-lbl{font-family:'DM Mono',monospace;font-size:8px;color:var(--txt3);letter-spacing:1px}
-.hs-controls{display:flex;gap:8px;margin-top:10px}
-.hs-ctrl-btn{flex:1;padding:9px;border-radius:8px;border:1px solid var(--border2);background:var(--ink3);color:var(--txt2);font-size:11px;font-weight:700;cursor:pointer;transition:.18s;letter-spacing:.5px}
-.hs-ctrl-btn.start{border-color:var(--r1);background:var(--rg3);color:var(--r1)}
-
-/* GYRO */
-.gyro-card{background:var(--ink2);border:1px solid var(--border2);border-radius:12px;padding:12px}
-.gyro-vis{width:100%;height:70px;background:var(--ink4);border-radius:8px;position:relative;overflow:hidden;margin:10px 0;display:flex;align-items:center;justify-content:center}
-.gyro-bar-h{position:absolute;height:2px;left:10%;right:10%;background:linear-gradient(90deg,transparent,var(--r1),transparent);transition:top .1s}
-.gyro-bar-v{position:absolute;width:2px;top:10%;bottom:10%;background:linear-gradient(180deg,transparent,var(--cyan),transparent);transition:left .1s}
-.gyro-center{width:10px;height:10px;border-radius:50%;background:var(--r1);box-shadow:0 0 8px var(--rg);z-index:2}
-
-/* AIM APPLY */
-.aim-apply{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:14px;padding:13px;border-radius:10px;border:none;cursor:pointer;background:linear-gradient(135deg,#880000,var(--r1));color:#fff;font-family:'Black Han Sans',sans-serif;font-size:18px;letter-spacing:3px;box-shadow:0 0 20px var(--rg2);transition:.18s}
-.aim-apply:active{transform:scale(.98)}
-
-/* ═══ OPTIMIZE PAGE (NEW) ═══ */
-.opt-scan-card{background:var(--ink2);border:1px solid var(--border2);border-radius:12px;padding:14px;margin-bottom:14px;position:relative;overflow:hidden}
-.opt-scan-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1.5px;background:linear-gradient(90deg,var(--r1),transparent)}
-.scan-anim{width:100%;height:4px;background:var(--ink4);border-radius:2px;overflow:hidden;margin:10px 0}
-.scan-beam{height:100%;width:30%;background:linear-gradient(90deg,transparent,var(--r1),transparent);animation:scanSlide 1.5s linear infinite}
-@keyframes scanSlide{0%{transform:translateX(-100%)}100%{transform:translateX(400%)}}
-.issues-list{display:flex;flex-direction:column;gap:6px}
-.issue-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;background:var(--ink3);border:1px solid var(--border2);transition:.18s}
-.issue-item:hover{border-color:var(--border)}
-.issue-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-.issue-dot.critical{background:var(--r1);box-shadow:0 0 6px var(--rg)}
-.issue-dot.warn{background:#ff8800;box-shadow:0 0 6px rgba(255,136,0,.5)}
-.issue-dot.ok{background:var(--lime);box-shadow:0 0 6px rgba(57,255,20,.4)}
-.issue-info{flex:1}
-.issue-name{font-size:12px;font-weight:600;color:var(--txt)}
-.issue-desc{font-size:10px;color:var(--txt3);margin-top:1px}
-.issue-fix{padding:5px 10px;border-radius:6px;font-size:10px;font-weight:700;letter-spacing:.5px;cursor:pointer;border:none;transition:.18s}
-.issue-fix.fix-btn{background:var(--rg3);color:var(--r1);border:1px solid var(--border)}
-.issue-fix.fix-btn:hover{background:var(--rg2)}
-.issue-fix.fixed{background:rgba(57,255,20,.1);color:var(--lime);border:1px solid rgba(57,255,20,.3);cursor:default}
-
-.opt-tools-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
-.ot{padding:12px;border-radius:10px;background:var(--ink2);border:1px solid var(--border2);cursor:pointer;transition:.18s;text-align:center;position:relative;overflow:hidden}
-.ot:active{transform:scale(.97)}
-.ot:hover{border-color:var(--border)}
-.ot-icon{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;margin:0 auto 8px;background:var(--rg3)}
-.ot-icon svg{width:18px;height:18px}
-.ot-name{font-size:12px;font-weight:700;color:var(--txt);margin-bottom:2px}
-.ot-desc{font-size:10px;color:var(--txt3);line-height:1.3}
-.ot-badge{position:absolute;top:5px;right:5px;width:7px;height:7px;border-radius:50%;background:var(--lime);box-shadow:0 0 5px rgba(57,255,20,.6);animation:ldot 2s ease-in-out infinite}
-
-.opt-clean-card{background:var(--ink2);border:1px solid var(--border2);border-radius:12px;overflow:hidden;margin-bottom:14px}
-.occ-header{display:flex;align-items:center;gap:12px;padding:12px 14px;background:var(--ink3);border-bottom:1px solid var(--border2)}
-.occ-icon{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;background:var(--rg3)}
-.occ-icon svg{width:18px;height:18px}
-.occ-info{flex:1}
-.occ-title{font-size:13px;font-weight:600;color:var(--txt)}
-.occ-desc{font-size:10px;color:var(--txt3);margin-top:1px}
-.occ-run{padding:7px 14px;border-radius:7px;background:var(--r1);color:#fff;font-size:11px;font-weight:700;letter-spacing:1px;border:none;cursor:pointer;transition:.18s}
-.occ-run:hover{box-shadow:0 0 12px var(--rg2)}
-.occ-progress{padding:10px 14px}
-.occ-bar{height:4px;background:var(--ink4);border-radius:2px;overflow:hidden}
-.occ-fill{height:100%;background:linear-gradient(90deg,#880000,var(--r1));border-radius:2px;transition:width .3s;box-shadow:0 0 6px var(--rg)}
-.occ-stat{font-family:'DM Mono',monospace;font-size:9px;color:var(--txt3);margin-top:5px;letter-spacing:1px}
-
-/* ═══ CONTACT PAGE ═══ */
-.contact-hero{padding:18px 14px;border-radius:12px;background:linear-gradient(135deg,var(--ink2),var(--ink3));border:1px solid var(--border);margin-bottom:14px;position:relative;overflow:hidden;text-align:center}
-.contact-hero::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--r1),transparent)}
-.ch-tag{font-family:'DM Mono',monospace;font-size:9px;color:var(--txt3);letter-spacing:3px;margin-bottom:8px}
-.ch-title{font-family:'Black Han Sans',sans-serif;font-size:24px;letter-spacing:2px}
-.ch-title span{color:var(--r1);text-shadow:0 0 12px var(--rg)}
-.admin-row{display:flex;align-items:center;gap:12px;padding:14px;border-radius:12px;background:var(--ink2);border:1px solid var(--border);margin-bottom:14px;position:relative;overflow:hidden}
-.admin-row::before{content:'';position:absolute;top:0;left:0;bottom:0;width:2px;background:var(--r1);box-shadow:0 0 8px var(--rg)}
-.av{width:56px;height:56px;border-radius:50%;border:2px solid var(--r1);box-shadow:0 0 12px var(--rg2);overflow:hidden;flex-shrink:0}
-.av img{width:100%;height:100%;object-fit:cover}
-.aname{font-family:'Black Han Sans',sans-serif;font-size:18px;letter-spacing:1px}
-.astatus{display:flex;align-items:center;gap:5px;margin:4px 0}
-.odot{width:6px;height:6px;border-radius:50%;background:var(--lime);box-shadow:0 0 6px rgba(57,255,20,.7)}
-.ostxt{font-size:11px;color:var(--txt3)}
-.arole{display:inline-block;padding:2px 8px;border-radius:4px;font-size:9px;font-weight:700;letter-spacing:1px;background:var(--rg3);border:1px solid var(--border);color:var(--r2);font-family:'DM Mono',monospace}
-.contact-links{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
-.cl-item{display:flex;align-items:center;gap:12px;padding:12px;border-radius:10px;background:var(--ink2);border:1px solid var(--border2);text-decoration:none;color:var(--txt);transition:.18s;position:relative}
-.cl-item:hover{border-color:var(--border);transform:translateX(3px)}
-.cl-item::after{content:'→';position:absolute;right:12px;color:var(--r1);font-size:14px}
-.cl-icon{width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.cl-pf{font-size:13px;font-weight:700}
-.cl-handle{font-size:10px;color:var(--txt3);font-family:'DM Mono',monospace;margin-top:1px}
-.cl-desc{font-size:10px;color:var(--txt3);margin-top:1px}
-.stats-pills{display:flex;border-radius:10px;overflow:hidden;border:1px solid var(--border2);margin-bottom:14px}
-.sp-pill{flex:1;text-align:center;padding:12px 6px;background:var(--ink2)}
-.sp-pill+.sp-pill{border-left:1px solid var(--border2)}
-.sp-val{font-family:'Black Han Sans',sans-serif;font-size:22px;color:var(--r1)}
-.sp-lbl{font-family:'DM Mono',monospace;font-size:8px;color:var(--txt3);letter-spacing:1px;margin-top:2px}
-
-/* ═══ SETTINGS PAGE ═══ */
-.sgroup{border-radius:12px;overflow:hidden;border:1px solid var(--border2);margin-bottom:12px}
-.sg-hdr{padding:9px 14px;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--txt3);background:var(--ink3);border-bottom:1px solid var(--border2)}
-.si{display:flex;align-items:center;gap:12px;padding:11px 14px;background:var(--ink2);border-bottom:1px solid var(--border2)}
-.si:last-child{border-bottom:none}
-.si-ico{width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:var(--rg3)}
-.si-ico svg{width:15px;height:15px}
-.si-info{flex:1}
-.si-name{font-size:13px;font-weight:600;color:var(--txt)}
-.si-desc{font-size:10px;color:var(--txt3);margin-top:1px}
-.si-val{font-family:'DM Mono',monospace;font-size:11px;color:var(--r2)}
-
-/* ═══ OVERLAYS ═══ */
-#key-modal {
-  position:fixed; inset:0; z-index:9999;
-  display:none; align-items:center; justify-content:center;
-  background:rgba(5,8,18,0.97); backdrop-filter:blur(22px);
-}
-#key-modal::before {
-  content:''; position:absolute; inset:0; pointer-events:none;
-  background:
-    radial-gradient(ellipse 70% 50% at 25% 40%, rgba(0,245,255,0.04) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 50% at 75% 60%, rgba(255,0,110,0.04) 0%, transparent 60%);
-}
-#key-modal::after {
-  content:''; position:absolute; inset:0; pointer-events:none;
-  background-image:
-    linear-gradient(rgba(0,245,255,0.025) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0,245,255,0.025) 1px, transparent 1px);
-  background-size:44px 44px;
-}
-.key-modal-box {
-  position:relative; z-index:1; width:88%; max-width:360px;
-  background:linear-gradient(160deg, rgba(10,15,30,0.99) 0%, rgba(14,21,38,0.99) 100%);
-  border:1px solid rgba(0,245,255,0.22);
-  border-radius:22px; padding:34px 24px; text-align:center;
-  box-shadow:
-    0 0 0 1px rgba(0,245,255,0.04),
-    0 0 50px rgba(0,245,255,0.1),
-    0 0 100px rgba(255,0,110,0.05),
-    0 24px 60px rgba(0,0,0,0.85);
-  animation:modalIn .4s cubic-bezier(.34,1.56,.64,1);
-}
-@keyframes modalIn { 0%{opacity:0;transform:scale(.82) translateY(22px)} 100%{opacity:1;transform:scale(1) translateY(0)} }
-.key-modal-box::before {
-  content:''; position:absolute; top:0; left:15%; right:15%; height:1px;
-  background:linear-gradient(90deg, transparent, var(--cyan), var(--pink), transparent);
-}
-.key-modal-box::after {
-  content:''; position:absolute; bottom:0; left:25%; right:25%; height:1px;
-  background:linear-gradient(90deg, transparent, rgba(0,245,255,0.28), transparent);
-}
-
-/* Corner accents */
-.key-modal-box .corner { position:absolute; width:14px; height:14px; }
-.key-modal-box .corner-tl { top:10px; left:10px; border-top:1.5px solid var(--cyan); border-left:1.5px solid var(--cyan); }
-.key-modal-box .corner-tr { top:10px; right:10px; border-top:1.5px solid var(--pink); border-right:1.5px solid var(--pink); }
-.key-modal-box .corner-bl { bottom:10px; left:10px; border-bottom:1.5px solid var(--cyan); border-left:1.5px solid var(--cyan); }
-.key-modal-box .corner-br { bottom:10px; right:10px; border-bottom:1.5px solid var(--pink); border-right:1.5px solid var(--pink); }
-
-.key-modal-icon { font-size:46px; margin-bottom:12px; filter:drop-shadow(0 0 22px #ffd700); display:block; }
-.key-modal-title {
-  font-family:var(--font-main); font-size:16px; font-weight:700; letter-spacing:4px; margin-bottom:6px;
-  background:linear-gradient(135deg, var(--cyan), var(--pink));
-  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
-}
-.key-modal-sub { font-family:var(--font-mono); font-size:10px; color:var(--text3); letter-spacing:2px; margin-bottom:26px; }
-
-#key-input {
-  width:100%; padding:14px 16px; border-radius:12px;
-  background:rgba(0,245,255,0.04); border:1px solid var(--border2);
-  color:var(--text); font-family:var(--font-mono); font-size:13px; letter-spacing:2px;
-  outline:none; margin-bottom:10px; transition:all .2s; box-sizing:border-box;
-}
-#key-input:focus {
-  border-color:var(--cyan); background:rgba(0,245,255,0.07);
-  box-shadow:0 0 18px rgba(0,245,255,0.14), inset 0 0 12px rgba(0,245,255,0.025);
-}
-#key-input::placeholder { color:var(--text3); }
-#key-msg { font-family:var(--font-mono); font-size:11px; min-height:18px; margin-bottom:14px; letter-spacing:1px; color:var(--text3); }
-#activate-btn {
-  width:100%; padding:16px; border-radius:14px; cursor:pointer; border:none; position:relative; overflow:hidden;
-  font-family:var(--font-main); font-size:13px; font-weight:700; letter-spacing:3px; color:#000; margin-bottom:14px;
-  background:linear-gradient(135deg, #00f5ff 0%, #00d4e8 50%, #00ffcc 100%);
-  box-shadow:0 0 24px rgba(0,245,255,0.45), 0 0 48px rgba(0,245,255,0.15);
-  transition:all .2s;
-}
-#activate-btn::after {
-  content:''; position:absolute; inset:-2px;
-  background:linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.3) 50%, transparent 100%);
-  transform:translateX(-120%); transition:transform .7s ease;
-}
-#activate-btn:not(:disabled):hover::after { transform:translateX(120%); }
-#activate-btn:disabled { opacity:.45; cursor:not-allowed; }
-#activate-btn:not(:disabled):active { transform:scale(.96); }
-
-.key-modal-lock {
-  display:flex; align-items:center; justify-content:center; gap:8px;
-  font-family:var(--font-mono); font-size:9px; color:var(--text3); letter-spacing:2px;
-}
-.key-modal-lock::before,.key-modal-lock::after {
-  content:''; flex:1; height:1px;
-  background:linear-gradient(90deg, transparent, rgba(0,245,255,0.1));
-}
-.key-modal-lock::after { background:linear-gradient(270deg, transparent, rgba(0,245,255,0.1)); }
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <!-- ═══════════ SPLASH ═══════════ -->
+
 <div id="splash">
   <div class="sp-noise"></div>
   <div class="sp-grid"></div>
@@ -538,9 +38,11 @@ canvas{display:block;width:100%;border-radius:4px}
 </div>
 
 <!-- ═══════════ APP ═══════════ -->
+
 <div id="app">
 
   <!-- TOPBAR -->
+
   <div class="topbar">
     <button class="hbg" id="hbg-btn" onclick="toggleDrawer()">
       <div class="hbg-line"></div><div class="hbg-line"></div><div class="hbg-line"></div>
@@ -562,425 +64,451 @@ canvas{display:block;width:100%;border-radius:4px}
   </div>
 
   <!-- PAGES -->
+
   <div class="pages">
 
-    <!-- ══ DASHBOARD ══ -->
-    <div class="page active" id="page-dash">
-      <div class="pscroll">
+```
+<!-- ══ DASHBOARD ══ -->
+<div class="page active" id="page-dash">
+  <div class="pscroll">
 
-        <div class="hero">
-          <div class="hero-bg"></div>
-          <div class="hero-corner tl"></div><div class="hero-corner tr"></div>
-          <div class="hero-corner bl"></div><div class="hero-corner br"></div>
-          <div class="hero-title">SYSTEM <b>IGNITION</b></div>
-          <div class="hero-desc">AI-Powered · Real-time Optimizer v4.0</div>
-          <button class="ignite-btn" onclick="runBoost()">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" fill="#fff" fill-opacity=".4" stroke="#fff" stroke-width="1.5"/></svg>
-            IGNITE SYSTEM
-          </button>
+    <div class="hero">
+      <div class="hero-bg"></div>
+      <div class="hero-corner tl"></div><div class="hero-corner tr"></div>
+      <div class="hero-corner bl"></div><div class="hero-corner br"></div>
+      <div class="hero-title">SYSTEM <b>IGNITION</b></div>
+      <div class="hero-desc">AI-Powered · Real-time Optimizer v4.0</div>
+      <button class="ignite-btn" onclick="runBoost()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" fill="#fff" fill-opacity=".4" stroke="#fff" stroke-width="1.5"/></svg>
+        IGNITE SYSTEM
+      </button>
+    </div>
+
+    <div class="stat-grid">
+      <div class="sc"><div class="sc-lbl">FRAMES/SEC</div><div class="sc-val" id="v-fps">--</div><div class="sc-bar"><div class="sc-fill fill-r" id="b-fps" style="width:0%"></div></div><div class="sc-status" id="s-fps">scanning...</div></div>
+      <div class="sc"><div class="sc-lbl">PROCESSOR</div><div class="sc-val" id="v-cpu">--<sup>%</sup></div><div class="sc-bar"><div class="sc-fill fill-o" id="b-cpu" style="width:0%"></div></div><div class="sc-status" id="s-cpu">scanning...</div></div>
+      <div class="sc"><div class="sc-lbl">MEMORY</div><div class="sc-val" id="v-ram">--<sup>%</sup></div><div class="sc-bar"><div class="sc-fill fill-b" id="b-ram" style="width:0%"></div></div><div class="sc-status" id="s-ram">scanning...</div></div>
+      <div class="sc"><div class="sc-lbl">THERMAL</div><div class="sc-val" id="v-tmp">--<sup>°</sup></div><div class="sc-bar"><div class="sc-fill fill-g" id="b-tmp" style="width:0%"></div></div><div class="sc-status" id="s-tmp">scanning...</div></div>
+    </div>
+
+    <div class="score-bar-card">
+      <div class="sb-row">
+        <div><div class="sb-label">CORE SCORE</div><div class="sb-score" id="core-score">0</div></div>
+        <div style="text-align:right"><div class="sb-grade" id="core-grade">INITIALIZING...</div><div style="font-size:9px;color:var(--txt4);font-family:'DM Mono',monospace;margin-top:2px">/ 100 MAX</div></div>
+      </div>
+      <div class="sb-track"><div class="sb-progress" id="sb-prog" style="width:0%"></div></div>
+      <div class="sb-segs"><span>0</span><span>25</span><span>50</span><span>75</span><span>100</span></div>
+    </div>
+
+    <div class="qa-label">Quick Actions</div>
+    <div class="qa-row">
+      <div class="qa" onclick="qa('ram')"><div class="qa-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6" stroke="#ff1a1a" stroke-width="2" stroke-linecap="round"/></svg></div><span>Clear<br>Memory</span></div>
+      <div class="qa" onclick="qa('cool')"><div class="qa-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2v20M4.93 4.93l14.14 14.14M2 12h20M4.93 19.07l14.14-14.14" stroke="#00e5ff" stroke-width="1.5"/></svg></div><span>Cool<br>Down</span></div>
+      <div class="qa" onclick="qa('fps')"><div class="qa-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="#ff1a1a" stroke-width="2" fill="#ff1a1a" fill-opacity=".2"/></svg></div><span>FPS<br>Boost</span></div>
+      <div class="qa" onclick="qa('net')"><div class="qa-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M1 6s4-4 11-4 11 4 11 4M5 10s2.5-2.5 7-2.5S19 10 19 10M9 14s1-1 3-1 3 1 3 1M12 18v.01" stroke="#39ff14" stroke-width="2"/></svg></div><span>Net<br>Fix</span></div>
+      <div class="qa" onclick="qa('game')"><div class="qa-icon"><svg viewBox="0 0 24 24" fill="none"><rect x="2" y="6" width="20" height="14" rx="3" stroke="#ff8800" stroke-width="2"/><path d="M8 13h4M10 11v4M15 13h.01M17 13h.01" stroke="#ff8800" stroke-width="2" stroke-linecap="round"/></svg></div><span>Game<br>Mode</span></div>
+      <div class="qa" onclick="qa('junk')"><div class="qa-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2v6M12 16v6M4.93 4.93l4.24 4.24M14.83 14.83l4.24 4.24M2 12h6M16 12h6M4.93 19.07l4.24-4.24M14.83 9.17l4.24-4.24" stroke="#ffc400" stroke-width="2"/></svg></div><span>Clean<br>Junk</span></div>
+    </div>
+
+    <!-- LAUNCH GAMES -->
+    <div class="qa-label" style="margin-top:16px">Launch Game</div>
+    <div class="ff-grid">
+      <button class="ff-btn ff-normal" onclick="launchGame('ff')">
+        <div class="ff-top-line"></div>
+        <div class="ff-ico">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+            <path d="M12 2c0 0-6 5-6 10a6 6 0 0012 0c0-2-1-4-2-5 0 2-1 3-2 3-1 0-2-1-2-3z" fill="#fff" fill-opacity=".9"/>
+            <path d="M9 14c0 1.66 1.34 3 3 3s3-1.34 3-3c0-1-.5-2-1-2.5 0 1-.5 1.5-1 1.5s-1-.5-1-1.5C10.5 12 9 13 9 14z" fill="#ffdd00"/>
+          </svg>
         </div>
-
-        <div class="stat-grid">
-          <div class="sc"><div class="sc-lbl">FRAMES/SEC</div><div class="sc-val" id="v-fps">--</div><div class="sc-bar"><div class="sc-fill fill-r" id="b-fps" style="width:0%"></div></div><div class="sc-status" id="s-fps">scanning...</div></div>
-          <div class="sc"><div class="sc-lbl">PROCESSOR</div><div class="sc-val" id="v-cpu">--<sup>%</sup></div><div class="sc-bar"><div class="sc-fill fill-o" id="b-cpu" style="width:0%"></div></div><div class="sc-status" id="s-cpu">scanning...</div></div>
-          <div class="sc"><div class="sc-lbl">MEMORY</div><div class="sc-val" id="v-ram">--<sup>%</sup></div><div class="sc-bar"><div class="sc-fill fill-b" id="b-ram" style="width:0%"></div></div><div class="sc-status" id="s-ram">scanning...</div></div>
-          <div class="sc"><div class="sc-lbl">THERMAL</div><div class="sc-val" id="v-tmp">--<sup>°</sup></div><div class="sc-bar"><div class="sc-fill fill-g" id="b-tmp" style="width:0%"></div></div><div class="sc-status" id="s-tmp">scanning...</div></div>
+        <div class="ff-name">FREE FIRE</div>
+        <div class="ff-tap">TAP TO LAUNCH</div>
+      </button>
+      <button class="ff-btn ff-max" onclick="launchGame('ffmax')">
+        <div class="ff-top-line"></div>
+        <div class="ff-ico">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+            <path d="M12 2c0 0-6 5-6 10a6 6 0 0012 0c0-2-1-4-2-5 0 2-1 3-2 3-1 0-2-1-2-3z" fill="#fff" fill-opacity=".9"/>
+            <path d="M9 14c0 1.66 1.34 3 3 3s3-1.34 3-3c0-1-.5-2-1-2.5 0 1-.5 1.5-1 1.5s-1-.5-1-1.5C10.5 12 9 13 9 14z" fill="#ffdd00"/>
+            <path d="M8 6l2 2 2-3 2 3 2-2" stroke="#ffd700" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
         </div>
+        <div class="ff-name">FREE FIRE MAX</div>
+        <div class="ff-tap">TAP TO LAUNCH</div>
+      </button>
+    </div>
 
-        <div class="score-bar-card">
-          <div class="sb-row">
-            <div><div class="sb-label">CORE SCORE</div><div class="sb-score" id="core-score">0</div></div>
-            <div style="text-align:right"><div class="sb-grade" id="core-grade">INITIALIZING...</div><div style="font-size:9px;color:var(--txt4);font-family:'DM Mono',monospace;margin-top:2px">/ 100 MAX</div></div>
-          </div>
-          <div class="sb-track"><div class="sb-progress" id="sb-prog" style="width:0%"></div></div>
-          <div class="sb-segs"><span>0</span><span>25</span><span>50</span><span>75</span><span>100</span></div>
-        </div>
+  </div>
+</div>
 
-        <div class="qa-label">Quick Actions</div>
-        <div class="qa-row">
-          <div class="qa" onclick="qa('ram')"><div class="qa-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6" stroke="#ff1a1a" stroke-width="2" stroke-linecap="round"/></svg></div><span>Clear<br>Memory</span></div>
-          <div class="qa" onclick="qa('cool')"><div class="qa-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2v20M4.93 4.93l14.14 14.14M2 12h20M4.93 19.07l14.14-14.14" stroke="#00e5ff" stroke-width="1.5"/></svg></div><span>Cool<br>Down</span></div>
-          <div class="qa" onclick="qa('fps')"><div class="qa-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="#ff1a1a" stroke-width="2" fill="#ff1a1a" fill-opacity=".2"/></svg></div><span>FPS<br>Boost</span></div>
-          <div class="qa" onclick="qa('net')"><div class="qa-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M1 6s4-4 11-4 11 4 11 4M5 10s2.5-2.5 7-2.5S19 10 19 10M9 14s1-1 3-1 3 1 3 1M12 18v.01" stroke="#39ff14" stroke-width="2"/></svg></div><span>Net<br>Fix</span></div>
-          <div class="qa" onclick="qa('game')"><div class="qa-icon"><svg viewBox="0 0 24 24" fill="none"><rect x="2" y="6" width="20" height="14" rx="3" stroke="#ff8800" stroke-width="2"/><path d="M8 13h4M10 11v4M15 13h.01M17 13h.01" stroke="#ff8800" stroke-width="2" stroke-linecap="round"/></svg></div><span>Game<br>Mode</span></div>
-          <div class="qa" onclick="qa('junk')"><div class="qa-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2v6M12 16v6M4.93 4.93l4.24 4.24M14.83 14.83l4.24 4.24M2 12h6M16 12h6M4.93 19.07l4.24-4.24M14.83 9.17l4.24-4.24" stroke="#ffc400" stroke-width="2"/></svg></div><span>Clean<br>Junk</span></div>
-        </div>
+<!-- ══ MONITOR ══ -->
+<div class="page" id="page-monitor">
+  <div class="pscroll">
+    <div class="pg-head"><div class="pg-title">MONITOR</div><div class="pg-sub">Real-time system graphs</div></div>
+    <div class="divider"></div>
+    <div class="chart-card">
+      <div class="cc-head"><span class="cc-label">FRAMES / SEC</span><span class="cc-val rv" id="rt-fps">--</span></div>
+      <canvas id="cv-fps" height="55"></canvas>
+      <div class="cc-stats">
+        <div class="cs-item"><div class="cs-lbl">MIN</div><div class="cs-val" id="fps-min">--</div></div>
+        <div class="cs-item"><div class="cs-lbl">AVG</div><div class="cs-val" id="fps-avg">--</div></div>
+        <div class="cs-item"><div class="cs-lbl">MAX</div><div class="cs-val" id="fps-max">--</div></div>
+        <div class="cs-item"><div class="cs-lbl">NOW</div><div class="cs-val" id="fps-now">--</div></div>
+      </div>
+    </div>
+    <div class="chart-card">
+      <div class="cc-head"><span class="cc-label">CPU LOAD</span><span class="cc-val ov" id="rt-cpu">--%</span></div>
+      <canvas id="cv-cpu" height="55"></canvas>
+      <div class="cc-stats">
+        <div class="cs-item"><div class="cs-lbl">MIN</div><div class="cs-val" id="cpu-min">--</div></div>
+        <div class="cs-item"><div class="cs-lbl">AVG</div><div class="cs-val" id="cpu-avg">--</div></div>
+        <div class="cs-item"><div class="cs-lbl">MAX</div><div class="cs-val" id="cpu-max">--</div></div>
+        <div class="cs-item"><div class="cs-lbl">NOW</div><div class="cs-val" id="cpu-now">--</div></div>
+      </div>
+    </div>
+    <div class="chart-card">
+      <div class="cc-head"><span class="cc-label">MEMORY</span><span class="cc-val bv" id="rt-ram">--%</span></div>
+      <canvas id="cv-ram" height="55"></canvas>
+      <div class="cc-stats">
+        <div class="cs-item"><div class="cs-lbl">MIN</div><div class="cs-val" id="ram-min">--</div></div>
+        <div class="cs-item"><div class="cs-lbl">AVG</div><div class="cs-val" id="ram-avg">--</div></div>
+        <div class="cs-item"><div class="cs-lbl">MAX</div><div class="cs-val" id="ram-max">--</div></div>
+        <div class="cs-item"><div class="cs-lbl">NOW</div><div class="cs-val" id="ram-now">--</div></div>
+      </div>
+    </div>
+    <div class="chart-card">
+      <div class="cc-head"><span class="cc-label">THERMAL</span><span class="cc-val gv" id="rt-tmp">--°</span></div>
+      <canvas id="cv-tmp" height="55"></canvas>
+      <div class="cc-stats">
+        <div class="cs-item"><div class="cs-lbl">MIN</div><div class="cs-val" id="tmp-min">--</div></div>
+        <div class="cs-item"><div class="cs-lbl">AVG</div><div class="cs-val" id="tmp-avg">--</div></div>
+        <div class="cs-item"><div class="cs-lbl">MAX</div><div class="cs-val" id="tmp-max">--</div></div>
+        <div class="cs-item"><div class="cs-lbl">NOW</div><div class="cs-val" id="tmp-now">--</div></div>
+      </div>
+    </div>
+    <div class="net-row">
+      <div class="net-c"><div class="net-icon" style="color:#39ff14">↓</div><div class="net-v" id="net-dl">--</div><div class="net-l">DOWNLOAD</div></div>
+      <div class="net-c"><div class="net-icon" style="color:#ff8800">↑</div><div class="net-v" id="net-ul">--</div><div class="net-l">UPLOAD</div></div>
+      <div class="net-c"><div class="net-icon" style="color:#00e5ff">◎</div><div class="net-v" id="net-ping">--</div><div class="net-l">PING</div></div>
+    </div>
+  </div>
+</div>
 
-        <!-- LAUNCH GAMES -->
-        <div class="qa-label" style="margin-top:16px">Launch Game</div>
-        <div class="ff-grid">
-          <button class="ff-btn ff-normal" onclick="launchGame('ff')">
-            <div class="ff-top-line"></div>
-            <div class="ff-ico">
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-                <path d="M12 2c0 0-6 5-6 10a6 6 0 0012 0c0-2-1-4-2-5 0 2-1 3-2 3-1 0-2-1-2-3z" fill="#fff" fill-opacity=".9"/>
-                <path d="M9 14c0 1.66 1.34 3 3 3s3-1.34 3-3c0-1-.5-2-1-2.5 0 1-.5 1.5-1 1.5s-1-.5-1-1.5C10.5 12 9 13 9 14z" fill="#ffdd00"/>
-              </svg>
-            </div>
-            <div class="ff-name">FREE FIRE</div>
-            <div class="ff-tap">TAP TO LAUNCH</div>
-          </button>
-          <button class="ff-btn ff-max" onclick="launchGame('ffmax')">
-            <div class="ff-top-line"></div>
-            <div class="ff-ico">
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-                <path d="M12 2c0 0-6 5-6 10a6 6 0 0012 0c0-2-1-4-2-5 0 2-1 3-2 3-1 0-2-1-2-3z" fill="#fff" fill-opacity=".9"/>
-                <path d="M9 14c0 1.66 1.34 3 3 3s3-1.34 3-3c0-1-.5-2-1-2.5 0 1-.5 1.5-1 1.5s-1-.5-1-1.5C10.5 12 9 13 9 14z" fill="#ffdd00"/>
-                <path d="M8 6l2 2 2-3 2 3 2-2" stroke="#ffd700" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </div>
-            <div class="ff-name">FREE FIRE MAX</div>
-            <div class="ff-tap">TAP TO LAUNCH</div>
-          </button>
-        </div>
+<!-- ══ BOOST ══ -->
+<div class="page" id="page-boost">
+  <div class="pscroll">
+    <div class="pg-head"><div class="pg-title">BOOST</div><div class="pg-sub">Optimization profiles & toggles</div></div>
+    <div class="divider"></div>
+    <div class="sec-lbl">Performance Mode</div>
+    <div class="bm-grid" id="bm-grid"></div>
+    <div class="sec-lbl">Power Toggles</div>
+    <div class="pt-list" id="pt-list"></div>
+    <div class="elite-wall">
+      <div class="ew-icon">👑</div>
+      <div class="ew-title">ELITE FEATURES</div>
+      <div class="ew-sub">Unlock AI Deep Optimizer, Thermal Shield Pro,<br>Frame Engine MAX & Network Turbo</div>
+      <button class="ew-btn" onclick="showKey()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><rect x="3" y="11" width="18" height="11" rx="2" stroke="currentColor" stroke-width="2"/><path d="M7 11V7a5 5 0 0110 0v4" stroke="currentColor" stroke-width="2"/></svg>
+        NHẬP ELITE KEY
+      </button>
+    </div>
+  </div>
+</div>
 
+<!-- ══ AIM LAB ══ -->
+<div class="page" id="page-aim">
+  <div class="pscroll">
+    <div class="pg-head"><div class="pg-title">AIM LAB</div><div class="pg-sub">Crosshair · Sensitivity · Trainer · Gyro</div></div>
+    <div class="divider"></div>
+
+    <!-- HERO -->
+    <div class="aim-hero">
+      <div class="aim-preview">
+        <div class="ch-o1"></div><div class="ch-o2"></div><div class="ch-o3"></div>
+        <div class="ch-h"></div><div class="ch-v"></div><div class="ch-dot"></div>
+      </div>
+      <div class="aim-metrics">
+        <div class="am-item"><div class="am-val" id="aim-score-display">78</div><div class="am-lbl">AIM SCORE</div></div>
+        <div class="am-item"><div class="am-val" id="ch-score" style="font-size:14px;color:var(--txt2)">78</div><div class="am-lbl">SCORE</div></div>
+        <div class="am-item"><div class="am-val" id="ch-lock" style="font-size:14px;color:var(--txt2)">v3</div><div class="am-lbl">LOCK</div></div>
       </div>
     </div>
 
-    <!-- ══ MONITOR ══ -->
-    <div class="page" id="page-monitor">
-      <div class="pscroll">
-        <div class="pg-head"><div class="pg-title">MONITOR</div><div class="pg-sub">Real-time system graphs</div></div>
-        <div class="divider"></div>
-        <div class="chart-card">
-          <div class="cc-head"><span class="cc-label">FRAMES / SEC</span><span class="cc-val rv" id="rt-fps">--</span></div>
-          <canvas id="cv-fps" height="55"></canvas>
-          <div class="cc-stats">
-            <div class="cs-item"><div class="cs-lbl">MIN</div><div class="cs-val" id="fps-min">--</div></div>
-            <div class="cs-item"><div class="cs-lbl">AVG</div><div class="cs-val" id="fps-avg">--</div></div>
-            <div class="cs-item"><div class="cs-lbl">MAX</div><div class="cs-val" id="fps-max">--</div></div>
-            <div class="cs-item"><div class="cs-lbl">NOW</div><div class="cs-val" id="fps-now">--</div></div>
-          </div>
-        </div>
-        <div class="chart-card">
-          <div class="cc-head"><span class="cc-label">CPU LOAD</span><span class="cc-val ov" id="rt-cpu">--%</span></div>
-          <canvas id="cv-cpu" height="55"></canvas>
-          <div class="cc-stats">
-            <div class="cs-item"><div class="cs-lbl">MIN</div><div class="cs-val" id="cpu-min">--</div></div>
-            <div class="cs-item"><div class="cs-lbl">AVG</div><div class="cs-val" id="cpu-avg">--</div></div>
-            <div class="cs-item"><div class="cs-lbl">MAX</div><div class="cs-val" id="cpu-max">--</div></div>
-            <div class="cs-item"><div class="cs-lbl">NOW</div><div class="cs-val" id="cpu-now">--</div></div>
-          </div>
-        </div>
-        <div class="chart-card">
-          <div class="cc-head"><span class="cc-label">MEMORY</span><span class="cc-val bv" id="rt-ram">--%</span></div>
-          <canvas id="cv-ram" height="55"></canvas>
-          <div class="cc-stats">
-            <div class="cs-item"><div class="cs-lbl">MIN</div><div class="cs-val" id="ram-min">--</div></div>
-            <div class="cs-item"><div class="cs-lbl">AVG</div><div class="cs-val" id="ram-avg">--</div></div>
-            <div class="cs-item"><div class="cs-lbl">MAX</div><div class="cs-val" id="ram-max">--</div></div>
-            <div class="cs-item"><div class="cs-lbl">NOW</div><div class="cs-val" id="ram-now">--</div></div>
-          </div>
-        </div>
-        <div class="chart-card">
-          <div class="cc-head"><span class="cc-label">THERMAL</span><span class="cc-val gv" id="rt-tmp">--°</span></div>
-          <canvas id="cv-tmp" height="55"></canvas>
-          <div class="cc-stats">
-            <div class="cs-item"><div class="cs-lbl">MIN</div><div class="cs-val" id="tmp-min">--</div></div>
-            <div class="cs-item"><div class="cs-lbl">AVG</div><div class="cs-val" id="tmp-avg">--</div></div>
-            <div class="cs-item"><div class="cs-lbl">MAX</div><div class="cs-val" id="tmp-max">--</div></div>
-            <div class="cs-item"><div class="cs-lbl">NOW</div><div class="cs-val" id="tmp-now">--</div></div>
-          </div>
-        </div>
-        <div class="net-row">
-          <div class="net-c"><div class="net-icon" style="color:#39ff14">↓</div><div class="net-v" id="net-dl">--</div><div class="net-l">DOWNLOAD</div></div>
-          <div class="net-c"><div class="net-icon" style="color:#ff8800">↑</div><div class="net-v" id="net-ul">--</div><div class="net-l">UPLOAD</div></div>
-          <div class="net-c"><div class="net-icon" style="color:#00e5ff">◎</div><div class="net-v" id="net-ping">--</div><div class="net-l">PING</div></div>
-        </div>
+    <!-- AIM LOCK -->
+    <div class="sec-lbl">Aim Lock — Khoá tâm</div>
+    <div class="lock-grid">
+      <button class="lb" id="lb-v1" onclick="setLock(this,'v1')"><span class="lb-ver">v1</span><span class="lb-name">Nhẹ</span><span class="lb-sub">basic</span></button>
+      <button class="lb" id="lb-v2" onclick="setLock(this,'v2')"><span class="lb-ver">v2</span><span class="lb-name">Vừa</span><span class="lb-sub">steady</span></button>
+      <button class="lb on" id="lb-v3" onclick="setLock(this,'v3')"><span class="lb-ver">v3</span><span class="lb-name">Mạnh</span><span class="lb-sub">pro</span></button>
+      <button class="lb" id="lb-v4" onclick="setLock(this,'v4')"><span class="lb-ver">v4</span><span class="lb-name">MAX</span><span class="lb-sub">elite</span></button>
+    </div>
+    <div class="lock-info">
+      <div class="li-row"><span>Lock Radius</span><span class="li-val" id="li-r">38px</span></div>
+      <div class="li-row"><span>Track Speed</span><span class="li-val" id="li-s">Medium-Fast</span></div>
+      <div class="li-row"><span>Target Zone</span><span class="li-val" id="li-t">Head + Chest</span></div>
+    </div>
+
+    <!-- SENSITIVITY -->
+    <div class="sec-lbl">Sensitivity Tuning</div>
+    <div class="sens-wrap">
+      <div class="sens-preset">
+        <div class="sp-item on" onclick="setPreset(this,'bal')"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3v18M5 8l7-5 7 5" stroke="#ff1a1a" stroke-width="2"/></svg><span>Cân bằng</span></div>
+        <div class="sp-item" onclick="setPreset(this,'snp')"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#ff1a1a" stroke-width="1.5"/><circle cx="12" cy="12" r="3" fill="#ff1a1a"/></svg><span>Sniper</span></div>
+        <div class="sp-item" onclick="setPreset(this,'rush')"><svg viewBox="0 0 24 24" fill="none"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="#ffc400" stroke-width="2"/></svg><span>Rush</span></div>
+        <div class="sp-item" onclick="setPreset(this,'pro')"><svg viewBox="0 0 24 24" fill="none"><path d="M2 19h20M3 9l4 4 5-8 5 8 4-4-2 10H5L3 9z" stroke="#ffc400" stroke-width="2"/></svg><span>Pro</span></div>
+      </div>
+      <div class="sr"><div class="sr-top"><span class="sr-lbl">General</span><span class="sr-val" id="sv-g">100</span></div><input type="range" min="1" max="200" value="100" oninput="sv('g',this.value)"></div>
+      <div class="sr"><div class="sr-top"><span class="sr-lbl">ADS</span><span class="sr-val" id="sv-a">80</span></div><input type="range" min="1" max="200" value="80" oninput="sv('a',this.value)"></div>
+      <div class="sr"><div class="sr-top"><span class="sr-lbl">Scope 2×</span><span class="sr-val" id="sv-s2">65</span></div><input type="range" min="1" max="200" value="65" oninput="sv('s2',this.value)"></div>
+      <div class="sr"><div class="sr-top"><span class="sr-lbl">Scope 4×</span><span class="sr-val" id="sv-s4">50</span></div><input type="range" min="1" max="200" value="50" oninput="sv('s4',this.value)"></div>
+      <div class="sr" style="margin-bottom:0"><div class="sr-top"><span class="sr-lbl">Scope 8×</span><span class="sr-val" id="sv-s8">35</span></div><input type="range" min="1" max="200" value="35" oninput="sv('s8',this.value)"></div>
+    </div>
+
+    <!-- FINGER LAYOUT -->
+    <div class="sec-lbl">Finger Layout — Bố cục ngón tay</div>
+    <div class="finger-grid">
+      <div class="fg-btn" onclick="selectFinger(this,'2')"><div class="fg-icon">✌️</div><div class="fg-name">2 Ngón</div><div class="fg-desc">Người mới<br>basic aim</div></div>
+      <div class="fg-btn on" onclick="selectFinger(this,'3')"><div class="fg-icon">🤟</div><div class="fg-name">3 Ngón</div><div class="fg-desc">Phổ biến<br>balanced</div></div>
+      <div class="fg-btn" onclick="selectFinger(this,'4')"><div class="fg-icon">🖐</div><div class="fg-name">4 Ngón</div><div class="fg-desc">Pro aim<br>fast reflex</div></div>
+      <div class="fg-btn" onclick="selectFinger(this,'claw')"><div class="fg-icon">🦅</div><div class="fg-name">Claw</div><div class="fg-desc">Expert mode<br>max control</div></div>
+    </div>
+
+    <!-- RECOIL CONTROL -->
+    <div class="sec-lbl">Recoil Control — Kiểm soát giật</div>
+    <div class="recoil-wrap">
+      <div class="recoil-zone">
+        <div class="recoil-grid-lines"></div>
+        <canvas id="cv-recoil" width="340" height="88" style="position:absolute;inset:0;width:100%;height:100%"></canvas>
+      </div>
+      <div class="recoil-btns">
+        <div class="rb-btn on" onclick="setRecoil(this,'auto')">Auto Compensate</div>
+        <div class="rb-btn" onclick="setRecoil(this,'manual')">Manual Control</div>
+        <div class="rb-btn" onclick="setRecoil(this,'ar')">AR Pattern (M4A1)</div>
+        <div class="rb-btn" onclick="setRecoil(this,'sniper')">Sniper Mode</div>
       </div>
     </div>
 
-    <!-- ══ BOOST ══ -->
-    <div class="page" id="page-boost">
-      <div class="pscroll">
-        <div class="pg-head"><div class="pg-title">BOOST</div><div class="pg-sub">Optimization profiles & toggles</div></div>
-        <div class="divider"></div>
-        <div class="sec-lbl">Performance Mode</div>
-        <div class="bm-grid" id="bm-grid"></div>
-        <div class="sec-lbl">Power Toggles</div>
-        <div class="pt-list" id="pt-list"></div>
-        <div class="elite-wall">
-          <div class="ew-icon">👑</div>
-          <div class="ew-title">ELITE FEATURES</div>
-          <div class="ew-sub">Unlock AI Deep Optimizer, Thermal Shield Pro,<br>Frame Engine MAX & Network Turbo</div>
-          <button class="ew-btn" onclick="showKey()">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><rect x="3" y="11" width="18" height="11" rx="2" stroke="currentColor" stroke-width="2"/><path d="M7 11V7a5 5 0 0110 0v4" stroke="currentColor" stroke-width="2"/></svg>
-            NHẬP ELITE KEY
-          </button>
-        </div>
+    <!-- HEADSHOT TRAINER -->
+    <div class="sec-lbl">Headshot Trainer — Luyện bám đầu</div>
+    <div class="hs-card">
+      <div class="hs-scene" id="hs-scene"></div>
+      <div class="hs-stats">
+        <div class="hs-stat"><div class="hs-stat-val" id="hs-hits">0</div><div class="hs-stat-lbl">HITS</div></div>
+        <div class="hs-stat"><div class="hs-stat-val" id="hs-misses" style="color:#ff8800">0</div><div class="hs-stat-lbl">MISS</div></div>
+        <div class="hs-stat"><div class="hs-stat-val" id="hs-acc">0%</div><div class="hs-stat-lbl">ACC%</div></div>
+      </div>
+      <div class="hs-controls">
+        <div class="hs-ctrl-btn start" onclick="startHSTrainer()">START</div>
+        <div class="hs-ctrl-btn" onclick="document.getElementById('hs-scene').querySelectorAll('.hs-target').forEach(t=>t.remove());hsScore=0;hsMisses=0;hsActive=false;document.getElementById('hs-hits').textContent='0';document.getElementById('hs-misses').textContent='0';document.getElementById('hs-acc').textContent='0%';document.querySelector('.hs-ctrl-btn.start').textContent='START';document.querySelector('.hs-ctrl-btn.start').onclick=startHSTrainer;">RESET</div>
       </div>
     </div>
 
-    <!-- ══ AIM LAB ══ -->
-    <div class="page" id="page-aim">
-      <div class="pscroll">
-        <div class="pg-head"><div class="pg-title">AIM LAB</div><div class="pg-sub">Crosshair · Sensitivity · Trainer · Gyro</div></div>
-        <div class="divider"></div>
-
-        <!-- HERO -->
-        <div class="aim-hero">
-          <div class="aim-preview">
-            <div class="ch-o1"></div><div class="ch-o2"></div><div class="ch-o3"></div>
-            <div class="ch-h"></div><div class="ch-v"></div><div class="ch-dot"></div>
-          </div>
-          <div class="aim-metrics">
-            <div class="am-item"><div class="am-val" id="aim-score-display">78</div><div class="am-lbl">AIM SCORE</div></div>
-            <div class="am-item"><div class="am-val" id="ch-score" style="font-size:14px;color:var(--txt2)">78</div><div class="am-lbl">SCORE</div></div>
-            <div class="am-item"><div class="am-val" id="ch-lock" style="font-size:14px;color:var(--txt2)">v3</div><div class="am-lbl">LOCK</div></div>
-          </div>
+    <!-- GYROSCOPE -->
+    <div class="sec-lbl">Gyroscope — Con quay hồi chuyển</div>
+    <div class="gyro-card">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+        <div><div style="font-size:13px;font-weight:600">Gyro Aim</div><div style="font-size:10px;color:var(--txt3)">Nghiêng máy để kéo tâm</div></div>
+        <label class="toggle"><input type="checkbox" id="gyro-toggle" onchange="toggleGyro(this)"><span class="ttrack"></span></label>
+      </div>
+      <div id="gyro-panel" style="display:none">
+        <div class="gyro-vis">
+          <div class="gyro-bar-h" id="gyro-bar-h" style="top:50%"></div>
+          <div class="gyro-bar-v" id="gyro-bar-v" style="left:50%"></div>
+          <div class="gyro-center"></div>
         </div>
-
-        <!-- AIM LOCK -->
-        <div class="sec-lbl">Aim Lock — Khoá tâm</div>
-        <div class="lock-grid">
-          <button class="lb" id="lb-v1" onclick="setLock(this,'v1')"><span class="lb-ver">v1</span><span class="lb-name">Nhẹ</span><span class="lb-sub">basic</span></button>
-          <button class="lb" id="lb-v2" onclick="setLock(this,'v2')"><span class="lb-ver">v2</span><span class="lb-name">Vừa</span><span class="lb-sub">steady</span></button>
-          <button class="lb on" id="lb-v3" onclick="setLock(this,'v3')"><span class="lb-ver">v3</span><span class="lb-name">Mạnh</span><span class="lb-sub">pro</span></button>
-          <button class="lb" id="lb-v4" onclick="setLock(this,'v4')"><span class="lb-ver">v4</span><span class="lb-name">MAX</span><span class="lb-sub">elite</span></button>
-        </div>
-        <div class="lock-info">
-          <div class="li-row"><span>Lock Radius</span><span class="li-val" id="li-r">38px</span></div>
-          <div class="li-row"><span>Track Speed</span><span class="li-val" id="li-s">Medium-Fast</span></div>
-          <div class="li-row"><span>Target Zone</span><span class="li-val" id="li-t">Head + Chest</span></div>
-        </div>
-
-        <!-- SENSITIVITY -->
-        <div class="sec-lbl">Sensitivity Tuning</div>
-        <div class="sens-wrap">
-          <div class="sens-preset">
-            <div class="sp-item on" onclick="setPreset(this,'bal')"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3v18M5 8l7-5 7 5" stroke="#ff1a1a" stroke-width="2"/></svg><span>Cân bằng</span></div>
-            <div class="sp-item" onclick="setPreset(this,'snp')"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#ff1a1a" stroke-width="1.5"/><circle cx="12" cy="12" r="3" fill="#ff1a1a"/></svg><span>Sniper</span></div>
-            <div class="sp-item" onclick="setPreset(this,'rush')"><svg viewBox="0 0 24 24" fill="none"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="#ffc400" stroke-width="2"/></svg><span>Rush</span></div>
-            <div class="sp-item" onclick="setPreset(this,'pro')"><svg viewBox="0 0 24 24" fill="none"><path d="M2 19h20M3 9l4 4 5-8 5 8 4-4-2 10H5L3 9z" stroke="#ffc400" stroke-width="2"/></svg><span>Pro</span></div>
-          </div>
-          <div class="sr"><div class="sr-top"><span class="sr-lbl">General</span><span class="sr-val" id="sv-g">100</span></div><input type="range" min="1" max="200" value="100" oninput="sv('g',this.value)"></div>
-          <div class="sr"><div class="sr-top"><span class="sr-lbl">ADS</span><span class="sr-val" id="sv-a">80</span></div><input type="range" min="1" max="200" value="80" oninput="sv('a',this.value)"></div>
-          <div class="sr"><div class="sr-top"><span class="sr-lbl">Scope 2×</span><span class="sr-val" id="sv-s2">65</span></div><input type="range" min="1" max="200" value="65" oninput="sv('s2',this.value)"></div>
-          <div class="sr"><div class="sr-top"><span class="sr-lbl">Scope 4×</span><span class="sr-val" id="sv-s4">50</span></div><input type="range" min="1" max="200" value="50" oninput="sv('s4',this.value)"></div>
-          <div class="sr" style="margin-bottom:0"><div class="sr-top"><span class="sr-lbl">Scope 8×</span><span class="sr-val" id="sv-s8">35</span></div><input type="range" min="1" max="200" value="35" oninput="sv('s8',this.value)"></div>
-        </div>
-
-        <!-- FINGER LAYOUT -->
-        <div class="sec-lbl">Finger Layout — Bố cục ngón tay</div>
-        <div class="finger-grid">
-          <div class="fg-btn" onclick="selectFinger(this,'2')"><div class="fg-icon">✌️</div><div class="fg-name">2 Ngón</div><div class="fg-desc">Người mới<br>basic aim</div></div>
-          <div class="fg-btn on" onclick="selectFinger(this,'3')"><div class="fg-icon">🤟</div><div class="fg-name">3 Ngón</div><div class="fg-desc">Phổ biến<br>balanced</div></div>
-          <div class="fg-btn" onclick="selectFinger(this,'4')"><div class="fg-icon">🖐</div><div class="fg-name">4 Ngón</div><div class="fg-desc">Pro aim<br>fast reflex</div></div>
-          <div class="fg-btn" onclick="selectFinger(this,'claw')"><div class="fg-icon">🦅</div><div class="fg-name">Claw</div><div class="fg-desc">Expert mode<br>max control</div></div>
-        </div>
-
-        <!-- RECOIL CONTROL -->
-        <div class="sec-lbl">Recoil Control — Kiểm soát giật</div>
-        <div class="recoil-wrap">
-          <div class="recoil-zone">
-            <div class="recoil-grid-lines"></div>
-            <canvas id="cv-recoil" width="340" height="88" style="position:absolute;inset:0;width:100%;height:100%"></canvas>
-          </div>
-          <div class="recoil-btns">
-            <div class="rb-btn on" onclick="setRecoil(this,'auto')">Auto Compensate</div>
-            <div class="rb-btn" onclick="setRecoil(this,'manual')">Manual Control</div>
-            <div class="rb-btn" onclick="setRecoil(this,'ar')">AR Pattern (M4A1)</div>
-            <div class="rb-btn" onclick="setRecoil(this,'sniper')">Sniper Mode</div>
-          </div>
-        </div>
-
-        <!-- HEADSHOT TRAINER -->
-        <div class="sec-lbl">Headshot Trainer — Luyện bám đầu</div>
-        <div class="hs-card">
-          <div class="hs-scene" id="hs-scene"></div>
-          <div class="hs-stats">
-            <div class="hs-stat"><div class="hs-stat-val" id="hs-hits">0</div><div class="hs-stat-lbl">HITS</div></div>
-            <div class="hs-stat"><div class="hs-stat-val" id="hs-misses" style="color:#ff8800">0</div><div class="hs-stat-lbl">MISS</div></div>
-            <div class="hs-stat"><div class="hs-stat-val" id="hs-acc">0%</div><div class="hs-stat-lbl">ACC%</div></div>
-          </div>
-          <div class="hs-controls">
-            <div class="hs-ctrl-btn start" onclick="startHSTrainer()">START</div>
-            <div class="hs-ctrl-btn" onclick="document.getElementById('hs-scene').querySelectorAll('.hs-target').forEach(t=>t.remove());hsScore=0;hsMisses=0;hsActive=false;document.getElementById('hs-hits').textContent='0';document.getElementById('hs-misses').textContent='0';document.getElementById('hs-acc').textContent='0%';document.querySelector('.hs-ctrl-btn.start').textContent='START';document.querySelector('.hs-ctrl-btn.start').onclick=startHSTrainer;">RESET</div>
-          </div>
-        </div>
-
-        <!-- GYROSCOPE -->
-        <div class="sec-lbl">Gyroscope — Con quay hồi chuyển</div>
-        <div class="gyro-card">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
-            <div><div style="font-size:13px;font-weight:600">Gyro Aim</div><div style="font-size:10px;color:var(--txt3)">Nghiêng máy để kéo tâm</div></div>
-            <label class="toggle"><input type="checkbox" id="gyro-toggle" onchange="toggleGyro(this)"><span class="ttrack"></span></label>
-          </div>
-          <div id="gyro-panel" style="display:none">
-            <div class="gyro-vis">
-              <div class="gyro-bar-h" id="gyro-bar-h" style="top:50%"></div>
-              <div class="gyro-bar-v" id="gyro-bar-v" style="left:50%"></div>
-              <div class="gyro-center"></div>
-            </div>
-            <div class="sr"><div class="sr-top"><span class="sr-lbl">Gyro Vertical</span><span class="sr-val" id="sv-gyv">60</span></div><input type="range" min="1" max="150" value="60" oninput="sv('gyv',this.value)"></div>
-            <div class="sr" style="margin-bottom:0"><div class="sr-top"><span class="sr-lbl">Gyro Horizontal</span><span class="sr-val" id="sv-gyh">55</span></div><input type="range" min="1" max="150" value="55" oninput="sv('gyh',this.value)"></div>
-          </div>
-        </div>
-
-        <button class="aim-apply" onclick="applyAim()">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
-          APPLY ALL AIM SETTINGS
-        </button>
+        <div class="sr"><div class="sr-top"><span class="sr-lbl">Gyro Vertical</span><span class="sr-val" id="sv-gyv">60</span></div><input type="range" min="1" max="150" value="60" oninput="sv('gyv',this.value)"></div>
+        <div class="sr" style="margin-bottom:0"><div class="sr-top"><span class="sr-lbl">Gyro Horizontal</span><span class="sr-val" id="sv-gyh">55</span></div><input type="range" min="1" max="150" value="55" oninput="sv('gyh',this.value)"></div>
       </div>
     </div>
 
-    <!-- ══ OPTIMIZE ══ (NEW PAGE) -->
-    <div class="page" id="page-optimize">
-      <div class="pscroll">
-        <div class="pg-head"><div class="pg-title">OPTIMIZE</div><div class="pg-sub">System scan · Fix · Deep clean</div></div>
-        <div class="divider"></div>
+    <button class="aim-apply" onclick="applyAim()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+      APPLY ALL AIM SETTINGS
+    </button>
+  </div>
+</div>
 
-        <!-- SCAN -->
-        <div class="opt-scan-card">
-          <div style="display:flex;align-items:center;justify-content:space-between">
-            <div>
-              <div style="font-family:'Black Han Sans',sans-serif;font-size:16px;letter-spacing:1px;color:var(--txt)">SYSTEM SCANNER</div>
-              <div style="font-size:10px;color:var(--txt3);margin-top:2px" id="scan-status">Nhấn SCAN để quét hệ thống</div>
-            </div>
-            <button onclick="runScan()" style="padding:8px 16px;border-radius:8px;background:var(--rg3);border:1px solid var(--border);color:var(--r1);font-family:'Black Han Sans',sans-serif;font-size:14px;letter-spacing:1px;cursor:pointer">SCAN</button>
-          </div>
-          <div class="scan-anim"><div class="scan-beam" id="scan-beam"></div></div>
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-            <div style="font-size:10px;color:var(--txt3);letter-spacing:1px;font-family:'DM Mono',monospace">ISSUES FOUND</div>
-            <button onclick="fixAll()" style="padding:5px 12px;border-radius:6px;background:linear-gradient(135deg,#880000,var(--r1));border:none;color:#fff;font-size:10px;font-weight:700;letter-spacing:1px;cursor:pointer">FIX ALL</button>
-          </div>
-          <div class="issues-list" id="issues-list"></div>
+<!-- ══ OPTIMIZE ══ (NEW PAGE) -->
+<div class="page" id="page-optimize">
+  <div class="pscroll">
+    <div class="pg-head"><div class="pg-title">OPTIMIZE</div><div class="pg-sub">System scan · Fix · Deep clean</div></div>
+    <div class="divider"></div>
+
+    <!-- SCAN -->
+    <div class="opt-scan-card">
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <div>
+          <div style="font-family:'Black Han Sans',sans-serif;font-size:16px;letter-spacing:1px;color:var(--txt)">SYSTEM SCANNER</div>
+          <div style="font-size:10px;color:var(--txt3);margin-top:2px" id="scan-status">Nhấn SCAN để quét hệ thống</div>
         </div>
-
-        <!-- OPT TOOLS -->
-        <div class="sec-lbl">Optimization Tools</div>
-        <div class="opt-tools-grid" id="opt-tools-grid"></div>
-
-        <!-- CLEAN TOOLS -->
-        <div class="sec-lbl">Deep Cleaner</div>
-        <div id="clean-list"></div>
-
-        <!-- BATTERY OPTIMIZER -->
-        <div class="sec-lbl">Battery Optimizer</div>
-        <div style="background:var(--ink2);border:1px solid var(--border2);border-radius:12px;overflow:hidden;margin-bottom:14px">
-          <div style="display:flex;gap:0">
-            <div onclick="setBattery(this,'save')" style="flex:1;text-align:center;padding:12px 6px;border-right:1px solid var(--border2);cursor:pointer;background:var(--rg4);border-top:2px solid var(--r1)">
-              <div style="font-size:18px;margin-bottom:4px">🔋</div>
-              <div style="font-family:'Black Han Sans',sans-serif;font-size:12px;color:var(--r1)">SAVE</div>
-              <div style="font-size:9px;color:var(--txt3)">Tiết kiệm pin</div>
-            </div>
-            <div onclick="setBattery(this,'balance')" style="flex:1;text-align:center;padding:12px 6px;border-right:1px solid var(--border2);cursor:pointer">
-              <div style="font-size:18px;margin-bottom:4px">⚖️</div>
-              <div style="font-family:'Black Han Sans',sans-serif;font-size:12px;color:var(--txt2)">BALANCE</div>
-              <div style="font-size:9px;color:var(--txt3)">Cân bằng</div>
-            </div>
-            <div onclick="setBattery(this,'perf')" style="flex:1;text-align:center;padding:12px 6px;cursor:pointer">
-              <div style="font-size:18px;margin-bottom:4px">⚡</div>
-              <div style="font-family:'Black Han Sans',sans-serif;font-size:12px;color:var(--txt2)">PERF</div>
-              <div style="font-size:9px;color:var(--txt3)">Hiệu năng cao</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- STORAGE -->
-        <div class="sec-lbl">Storage Info</div>
-        <div style="background:var(--ink2);border:1px solid var(--border2);border-radius:12px;padding:14px;margin-bottom:14px">
-          <div style="display:flex;justify-content:space-between;margin-bottom:8px">
-            <div style="font-size:13px;font-weight:600">Internal Storage</div>
-            <div style="font-family:'DM Mono',monospace;font-size:12px;color:var(--r1)">73% used</div>
-          </div>
-          <div style="height:8px;background:var(--ink4);border-radius:4px;overflow:hidden">
-            <div style="width:73%;height:100%;background:linear-gradient(90deg,#880000,var(--r1));border-radius:4px;box-shadow:0 0 6px var(--rg)"></div>
-          </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:10px">
-            <div style="text-align:center;padding:8px;background:var(--ink4);border-radius:8px">
-              <div style="font-family:'Black Han Sans',sans-serif;font-size:16px;color:#ff8800">4.2G</div>
-              <div style="font-size:9px;color:var(--txt3);font-family:'DM Mono',monospace">GAMES</div>
-            </div>
-            <div style="text-align:center;padding:8px;background:var(--ink4);border-radius:8px">
-              <div style="font-family:'Black Han Sans',sans-serif;font-size:16px;color:#00e5ff">1.8G</div>
-              <div style="font-size:9px;color:var(--txt3);font-family:'DM Mono',monospace">CACHE</div>
-            </div>
-            <div style="text-align:center;padding:8px;background:var(--ink4);border-radius:8px">
-              <div style="font-family:'Black Han Sans',sans-serif;font-size:16px;color:var(--lime)">2.1G</div>
-              <div style="font-size:9px;color:var(--txt3);font-family:'DM Mono',monospace">FREE</div>
-            </div>
-          </div>
-        </div>
-
+        <button onclick="runScan()" style="padding:8px 16px;border-radius:8px;background:var(--rg3);border:1px solid var(--border);color:var(--r1);font-family:'Black Han Sans',sans-serif;font-size:14px;letter-spacing:1px;cursor:pointer">SCAN</button>
       </div>
+      <div class="scan-anim"><div class="scan-beam" id="scan-beam"></div></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <div style="font-size:10px;color:var(--txt3);letter-spacing:1px;font-family:'DM Mono',monospace">ISSUES FOUND</div>
+        <button onclick="fixAll()" style="padding:5px 12px;border-radius:6px;background:linear-gradient(135deg,#880000,var(--r1));border:none;color:#fff;font-size:10px;font-weight:700;letter-spacing:1px;cursor:pointer">FIX ALL</button>
+      </div>
+      <div class="issues-list" id="issues-list"></div>
     </div>
 
-    <!-- ══ CONTACT ══ -->
-    <div class="page" id="page-contact">
-      <div class="pscroll">
-        <div class="contact-hero">
-          <div class="ch-tag">BLOODCORE NETWORK</div>
-          <div class="ch-title">LIÊN HỆ <span>ADMIN</span></div>
+    <!-- OPT TOOLS -->
+    <div class="sec-lbl">Optimization Tools</div>
+    <div class="opt-tools-grid" id="opt-tools-grid"></div>
+
+    <!-- CLEAN TOOLS -->
+    <div class="sec-lbl">Deep Cleaner</div>
+    <div id="clean-list"></div>
+
+    <!-- BATTERY OPTIMIZER -->
+    <div class="sec-lbl">Battery Optimizer</div>
+    <div style="background:var(--ink2);border:1px solid var(--border2);border-radius:12px;overflow:hidden;margin-bottom:14px">
+      <div style="display:flex;gap:0">
+        <div onclick="setBattery(this,'save')" style="flex:1;text-align:center;padding:12px 6px;border-right:1px solid var(--border2);cursor:pointer;background:var(--rg4);border-top:2px solid var(--r1)">
+          <div style="font-size:18px;margin-bottom:4px">🔋</div>
+          <div style="font-family:'Black Han Sans',sans-serif;font-size:12px;color:var(--r1)">SAVE</div>
+          <div style="font-size:9px;color:var(--txt3)">Tiết kiệm pin</div>
         </div>
-        <div class="admin-row">
-          <div class="av"><img src="https://sf-static.upanhlaylink.com/img/image_2026032908b0dc0c6571f1e01cbd954b962b09d1.jpg" alt="Admin" onerror="this.style.display='none'"></div>
-          <div class="admin-info">
-            <div class="aname">BloodCore Admin</div>
-            <div class="astatus"><div class="odot"></div><span class="ostxt">Online · Phản hồi nhanh</span></div>
-            <div class="arole">⚡ OWNER · DEVELOPER</div>
-          </div>
+        <div onclick="setBattery(this,'balance')" style="flex:1;text-align:center;padding:12px 6px;border-right:1px solid var(--border2);cursor:pointer">
+          <div style="font-size:18px;margin-bottom:4px">⚖️</div>
+          <div style="font-family:'Black Han Sans',sans-serif;font-size:12px;color:var(--txt2)">BALANCE</div>
+          <div style="font-size:9px;color:var(--txt3)">Cân bằng</div>
         </div>
-        <div class="contact-links">
-          <a class="cl-item" href="https://zalo.me/0336854208" target="_blank">
-            <div class="cl-icon" style="background:#0068ff22;border:1px solid #0068ff44"><svg width="24" height="24" viewBox="0 0 50 50" fill="none"><rect width="50" height="50" rx="10" fill="#0068FF"/><text x="50%" y="60%" dominant-baseline="middle" text-anchor="middle" fill="white" font-size="26" font-weight="bold" font-family="Arial">Z</text></svg></div>
-            <div><div class="cl-pf">Zalo</div><div class="cl-handle">0336854208</div><div class="cl-desc">Chat trực tiếp · Mua key Elite</div></div>
-          </a>
-          <a class="cl-item" href="https://www.facebook.com/share/1CjgQCh4n2/?mibextid=wwXIfr" target="_blank">
-            <div class="cl-icon" style="background:#1877f222;border:1px solid #1877f244"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect width="24" height="24" rx="6" fill="#1877F2"/><path d="M16 4h-2a4 4 0 00-4 4v2H8v3h2v7h3v-7h2.5l.5-3h-3V8a1 1 0 011-1h2V4z" fill="white"/></svg></div>
-            <div><div class="cl-pf">Facebook</div><div class="cl-handle">BloodCore Official</div><div class="cl-desc">Fanpage · Update · Community</div></div>
-          </a>
-          <a class="cl-item" href="https://t.me/spernew" target="_blank">
-            <div class="cl-icon" style="background:#229ed922;border:1px solid #229ed944"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect width="24" height="24" rx="6" fill="#229ED9"/><path d="M20 4L3 11l6 2 2 6 3-4 5 3 1-14z" fill="white"/></svg></div>
-            <div><div class="cl-pf">Telegram</div><div class="cl-handle">@BloodCoreAdmin</div><div class="cl-desc">Kênh thông báo · 24/7 Support</div></div>
-          </a>
-        </div>
-        <div class="stats-pills">
-          <div class="sp-pill"><div class="sp-val">500+</div><div class="sp-lbl">USERS</div></div>
-          <div class="sp-pill"><div class="sp-val">24/7</div><div class="sp-lbl">SUPPORT</div></div>
-          <div class="sp-pill"><div class="sp-val">v4.0</div><div class="sp-lbl">VERSION</div></div>
-        </div>
-        <div style="background:var(--ink2);border:1px solid var(--border2);border-radius:10px;padding:12px;display:flex;gap:8px;font-size:11px;color:var(--txt3);line-height:1.6">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="9" stroke="#ff1a1a" stroke-width="2"/><path d="M12 8v4M12 16h.01" stroke="#ff1a1a" stroke-width="2" stroke-linecap="round"/></svg>
-          <span>Liên hệ admin để mua key Elite, báo lỗi hoặc yêu cầu tính năng. Phản hồi trong 1–6 giờ.</span>
+        <div onclick="setBattery(this,'perf')" style="flex:1;text-align:center;padding:12px 6px;cursor:pointer">
+          <div style="font-size:18px;margin-bottom:4px">⚡</div>
+          <div style="font-family:'Black Han Sans',sans-serif;font-size:12px;color:var(--txt2)">PERF</div>
+          <div style="font-size:9px;color:var(--txt3)">Hiệu năng cao</div>
         </div>
       </div>
     </div>
 
-    <!-- ══ SETTINGS ══ -->
-    <div class="page" id="page-set">
-      <div class="pscroll">
-        <div class="pg-head"><div class="pg-title">SETTINGS</div><div class="pg-sub">System preferences</div></div>
-        <div class="divider"></div>
-        <div class="sgroup">
-          <div class="sg-hdr">DISPLAY</div>
-          <div class="si"><div class="si-ico"><svg viewBox="0 0 24 24" fill="none"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" stroke="#ff1a1a" stroke-width="2"/></svg></div><div class="si-info"><div class="si-name">Dark Mode</div><div class="si-desc">Nền tối gaming</div></div><label class="toggle"><input type="checkbox" checked><span class="ttrack"></span></label></div>
-          <div class="si"><div class="si-ico"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="4" stroke="#ff1a1a" stroke-width="2"/><path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke="#ff1a1a" stroke-width="2"/></svg></div><div class="si-info"><div class="si-name">Animations</div><div class="si-desc">Hiệu ứng chuyển động</div></div><label class="toggle"><input type="checkbox" checked><span class="ttrack"></span></label></div>
-          <div class="si"><div class="si-ico"><svg viewBox="0 0 24 24" fill="none"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" stroke="#ff1a1a" stroke-width="2"/></svg></div><div class="si-info"><div class="si-name">Neon Glow Effects</div><div class="si-desc">Hiệu ứng phát sáng đỏ neon</div></div><label class="toggle"><input type="checkbox" checked><span class="ttrack"></span></label></div>
-          <div class="si"><div class="si-ico"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2v20M2 12h20" stroke="#ff1a1a" stroke-width="2"/></svg></div><div class="si-info"><div class="si-name">Scan Line Effect</div><div class="si-desc">Hiệu ứng scanline CRT</div></div><label class="toggle"><input type="checkbox" checked><span class="ttrack"></span></label></div>
+    <!-- STORAGE -->
+    <div class="sec-lbl">Storage Info</div>
+    <div style="background:var(--ink2);border:1px solid var(--border2);border-radius:12px;padding:14px;margin-bottom:14px">
+      <div style="display:flex;justify-content:space-between;margin-bottom:8px">
+        <div style="font-size:13px;font-weight:600">Internal Storage</div>
+        <div style="font-family:'DM Mono',monospace;font-size:12px;color:var(--r1)">73% used</div>
+      </div>
+      <div style="height:8px;background:var(--ink4);border-radius:4px;overflow:hidden">
+        <div style="width:73%;height:100%;background:linear-gradient(90deg,#880000,var(--r1));border-radius:4px;box-shadow:0 0 6px var(--rg)"></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:10px">
+        <div style="text-align:center;padding:8px;background:var(--ink4);border-radius:8px">
+          <div style="font-family:'Black Han Sans',sans-serif;font-size:16px;color:#ff8800">4.2G</div>
+          <div style="font-size:9px;color:var(--txt3);font-family:'DM Mono',monospace">GAMES</div>
         </div>
-        <div class="sgroup">
-          <div class="sg-hdr">SYSTEM</div>
-          <div class="si"><div class="si-ico"><svg viewBox="0 0 24 24" fill="none"><path d="M11 5L6 9H2v6h4l5 4V5z" stroke="#ff1a1a" stroke-width="2"/><path d="M15.54 8.46a5 5 0 010 7.07" stroke="#ff1a1a" stroke-width="2"/></svg></div><div class="si-info"><div class="si-name">Sound FX</div><div class="si-desc">Âm thanh phản hồi UI</div></div><label class="toggle"><input type="checkbox" id="s-sound" checked><span class="ttrack"></span></label></div>
-          <div class="si"><div class="si-ico"><svg viewBox="0 0 24 24" fill="none"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="#ff1a1a" stroke-width="2"/></svg></div><div class="si-info"><div class="si-name">Auto Boost on Open</div><div class="si-desc">Tự động tối ưu khi mở app</div></div><label class="toggle"><input type="checkbox"><span class="ttrack"></span></label></div>
-          <div class="si"><div class="si-ico"><svg viewBox="0 0 24 24" fill="none"><path d="M18 20V10M12 20V4M6 20v-6" stroke="#ff1a1a" stroke-width="2" stroke-linecap="round"/></svg></div><div class="si-info"><div class="si-name">Live Monitor</div><div class="si-desc">Theo dõi hệ thống nền liên tục</div></div><label class="toggle"><input type="checkbox" checked><span class="ttrack"></span></label></div>
-          <div class="si"><div class="si-ico"><svg viewBox="0 0 24 24" fill="none"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0" stroke="#ff1a1a" stroke-width="2"/></svg></div><div class="si-info"><div class="si-name">Notifications</div><div class="si-desc">Thông báo cảnh báo hệ thống</div></div><label class="toggle"><input type="checkbox" checked><span class="ttrack"></span></label></div>
-          <div class="si"><div class="si-ico"><svg viewBox="0 0 24 24" fill="none"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="#ff1a1a" stroke-width="2"/></svg></div><div class="si-info"><div class="si-name">Anti-Cheat Shield</div><div class="si-desc">Bảo vệ tài khoản game</div></div><label class="toggle"><input type="checkbox" checked><span class="ttrack"></span></label></div>
+        <div style="text-align:center;padding:8px;background:var(--ink4);border-radius:8px">
+          <div style="font-family:'Black Han Sans',sans-serif;font-size:16px;color:#00e5ff">1.8G</div>
+          <div style="font-size:9px;color:var(--txt3);font-family:'DM Mono',monospace">CACHE</div>
         </div>
-        <div class="sgroup">
-          <div class="sg-hdr">ABOUT</div>
-          <div class="si"><span class="si-name">App</span><span class="si-val">BloodCore Optimizer</span></div>
-          <div class="si"><span class="si-name">Version</span><span class="si-val">4.0.0</span></div>
-          <div class="si"><span class="si-name">Tier</span><span class="si-val" id="about-tier">FREE</span></div>
-          <div class="si"><span class="si-name">Build</span><span class="si-val">2026.04</span></div>
-          <div class="si"><span class="si-name">Engine</span><span class="si-val">BlazEngine AI</span></div>
+        <div style="text-align:center;padding:8px;background:var(--ink4);border-radius:8px">
+          <div style="font-family:'Black Han Sans',sans-serif;font-size:16px;color:var(--lime)">2.1G</div>
+          <div style="font-size:9px;color:var(--txt3);font-family:'DM Mono',monospace">FREE</div>
         </div>
       </div>
     </div>
+
+  </div>
+</div>
+
+<!-- ══ CONTACT ══ -->
+<div class="page" id="page-contact">
+  <div class="pscroll">
+    <div class="contact-hero">
+      <div class="ch-tag">BLOODCORE NETWORK</div>
+      <div class="ch-title">LIÊN HỆ <span>ADMIN</span></div>
+    </div>
+    <div class="admin-row">
+      <div class="av"><img src="https://sf-static.upanhlaylink.com/img/image_2026032908b0dc0c6571f1e01cbd954b962b09d1.jpg" alt="Admin" onerror="this.style.display='none'"></div>
+      <div class="admin-info">
+        <div class="aname">BloodCore Admin</div>
+        <div class="astatus"><div class="odot"></div><span class="ostxt">Online · Phản hồi nhanh</span></div>
+        <div class="arole">⚡ OWNER · DEVELOPER</div>
+      </div>
+    </div>
+    <div class="contact-links">
+      <a class="cl-item" href="https://zalo.me/0336854208" target="_blank">
+        <div class="cl-icon" style="background:#0068ff22;border:1px solid #0068ff44"><svg width="24" height="24" viewBox="0 0 50 50" fill="none"><rect width="50" height="50" rx="10" fill="#0068FF"/><text x="50%" y="60%" dominant-baseline="middle" text-anchor="middle" fill="white" font-size="26" font-weight="bold" font-family="Arial">Z</text></svg></div>
+        <div><div class="cl-pf">Zalo</div><div class="cl-handle">0336854208</div><div class="cl-desc">Chat trực tiếp · Mua key Elite</div></div>
+      </a>
+      <a class="cl-item" href="https://www.facebook.com/share/1CjgQCh4n2/?mibextid=wwXIfr" target="_blank">
+        <div class="cl-icon" style="background:#1877f222;border:1px solid #1877f244"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect width="24" height="24" rx="6" fill="#1877F2"/><path d="M16 4h-2a4 4 0 00-4 4v2H8v3h2v7h3v-7h2.5l.5-3h-3V8a1 1 0 011-1h2V4z" fill="white"/></svg></div>
+        <div><div class="cl-pf">Facebook</div><div class="cl-handle">BloodCore Official</div><div class="cl-desc">Fanpage · Update · Community</div></div>
+      </a>
+      <a class="cl-item" href="https://t.me/spernew" target="_blank">
+        <div class="cl-icon" style="background:#229ed922;border:1px solid #229ed944"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect width="24" height="24" rx="6" fill="#229ED9"/><path d="M20 4L3 11l6 2 2 6 3-4 5 3 1-14z" fill="white"/></svg></div>
+        <div><div class="cl-pf">Telegram</div><div class="cl-handle">@BloodCoreAdmin</div><div class="cl-desc">Kênh thông báo · 24/7 Support</div></div>
+      </a>
+    </div>
+    <div class="stats-pills">
+      <div class="sp-pill"><div class="sp-val">500+</div><div class="sp-lbl">USERS</div></div>
+      <div class="sp-pill"><div class="sp-val">24/7</div><div class="sp-lbl">SUPPORT</div></div>
+      <div class="sp-pill"><div class="sp-val">v4.0</div><div class="sp-lbl">VERSION</div></div>
+    </div>
+    <div style="background:var(--ink2);border:1px solid var(--border2);border-radius:10px;padding:12px;display:flex;gap:8px;font-size:11px;color:var(--txt3);line-height:1.6">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="9" stroke="#ff1a1a" stroke-width="2"/><path d="M12 8v4M12 16h.01" stroke="#ff1a1a" stroke-width="2" stroke-linecap="round"/></svg>
+      <span>Liên hệ admin để mua key Elite, báo lỗi hoặc yêu cầu tính năng. Phản hồi trong 1–6 giờ.</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SETTINGS ══ -->
+<div class="page" id="page-set">
+  <div class="pscroll">
+    <div class="pg-head"><div class="pg-title">SETTINGS</div><div class="pg-sub">System preferences</div></div>
+    <div class="divider"></div>
+    <div class="sgroup">
+      <div class="sg-hdr">DISPLAY</div>
+      <div class="si"><div class="si-ico"><svg viewBox="0 0 24 24" fill="none"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" stroke="#ff1a1a" stroke-width="2"/></svg></div><div class="si-info"><div class="si-name">Dark Mode</div><div class="si-desc">Nền tối gaming</div></div><label class="toggle"><input type="checkbox" checked><span class="ttrack"></span></label></div>
+      <div class="si"><div class="si-ico"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="4" stroke="#ff1a1a" stroke-width="2"/><path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke="#ff1a1a" stroke-width="2"/></svg></div><div class="si-info"><div class="si-name">Animations</div><div class="si-desc">Hiệu ứng chuyển động</div></div><label class="toggle"><input type="checkbox" checked><span class="ttrack"></span></label></div>
+      <div class="si"><div class="si-ico"><svg viewBox="0 0 24 24" fill="none"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" stroke="#ff1a1a" stroke-width="2"/></svg></div><div class="si-info"><div class="si-name">Neon Glow Effects</div><div class="si-desc">Hiệu ứng phát sáng đỏ neon</div></div><label class="toggle"><input type="checkbox" checked><span class="ttrack"></span></label></div>
+      <div class="si"><div class="si-ico"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2v20M2 12h20" stroke="#ff1a1a" stroke-width="2"/></svg></div><div class="si-info"><div class="si-name">Scan Line Effect</div><div class="si-desc">Hiệu ứng scanline CRT</div></div><label class="toggle"><input type="checkbox" checked><span class="ttrack"></span></label></div>
+    </div>
+    <div class="sgroup">
+      <div class="sg-hdr">SYSTEM</div>
+      <div class="si"><div class="si-ico"><svg viewBox="0 0 24 24" fill="none"><path d="M11 5L6 9H2v6h4l5 4V5z" stroke="#ff1a1a" stroke-width="2"/><path d="M15.54 8.46a5 5 0 010 7.07" stroke="#ff1a1a" stroke-width="2"/></svg></div><div class="si-info"><div class="si-name">Sound FX</div><div class="si-desc">Âm thanh phản hồi UI</div></div><label class="toggle"><input type="checkbox" id="s-sound" checked><span class="ttrack"></span></label></div>
+      <div class="si"><div class="si-ico"><svg viewBox="0 0 24 24" fill="none"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="#ff1a1a" stroke-width="2"/></svg></div><div class="si-info"><div class="si-name">Auto Boost on Open</div><div class="si-desc">Tự động tối ưu khi mở app</div></div><label class="toggle"><input type="checkbox"><span class="ttrack"></span></label></div>
+      <div class="si"><div class="si-ico"><svg viewBox="0 0 24 24" fill="none"><path d="M18 20V10M12 20V4M6 20v-6" stroke="#ff1a1a" stroke-width="2" stroke-linecap="round"/></svg></div><div class="si-info"><div class="si-name">Live Monitor</div><div class="si-desc">Theo dõi hệ thống nền liên tục</div></div><label class="toggle"><input type="checkbox" checked><span class="ttrack"></span></label></div>
+      <div class="si"><div class="si-ico"><svg viewBox="0 0 24 24" fill="none"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0" stroke="#ff1a1a" stroke-width="2"/></svg></div><div class="si-info"><div class="si-name">Notifications</div><div class="si-desc">Thông báo cảnh báo hệ thống</div></div><label class="toggle"><input type="checkbox" checked><span class="ttrack"></span></label></div>
+      <div class="si"><div class="si-ico"><svg viewBox="0 0 24 24" fill="none"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="#ff1a1a" stroke-width="2"/></svg></div><div class="si-info"><div class="si-name">Anti-Cheat Shield</div><div class="si-desc">Bảo vệ tài khoản game</div></div><label class="toggle"><input type="checkbox" checked><span class="ttrack"></span></label></div>
+    </div>
+    <div class="sgroup">
+      <div class="sg-hdr">ABOUT</div>
+      <div class="si"><span class="si-name">App</span><span class="si-val">BloodCore Optimizer</span></div>
+      <div class="si"><span class="si-name">Version</span><span class="si-val">4.0.0</span></div>
+      <div class="si"><span class="si-name">Tier</span><span class="si-val" id="about-tier">FREE</span></div>
+      <div class="si"><span class="si-name">Build</span><span class="si-val">2026.04</span></div>
+      <div class="si"><span class="si-name">Engine</span><span class="si-val">BlazEngine AI</span></div>
+    </div>
+    <div class="sgroup">
+      <div class="sg-hdr">ELITE KEY</div>
+      <div class="si" style="flex-direction:column;align-items:flex-start;gap:4px">
+        <div style="display:flex;justify-content:space-between;width:100%;align-items:center">
+          <span class="si-name">Key Status</span>
+          <button onclick="showKey()" style="padding:4px 10px;border-radius:6px;background:linear-gradient(135deg,#880000,var(--r1));border:none;color:#fff;font-size:9px;font-weight:700;letter-spacing:1px;cursor:pointer">NHẬP KEY</button>
+        </div>
+        <div id="elite-key-info"></div>
+      </div>
+      <div class="si" style="flex-direction:column;align-items:flex-start;gap:4px">
+        <div style="display:flex;justify-content:space-between;width:100%;align-items:center">
+          <span class="si-name">Device ID</span>
+          <button onclick="copyDeviceId()" style="padding:4px 10px;border-radius:6px;background:var(--ink4);border:1px solid var(--border2);color:var(--txt3);font-size:9px;letter-spacing:1px;cursor:pointer">COPY</button>
+        </div>
+        <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--txt4);margin-top:2px" id="dev-id-display"></div>
+      </div>
+      <div class="si">
+        <div class="si-ico"><svg viewBox="0 0 24 24" fill="none"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9" stroke="#ff1a1a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="si-info"><div class="si-name">Đăng xuất Key</div><div class="si-desc">Xoá key khỏi thiết bị này</div></div>
+        <button onclick="logoutKey()" style="padding:5px 10px;border-radius:6px;background:transparent;border:1px solid #ff1a1a44;color:#ff1a1a;font-size:10px;cursor:pointer;letter-spacing:1px">LOGOUT</button>
+      </div>
+    </div>
+  </div>
+</div>
+```
 
   </div><!-- end pages -->
 
   <!-- BOTTOM NAV BAR -->
+
   <div class="nav">
     <div class="nav-cur">
       <div class="nav-cur-dot"></div>
@@ -989,9 +517,11 @@ canvas{display:block;width:100%;border-radius:4px}
   </div>
 
   <!-- DRAWER BACKDROP -->
+
   <div class="drawer-backdrop" id="drawer-bd" onclick="closeDrawer()"></div>
 
   <!-- DRAWER MENU -->
+
   <div class="drawer" id="drawer">
     <div class="drawer-handle"></div>
     <div class="drawer-title">NAVIGATE</div>
@@ -1028,9 +558,11 @@ canvas{display:block;width:100%;border-radius:4px}
   </div>
 
   <!-- TOAST -->
+
   <div class="toast" id="toast"></div>
 
   <!-- BOOST OVERLAY -->
+
   <div class="b-overlay" id="bov">
     <div class="b-ring-wrap">
       <svg class="b-ring" width="120" height="120" viewBox="0 0 120 120">
@@ -1047,840 +579,180 @@ canvas{display:block;width:100%;border-radius:4px}
 
 </div><!-- end app -->
 
-<!-- KEY MODAL -->
-<div id="key-modal">
-  <div class="key-modal-box">
-    <div class="corner corner-tl"></div>
-    <div class="corner corner-tr"></div>
-    <div class="corner corner-bl"></div>
-    <div class="corner corner-br"></div>
-    <span class="key-modal-icon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none"><rect x="3" y="11" width="18" height="11" rx="2" stroke="#00ff88" stroke-width="2" fill="#00ff8811"/><path d="M7 11V7a5 5 0 0110 0v4" stroke="#00ff88" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="16" r="1.5" fill="#00ff88"/></svg></span>
-    <div class="key-modal-title">NHẬP KEY VIP</div>
-    <div class="key-modal-sub">Liên hệ admin để lấy key kích hoạt</div>
-    <input id="key-input" placeholder="Nhập access key của bạn..."
-      onkeydown="if(event.key==='Enter')activateKey()">
-    <div id="key-msg"></div>
-    <button id="activate-btn" onclick="activateKey()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;margin-right:6px"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="currentColor" stroke-width="2" fill="currentColor" fill-opacity="0.3"/></svg>KÍCH HOẠT</button>
-    <div class="key-modal-lock"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;margin-right:4px"><rect x="3" y="11" width="18" height="11" rx="2" stroke="currentColor" stroke-width="2"/><path d="M7 11V7a5 5 0 0110 0v4" stroke="currentColor" stroke-width="2"/></svg>1 KEY — 1 THIẾT BỊ</div>
+<!-- KEY MODAL — spernew style with device binding -->
+
+<div class="km" id="km">
+  <div class="km-box">
+    <div class="km-corner km-tl"></div>
+    <div class="km-corner km-tr"></div>
+    <div class="km-corner km-bl"></div>
+    <div class="km-corner km-br"></div>
+    <!-- Tabs: ACTIVATE / INFO -->
+    <div class="km-tabs">
+      <button class="km-tab km-tab-on" id="ktab-activate" onclick="switchKTab('activate')">🔑 KÍCH HOẠT</button>
+      <button class="km-tab" id="ktab-info" onclick="switchKTab('info')">👑 ELITE INFO</button>
+    </div>
+    <!-- TAB: ACTIVATE -->
+    <div id="ktab-panel-activate">
+      <div class="km-icon">
+        <svg width="44" height="44" viewBox="0 0 24 24" fill="none">
+          <rect x="3" y="11" width="18" height="11" rx="2" stroke="#ff1a1a" stroke-width="2" fill="#ff1a1a" fill-opacity=".08"/>
+          <path d="M7 11V7a5 5 0 0110 0v4" stroke="#ff1a1a" stroke-width="2"/>
+          <circle cx="12" cy="16" r="1.5" fill="#ff1a1a"/>
+        </svg>
+      </div>
+      <div class="km-title">BLOODCORE ELITE</div>
+      <div class="km-sub">Xác thực qua server · 1 key · 1 thiết bị</div>
+      <input class="km-inp" id="km-inp" placeholder="BLOOD-XXXX-XXXX-XXXX" onkeydown="if(event.key==='Enter')activateKey()" autocomplete="off" spellcheck="false">
+      <div class="km-msg" id="km-msg"></div>
+      <button class="km-act" id="km-act-btn" onclick="activateKey()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;margin-right:6px"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="currentColor" stroke-width="2" fill="currentColor" fill-opacity=".3"/></svg>
+        KÍCH HOẠT
+      </button>
+      <div class="km-divider"></div>
+      <div class="km-note">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;margin-right:3px"><rect x="3" y="11" width="18" height="11" rx="2" stroke="currentColor" stroke-width="2"/><path d="M7 11V7a5 5 0 0110 0v4" stroke="currentColor" stroke-width="2"/></svg>
+        1 KEY · 1 THIẾT BỊ · KHÔNG CHIA SẺ
+      </div>
+      <div class="km-buy-row">
+        <a href="https://zalo.me/0336854208" target="_blank" class="km-buy-btn">
+          <svg width="13" height="13" viewBox="0 0 50 50" fill="none"><rect width="50" height="50" rx="10" fill="#0068FF"/><text x="50%" y="62%" dominant-baseline="middle" text-anchor="middle" fill="white" font-size="28" font-weight="bold" font-family="Arial">Z</text></svg>
+          Mua key Zalo
+        </a>
+        <a href="https://t.me/BloodCoreAdmin" target="_blank" class="km-buy-btn">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><rect width="24" height="24" rx="6" fill="#229ED9"/><path d="M20 4L3 11l6 2 2 6 3-4 5 3 1-14z" fill="white"/></svg>
+          Mua key Telegram
+        </a>
+      </div>
+    </div>
+    <!-- TAB: ELITE INFO -->
+    <div id="ktab-panel-info" style="display:none">
+      <div class="km-feat-list">
+        <div class="km-feat-item">
+          <div class="km-feat-ico" style="color:#ff1a1a">⚡</div>
+          <div><div class="km-feat-name">AI DEEP OPTIMIZER</div><div class="km-feat-desc">Tối ưu CPU/GPU bằng AI thực sự</div></div>
+        </div>
+        <div class="km-feat-item">
+          <div class="km-feat-ico" style="color:#ffc400">🎯</div>
+          <div><div class="km-feat-name">AIM ENGINE MAX</div><div class="km-feat-desc">Bộ điều chỉnh aim nâng cao</div></div>
+        </div>
+        <div class="km-feat-item">
+          <div class="km-feat-ico" style="color:#00e5ff">❄️</div>
+          <div><div class="km-feat-name">THERMAL SHIELD PRO</div><div class="km-feat-desc">Kiểm soát nhiệt độ thông minh</div></div>
+        </div>
+        <div class="km-feat-item">
+          <div class="km-feat-ico" style="color:#39ff14">🌐</div>
+          <div><div class="km-feat-name">NETWORK TURBO</div><div class="km-feat-desc">Giảm ping · tăng tốc độ kết nối</div></div>
+        </div>
+        <div class="km-feat-item">
+          <div class="km-feat-ico" style="color:#ff8800">🛡️</div>
+          <div><div class="km-feat-name">ANTI-LAG SHIELD</div><div class="km-feat-desc">Ngăn lag đột ngột khi chơi game</div></div>
+        </div>
+        <div class="km-feat-item">
+          <div class="km-feat-ico" style="color:#aa88ff">📊</div>
+          <div><div class="km-feat-name">DEEP ANALYTICS</div><div class="km-feat-desc">Phân tích hiệu năng chuyên sâu</div></div>
+        </div>
+      </div>
+      <button class="km-act" onclick="switchKTab('activate')" style="margin-top:12px">
+        🔑 NHẬP KEY NGAY
+      </button>
+    </div>
   </div>
 </div>
 
-<script>/* ═══════════════════════════════════════
-   BLOODCORE OPTIMIZER — script.js v4.0
-═══════════════════════════════════════ */
+<script src="script.js"></script>
 
-// ── AUDIO ENGINE ──────────────────────
-const AC = window.AudioContext || window.webkitAudioContext;
-let _ac = null;
-const ac = () => { if (!_ac) _ac = new AC(); return _ac; };
+<script>
+/* ═══════════════════════════════════════════════════════
+   BLOODCORE — KEY SYSTEM v2 (Supabase + Device Binding)
+   Giống hệ thống spernew optimizer
+   ═══════════════════════════════════════════════════════ */
 
-function snd(t) {
-  try {
-    if (!document.getElementById('s-sound')?.checked) return;
-    const ctx = ac(), g = ctx.createGain();
-    g.connect(ctx.destination);
-    if (t === 'click') {
-      const o = ctx.createOscillator();
-      o.type = 'triangle';
-      o.frequency.setValueAtTime(1100, ctx.currentTime);
-      o.frequency.exponentialRampToValueAtTime(550, ctx.currentTime + .07);
-      g.gain.setValueAtTime(.1, ctx.currentTime);
-      g.gain.exponentialRampToValueAtTime(.001, ctx.currentTime + .09);
-      o.connect(g); o.start(); o.stop(ctx.currentTime + .1);
-    } else if (t === 'boost') {
-      const o = ctx.createOscillator();
-      o.type = 'sawtooth';
-      o.frequency.setValueAtTime(100, ctx.currentTime);
-      o.frequency.exponentialRampToValueAtTime(1600, ctx.currentTime + .6);
-      g.gain.setValueAtTime(.09, ctx.currentTime);
-      g.gain.exponentialRampToValueAtTime(.001, ctx.currentTime + .6);
-      o.connect(g); o.start(); o.stop(ctx.currentTime + .6);
-    } else if (t === 'ok') {
-      [523, 784].forEach((f, i) => {
-        const o = ctx.createOscillator(), gg = ctx.createGain();
-        o.frequency.value = f;
-        gg.gain.setValueAtTime(0, ctx.currentTime + i * .1);
-        gg.gain.linearRampToValueAtTime(.08, ctx.currentTime + i * .1 + .04);
-        gg.gain.exponentialRampToValueAtTime(.001, ctx.currentTime + i * .1 + .2);
-        o.connect(gg); gg.connect(ctx.destination);
-        o.start(ctx.currentTime + i * .1); o.stop(ctx.currentTime + i * .1 + .22);
-      });
-    } else if (t === 'nav') {
-      const o = ctx.createOscillator();
-      o.type = 'sine';
-      o.frequency.setValueAtTime(550, ctx.currentTime);
-      o.frequency.exponentialRampToValueAtTime(770, ctx.currentTime + .06);
-      g.gain.setValueAtTime(.07, ctx.currentTime);
-      g.gain.exponentialRampToValueAtTime(.001, ctx.currentTime + .08);
-      o.connect(g); o.start(); o.stop(ctx.currentTime + .08);
-    } else if (t === 'err') {
-      const o = ctx.createOscillator();
-      o.type = 'sawtooth';
-      o.frequency.setValueAtTime(280, ctx.currentTime);
-      o.frequency.exponentialRampToValueAtTime(90, ctx.currentTime + .22);
-      g.gain.setValueAtTime(.1, ctx.currentTime);
-      g.gain.exponentialRampToValueAtTime(.001, ctx.currentTime + .24);
-      o.connect(g); o.start(); o.stop(ctx.currentTime + .24);
-    } else if (t === 'hit') {
-      const o = ctx.createOscillator();
-      o.type = 'square';
-      o.frequency.setValueAtTime(660, ctx.currentTime);
-      o.frequency.exponentialRampToValueAtTime(330, ctx.currentTime + .05);
-      g.gain.setValueAtTime(.12, ctx.currentTime);
-      g.gain.exponentialRampToValueAtTime(.001, ctx.currentTime + .07);
-      o.connect(g); o.start(); o.stop(ctx.currentTime + .08);
-    } else if (t === 'miss') {
-      const o = ctx.createOscillator();
-      o.type = 'sine';
-      o.frequency.setValueAtTime(200, ctx.currentTime);
-      g.gain.setValueAtTime(.05, ctx.currentTime);
-      g.gain.exponentialRampToValueAtTime(.001, ctx.currentTime + .1);
-      o.connect(g); o.start(); o.stop(ctx.currentTime + .1);
-    }
-  } catch (e) {}
-}
+// ⚠️ Điền thông tin Supabase project của bạn vào đây
+const SUPABASE_URL       = 'https://pjhdnvbssbcmbhepevcn.supabase.co';
+const SUPABASE_KEY       = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBqaGRudmJzc2JjbWJoZXBldmNuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ2NTk4MzMsImV4cCI6MjA5MDIzNTgzM30.00MnFaNSNOJEHJO_OPbsMu45EftknC9o4_ukx5UHaE4';
+const SUPABASE_WRITE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBqaGRudmJzc2JjbWJoZXBldmNuIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NDY1OTgzMywiZXhwIjoyMDkwMjM1ODMzfQ.63NAUMk4y-25eyjy9n96BhK3grB0b_64Ng04wIsSDVM';
 
-// ── TOAST ──────────────────────────────
-function toast(msg, col = '#ff1a1a') {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.style.borderColor = col;
-  t.style.boxShadow = `0 0 18px ${col}55`;
-  t.classList.add('show');
-  clearTimeout(t._t);
-  t._t = setTimeout(() => t.classList.remove('show'), 2200);
-}
-
-// ── DRAWER NAVIGATION ──────────────────
-let cur = 'dash';
-let drawerOpen = false;
-
-function toggleDrawer() { drawerOpen ? closeDrawer() : openDrawer(); }
-
-function openDrawer() {
-  drawerOpen = true;
-  document.getElementById('drawer').classList.add('open');
-  document.getElementById('drawer-bd').classList.add('open');
-  document.getElementById('hbg-btn').classList.add('open');
-  snd('click');
-}
-
-function closeDrawer() {
-  drawerOpen = false;
-  document.getElementById('drawer').classList.remove('open');
-  document.getElementById('drawer-bd').classList.remove('open');
-  document.getElementById('hbg-btn').classList.remove('open');
-}
-
-function dmGo(id, label) {
-  closeDrawer();
-  if (id === cur) return;
-  snd('nav');
-  document.getElementById('page-' + cur).classList.remove('active');
-  document.getElementById('page-' + id).classList.add('active');
-  document.querySelectorAll('.dm-btn').forEach(b => b.classList.remove('dm-on'));
-  document.getElementById('dm-' + id).classList.add('dm-on');
-  document.getElementById('nav-cur-name').textContent = label;
-  cur = id;
-}
-
-function go(id) {
-  const lbl = { dash: 'DASHBOARD', monitor: 'MONITOR', boost: 'BOOST', aim: 'AIM LAB', optimize: 'OPTIMIZE', contact: 'ADMIN', set: 'SETTINGS' };
-  dmGo(id, lbl[id] || id.toUpperCase());
-}
-
-// ── SPLASH ────────────────────────────
-(function () {
-  const fill = document.getElementById('sp-fill');
-  const status = document.getElementById('sp-status');
-  const msgs = ['BOOT SEQUENCE...', 'LOAD AI ENGINE...', 'INIT SENSORS...', 'CALIBRATE CORE...', 'BLOODCORE READY!'];
-  let p = 0;
-  const iv = setInterval(() => {
-    p += Math.random() * 18 + 4;
-    if (p > 100) p = 100;
-    fill.style.width = p + '%';
-    status.textContent = msgs[Math.min(Math.floor(p / 22), 4)];
-    if (p >= 100) {
-      clearInterval(iv);
-      setTimeout(() => {
-        document.getElementById('splash').style.opacity = '0';
-        setTimeout(() => {
-          document.getElementById('splash').style.display = 'none';
-          document.getElementById('app').style.display = 'flex';
-          initApp();
-        }, 500);
-      }, 350);
-    }
-  }, 190);
-})();
-
-// ── APP INIT ─────────────────────────
-let sim = { fps: 62, cpu: 34, ram: 55, tmp: 48 };
-let hist = { fps: [], cpu: [], ram: [], tmp: [] };
-let statsIv = null;
-
-function initApp() {
-  buildBoostModes();
-  buildPowerToggles();
-  buildIssuesList();
-  buildOptTools();
-  buildCleanTools();
-  setTimeout(initCanvases, 100);
-  setTimeout(initialScan, 400);
-}
-
-// ── HELPERS ───────────────────────────
-const rn = (a, b) => Math.floor(Math.random() * (b - a + 1)) + a;
-const drift = (v, mn, mx, s) => Math.max(mn, Math.min(mx, v + (Math.random() - .44) * s));
-
-// ── STATS ─────────────────────────────
-function initialScan() {
-  let i = 0;
-  const iv = setInterval(() => {
-    i++;
-    sim.fps = drift(sim.fps, 30, 120, 9);
-    sim.cpu = drift(sim.cpu, 8, 85, 9);
-    sim.ram = drift(sim.ram, 30, 88, 6);
-    sim.tmp = drift(sim.tmp, 35, 78, 6);
-    updateCards(sim);
-    if (i >= 8) { clearInterval(iv); startLive(); updateScore(); }
-  }, 220);
-}
-
-function startLive() {
-  if (statsIv) clearInterval(statsIv);
-  statsIv = setInterval(() => {
-    sim.fps = drift(sim.fps, 28, 120, 4);
-    sim.cpu = drift(sim.cpu, 8, 82, 4);
-    sim.ram = drift(sim.ram, 28, 88, 3);
-    sim.tmp = drift(sim.tmp, 34, 78, 3);
-    updateCards(sim);
-    ['fps', 'cpu', 'ram', 'tmp'].forEach(k => {
-      hist[k].push(sim[k]);
-      if (hist[k].length > 45) hist[k].shift();
-    });
-    drawAllCharts();
-    updateRTCards(sim);
-    updateNetStats();
-  }, 1100);
-}
-
-function updateCards({ fps, cpu, ram, tmp }) {
-  document.getElementById('v-fps').textContent = Math.round(fps);
-  document.getElementById('b-fps').style.width = Math.min(fps / 120 * 100, 100) + '%';
-  document.getElementById('v-fps').className = 'sc-val' + (fps > 60 ? ' hot' : '');
-  document.getElementById('s-fps').textContent = fps > 75 ? 'smooth ▲' : fps > 45 ? 'ok ●' : 'low ▼';
-  document.getElementById('v-cpu').innerHTML = Math.round(cpu) + '<sup>%</sup>';
-  document.getElementById('b-cpu').style.width = cpu + '%';
-  document.getElementById('s-cpu').textContent = cpu < 45 ? 'normal' : cpu < 70 ? 'medium' : 'high ⚠';
-  document.getElementById('v-ram').innerHTML = Math.round(ram) + '<sup>%</sup>';
-  document.getElementById('b-ram').style.width = ram + '%';
-  document.getElementById('s-ram').textContent = ram < 55 ? 'ok' : ram < 75 ? 'moderate' : 'high ⚠';
-  document.getElementById('v-tmp').innerHTML = Math.round(tmp) + '<sup>°</sup>';
-  document.getElementById('b-tmp').style.width = Math.min(tmp / 85 * 100, 100) + '%';
-  document.getElementById('s-tmp').textContent = tmp < 48 ? 'cool' : tmp < 62 ? 'warm' : 'hot ⚠';
-}
-
-function updateRTCards({ fps, cpu, ram, tmp }) {
-  document.getElementById('rt-fps').textContent = Math.round(fps);
-  document.getElementById('rt-cpu').textContent = Math.round(cpu) + '%';
-  document.getElementById('rt-ram').textContent = Math.round(ram) + '%';
-  document.getElementById('rt-tmp').textContent = Math.round(tmp) + '°';
-  document.getElementById('fps-now').textContent = Math.round(fps);
-  document.getElementById('cpu-now').textContent = Math.round(cpu) + '%';
-  document.getElementById('ram-now').textContent = Math.round(ram) + '%';
-  document.getElementById('tmp-now').textContent = Math.round(tmp) + '°';
-  const calc = (arr, sfx) => {
-    if (!arr.length) return null;
-    return { mn: Math.min(...arr) + sfx, av: Math.round(arr.reduce((a, b) => a + b) / arr.length) + sfx, mx: Math.max(...arr) + sfx };
-  };
-  const d = [['fps', ''], ['cpu', '%'], ['ram', '%'], ['tmp', '°']];
-  d.forEach(([k, s]) => {
-    const v = calc(hist[k], s);
-    if (v) { document.getElementById(k + '-min').textContent = v.mn; document.getElementById(k + '-avg').textContent = v.av; document.getElementById(k + '-max').textContent = v.mx; }
-  });
-}
-
-function updateNetStats() {
-  document.getElementById('net-dl').textContent = (Math.random() * 5 + .5).toFixed(1) + 'M';
-  document.getElementById('net-ul').textContent = (Math.random() * 2 + .2).toFixed(1) + 'M';
-  document.getElementById('net-ping').textContent = rn(4, 32) + 'ms';
-}
-
-function updateScore() {
-  const s = Math.round((sim.fps / 120 * 40) + ((100 - sim.cpu) / 100 * 30) + ((100 - sim.ram) / 100 * 20) + ((85 - sim.tmp) / 85 * 10));
-  let c = 0;
-  const el = document.getElementById('core-score');
-  const prog = document.getElementById('sb-prog');
-  const grade = document.getElementById('core-grade');
-  const iv = setInterval(() => {
-    c += Math.ceil((s - c) / 5) || 1;
-    if (c >= s) { c = s; clearInterval(iv); }
-    el.textContent = c;
-    prog.style.width = c + '%';
-    grade.textContent = c > 88 ? 'S — GODLIKE' : c > 75 ? 'A — EXCELLENT' : c > 60 ? 'B — GOOD' : 'C — AVERAGE';
-  }, 28);
-}
-
-// ── CANVAS CHARTS ─────────────────────
-const cvCfg = {
-  fps: { id: 'cv-fps', col: '#ff1a1a', shadow: 'rgba(255,26,26,.45)', range: [0, 120] },
-  cpu: { id: 'cv-cpu', col: '#ff8800', shadow: 'rgba(255,136,0,.35)', range: [0, 100] },
-  ram: { id: 'cv-ram', col: '#00e5ff', shadow: 'rgba(0,229,255,.3)', range: [0, 100] },
-  tmp: { id: 'cv-tmp', col: '#39ff14', shadow: 'rgba(57,255,20,.35)', range: [0, 90] }
-};
-
-function initCanvases() {
-  Object.values(cvCfg).forEach(cfg => {
-    const cv = document.getElementById(cfg.id);
-    if (cv) { cv.width = cv.offsetWidth || 340; cv.height = 55; }
-  });
-}
-
-function drawChart(key, data) {
-  const cfg = cvCfg[key];
-  const cv = document.getElementById(cfg.id);
-  if (!cv || !data.length) return;
-  const ctx = cv.getContext('2d');
-  const w = cv.width, h = cv.height;
-  const [mn, mx] = cfg.range;
-  ctx.clearRect(0, 0, w, h);
-  // grid
-  ctx.strokeStyle = 'rgba(255,255,255,.04)'; ctx.lineWidth = 1;
-  for (let i = 1; i < 4; i++) { const y = Math.round(h * i / 4) + .5; ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke(); }
-  const pts = data.map((v, i) => ({ x: (i / Math.max(data.length - 1, 1)) * w, y: h - ((v - mn) / (mx - mn)) * h * .86 - 4 }));
-  // fill
-  const grad = ctx.createLinearGradient(0, 0, 0, h);
-  grad.addColorStop(0, cfg.shadow); grad.addColorStop(1, 'transparent');
-  ctx.beginPath();
-  pts.forEach((p, i) => i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y));
-  ctx.lineTo(w, h); ctx.lineTo(0, h); ctx.closePath();
-  ctx.fillStyle = grad; ctx.fill();
-  // line
-  ctx.beginPath();
-  pts.forEach((p, i) => i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y));
-  ctx.strokeStyle = cfg.col; ctx.lineWidth = 2;
-  ctx.shadowColor = cfg.col; ctx.shadowBlur = 6;
-  ctx.stroke(); ctx.shadowBlur = 0;
-  // dot
-  if (pts.length) {
-    const last = pts[pts.length - 1];
-    ctx.beginPath(); ctx.arc(last.x, last.y, 3.5, 0, Math.PI * 2);
-    ctx.fillStyle = cfg.col; ctx.shadowColor = cfg.col; ctx.shadowBlur = 8;
-    ctx.fill(); ctx.shadowBlur = 0;
-  }
-}
-
-function drawAllCharts() {
-  drawChart('fps', hist.fps); drawChart('cpu', hist.cpu);
-  drawChart('ram', hist.ram); drawChart('tmp', hist.tmp);
-}
-
-// ── BOOST ─────────────────────────────
-function runBoost() {
-  snd('boost');
-  const ov = document.getElementById('bov'), txt = document.getElementById('bov-txt');
-  const pct = document.getElementById('bov-pct'), arc = document.getElementById('bov-arc');
-  ov.style.display = 'flex';
-  const steps = ['CLEARING CACHE...', 'KILL BG APPS...', 'TUNE CPU CLOCK...', 'TURBO GPU...', 'NET ACCELERATE...', 'BLOODCORE HOT!'];
-  let p = 0;
-  const iv = setInterval(() => {
-    p += rn(9, 18);
-    if (p >= 100) {
-      p = 100; clearInterval(iv);
-      setTimeout(() => {
-        ov.style.display = 'none';
-        sim.fps = Math.min(120, sim.fps + rn(12, 22));
-        sim.cpu = Math.max(5, sim.cpu - rn(10, 18));
-        sim.ram = Math.max(18, sim.ram - rn(10, 20));
-        sim.tmp = Math.max(34, sim.tmp - rn(3, 9));
-        updateCards(sim); updateScore();
-        toast('🔥 IGNITION COMPLETE!', '#ff1a1a'); snd('ok');
-      }, 350); return;
-    }
-    arc.style.strokeDashoffset = 327 - (327 * p / 100);
-    pct.textContent = p + '%';
-    txt.textContent = steps[Math.min(Math.floor(p / 18), 5)];
-  }, 170);
-}
-
-// ── QUICK ACTIONS ─────────────────────
-function qa(t) {
-  snd('click');
-  const m = { ram: '🗑 Memory cleared +14%', cool: '❄️ Thermal -7°C', fps: '⚡ FPS boosted', net: '📡 Network optimized', game: '🎮 Game Mode ON', junk: '🧹 Junk purged 240MB' };
-  toast(m[t]);
-  if (t === 'ram') { sim.ram = Math.max(18, sim.ram - rn(8, 16)); updateCards(sim); }
-  if (t === 'cool') { sim.tmp = Math.max(34, sim.tmp - rn(5, 9)); updateCards(sim); }
-  if (t === 'fps') { sim.fps = Math.min(120, sim.fps + rn(5, 14)); updateCards(sim); }
-  if (t === 'junk') { sim.ram = Math.max(18, sim.ram - rn(3, 8)); updateCards(sim); }
-}
-
-// ── LAUNCH GAME ───────────────────────
-function launchGame(which) {
-  snd('boost');
-  const isMax = which === 'ffmax';
-  const name = isMax ? 'Free Fire MAX' : 'Free Fire';
-  const uri = isMax
-    ? 'intent://com.dts.freefiremax/#Intent;package=com.dts.freefiremax;scheme=app;end'
-    : 'intent://com.dts.freefireth/#Intent;package=com.dts.freefireth;scheme=app;end';
-  toast('🔥 Đang mở ' + name + '...', isMax ? '#ff1a1a' : '#ff8c00');
-  const ov = document.getElementById('bov');
-  document.getElementById('bov-txt').textContent = 'LAUNCHING ' + name.toUpperCase();
-  document.getElementById('bov-pct').textContent = 'PLEASE WAIT...';
-  document.getElementById('bov-arc').style.strokeDashoffset = '0';
-  ov.style.display = 'flex';
-  setTimeout(() => {
-    ov.style.display = 'none';
-    try { window.location.href = uri; } catch (e) {}
-    setTimeout(() => {
-      const store = isMax
-        ? 'https://play.google.com/store/apps/details?id=com.dts.freefiremax'
-        : 'https://play.google.com/store/apps/details?id=com.dts.freefireth';
-      window.open(store, '_blank');
-    }, 1200);
-  }, 1200);
-}
-
-// ── BOOST MODES ───────────────────────
-const bmData = [
-  { id: 'balance', icon: '<path d="M12 3v18M5 8l7-5 7 5M3 12h4l2 6H5M15 12h4l2 6h-4" stroke="#ff1a1a" stroke-width="2"/>', name: 'BALANCED', desc: 'Cân bằng FPS & nhiệt', badge: 'HOT', bc: 'hot', sel: true },
-  { id: 'sniper',  icon: '<circle cx="12" cy="12" r="9" stroke="#ff1a1a" stroke-width="1.5"/><circle cx="12" cy="12" r="3" fill="#ff1a1a"/>', name: 'SNIPER', desc: 'Ổn định, ít drop', badge: null, sel: false },
-  { id: 'rush',   icon: '<path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="#ffc400" stroke-width="2"/>', name: 'RUSH', desc: 'Max FPS, phản xạ nhanh', badge: 'NEW', bc: 'new', sel: false },
-  { id: 'thermal',icon: '<path d="M12 2v20M4.93 4.93l14.14 14.14M2 12h20" stroke="#00e5ff" stroke-width="2"/>', name: 'THERMAL', desc: 'Ưu tiên kiểm soát nhiệt', badge: null, sel: false },
-];
-
-function buildBoostModes() {
-  const g = document.getElementById('bm-grid');
-  bmData.forEach(m => {
-    const el = document.createElement('div');
-    el.className = 'bm' + (m.sel ? ' sel' : ''); el.id = 'bm-' + m.id;
-    el.innerHTML = (m.badge ? `<div class="bm-badge ${m.bc}">${m.badge}</div>` : '') +
-      `<div class="bm-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none">${m.icon}</svg></div>
-       <div class="bm-name">${m.name}</div><div class="bm-desc">${m.desc}</div>`;
-    el.onclick = () => { snd('click'); document.querySelectorAll('.bm').forEach(b => b.classList.remove('sel')); el.classList.add('sel'); toast('Mode: ' + m.name); };
-    g.appendChild(el);
-  });
-}
-
-const ptData = [
-  { ico: '<path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="#ff1a1a" stroke-width="2"/>', name: 'FPS Unlocker', desc: 'Mở khoá giới hạn khung hình', on: true },
-  { ico: '<path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6" stroke="#ff1a1a" stroke-width="2"/>', name: 'RAM Optimizer', desc: 'Dọn bộ nhớ tự động', on: true },
-  { ico: '<rect x="2" y="6" width="20" height="14" rx="3" stroke="#ff8800" stroke-width="2"/><path d="M8 13h4M10 11v4M15 13h.01" stroke="#ff8800" stroke-width="2"/>', name: 'Game Priority', desc: 'Ưu tiên tài nguyên cho game', on: false },
-  { ico: '<path d="M1 6s4-4 11-4 11 4 11 4M5 10s2.5-2.5 7-2.5S19 10 19 10M9 14s1-1 3-1 3 1 3 1" stroke="#39ff14" stroke-width="2"/>', name: 'Network Boost', desc: 'Giảm ping, ổn định kết nối', on: true },
-  { ico: '<path d="M18 20V10M12 20V4M6 20v-6" stroke="#ff1a1a" stroke-width="2" stroke-linecap="round"/>', name: 'CPU Turbo', desc: 'Tăng xung nhịp CPU max', on: false },
-  { ico: '<path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4" stroke="#00e5ff" stroke-width="2"/>', name: 'Thermal Shield', desc: 'Bảo vệ quá nhiệt 85°+', on: true },
-  { ico: '<path d="M11 5L6 9H2v6h4l5 4V5z" stroke="#ff8800" stroke-width="2"/><path d="M15.54 8.46a5 5 0 010 7.07" stroke="#ff8800" stroke-width="2"/>', name: 'Sound Enhancer', desc: 'Tăng cường âm thanh 3D', on: false },
-  { ico: '<rect x="2" y="3" width="20" height="14" rx="2" stroke="#c084fc" stroke-width="2"/><path d="M8 21h8M12 17v4" stroke="#c084fc" stroke-width="2"/>', name: 'Display Optimizer', desc: 'Tối ưu màn hình, tăng HDR', on: false },
-  { ico: '<path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9" stroke="#ffc400" stroke-width="2"/>', name: 'Anti-Lag Engine', desc: 'Giảm input lag xuống tối thiểu', on: true },
-];
-
-function buildPowerToggles() {
-  const l = document.getElementById('pt-list');
-  ptData.forEach(p => {
-    const el = document.createElement('div'); el.className = 'pt-item';
-    el.innerHTML = `<div class="pt-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none">${p.ico}</svg></div>
-      <div class="pt-info"><div class="pt-name">${p.name}</div><div class="pt-desc">${p.desc}</div></div>
-      <label class="toggle"><input type="checkbox" ${p.on ? 'checked' : ''} onchange="snd(this.checked?'click':'nav');toast('${p.name} '+(this.checked?'✓ Bật':'✗ Tắt'))"><span class="ttrack"></span></label>`;
-    l.appendChild(el);
-  });
-}
-
-// ── AIM LAB ───────────────────────────
-const lockData = {
-  v1: { r: '18px', s: 'Slow',        t: 'Chest only' },
-  v2: { r: '28px', s: 'Medium',      t: 'Head' },
-  v3: { r: '38px', s: 'Medium-Fast', t: 'Head + Chest' },
-  v4: { r: '55px', s: 'Fast',        t: 'Auto Target' }
-};
-
-function setLock(el, v) {
-  snd('click');
-  document.querySelectorAll('.lb').forEach(b => b.classList.remove('on'));
-  el.classList.add('on');
-  const d = lockData[v];
-  document.getElementById('li-r').textContent = d.r;
-  document.getElementById('li-s').textContent = d.s;
-  document.getElementById('li-t').textContent = d.t;
-  document.getElementById('ch-lock').textContent = v;
-  toast('Lock: ' + v.toUpperCase());
-}
-
-function sv(k, v) { document.getElementById('sv-' + k).textContent = v; }
-
-const presets = {
-  bal:  { g: 100, a: 80,  s2: 65, s4: 50, s8: 35, gyv: 60, gyh: 55 },
-  snp:  { g: 75,  a: 55,  s2: 42, s4: 30, s8: 20, gyv: 40, gyh: 35 },
-  rush: { g: 130, a: 105, s2: 88, s4: 72, s8: 58, gyv: 80, gyh: 75 },
-  pro:  { g: 110, a: 88,  s2: 72, s4: 56, s8: 42, gyv: 65, gyh: 60 },
-};
-
-function setPreset(el, k) {
-  snd('click');
-  document.querySelectorAll('.sp-item').forEach(b => b.classList.remove('on'));
-  el.classList.add('on');
-  const p = presets[k];
-  Object.entries(p).forEach(([key, val]) => {
-    const sl = document.querySelector(`[oninput="sv('${key}',this.value)"]`);
-    if (sl) { sl.value = val; document.getElementById('sv-' + key).textContent = val; }
-  });
-  toast('Preset: ' + k.toUpperCase());
-}
-
-function applyAim() {
-  snd('ok');
-  document.getElementById('ch-score').textContent = rn(82, 98);
-  toast('✅ Aim settings applied!');
-}
-
-// FINGER LAYOUT
-function selectFinger(el, mode) {
-  snd('click');
-  document.querySelectorAll('.fg-btn').forEach(b => b.classList.remove('on'));
-  el.classList.add('on');
-  const tips = {
-    '2': 'Ngón cái trái: di chuyển · Ngón cái phải: ngắm & bắn',
-    '3': 'Ngón cái trái: di chuyển · Trỏ: bắn · Ngón cái phải: scope',
-    '4': 'Ngón cái: di chuyển & ngắm · Trỏ 2 tay: bắn & scope',
-    'claw': 'Claw grip: 3-4 ngón duỗi thẳng · Tốt cho phản xạ nhanh',
-  };
-  toast('Layout: ' + tips[mode]);
-}
-
-// RECOIL CONTROL
-function setRecoil(el, mode) {
-  snd('click');
-  document.querySelectorAll('.rb-btn').forEach(b => b.classList.remove('on'));
-  el.classList.add('on');
-  const msgs = { auto: '🔫 Auto recoil compensation ON', manual: '🎯 Manual recoil mode', off: 'Recoil control tắt' };
-  toast(msgs[mode] || 'Done');
-  drawRecoilPattern(mode);
-}
-
-function drawRecoilPattern(mode) {
-  const cv = document.getElementById('cv-recoil');
-  if (!cv) return;
-  const ctx = cv.getContext('2d');
-  const w = cv.width, h = cv.height;
-  ctx.clearRect(0, 0, w, h);
-  ctx.strokeStyle = '#ff1a1a'; ctx.lineWidth = 1.5;
-  ctx.shadowColor = '#ff1a1a'; ctx.shadowBlur = 4;
-  ctx.beginPath();
-  if (mode === 'auto') {
-    ctx.moveTo(w / 2, 10);
-    for (let i = 0; i < 12; i++) {
-      ctx.lineTo(w / 2 + Math.sin(i * .8) * 8, 10 + i * 5);
-    }
-  } else if (mode === 'manual') {
-    ctx.moveTo(w / 2, 10);
-    for (let i = 0; i < 12; i++) {
-      ctx.lineTo(w / 2 + (Math.random() - .5) * 20, 10 + i * 5);
-    }
-  } else {
-    ctx.moveTo(w / 2, 10);
-    for (let i = 0; i < 12; i++) ctx.lineTo(w / 2, 10 + i * 5);
-  }
-  ctx.stroke(); ctx.shadowBlur = 0;
-}
-
-// HEADSHOT TRAINER
-let hsActive = false, hsScore = 0, hsMisses = 0, hsTargetTimer = null;
-
-function initHSTrainer() {
-  const cv = document.getElementById('cv-recoil'); // reuse canvas not needed
-  startHSTrainer();
-}
-
-function startHSTrainer() {
-  hsActive = true; hsScore = 0; hsMisses = 0;
-  document.getElementById('hs-hits').textContent = 0;
-  document.getElementById('hs-misses').textContent = 0;
-  document.getElementById('hs-acc').textContent = '0%';
-  document.querySelector('.hs-ctrl-btn.start').textContent = 'STOP';
-  document.querySelector('.hs-ctrl-btn.start').onclick = stopHSTrainer;
-  spawnHSTarget();
-}
-
-function stopHSTrainer() {
-  hsActive = false;
-  clearTimeout(hsTargetTimer);
-  const scene = document.getElementById('hs-scene');
-  scene.querySelectorAll('.hs-target').forEach(t => t.remove());
-  document.querySelector('.hs-ctrl-btn.start').textContent = 'START';
-  document.querySelector('.hs-ctrl-btn.start').onclick = startHSTrainer;
-  const total = hsScore + hsMisses;
-  const acc = total > 0 ? Math.round(hsScore / total * 100) : 0;
-  document.getElementById('aim-score-display').textContent = rn(75, 98);
-  toast(acc > 80 ? '🎯 Excellent aim! ' + acc + '%' : '🎯 Accuracy: ' + acc + '%');
-}
-
-function spawnHSTarget() {
-  if (!hsActive) return;
-  const scene = document.getElementById('hs-scene');
-  scene.querySelectorAll('.hs-target').forEach(t => t.remove());
-  const t = document.createElement('div'); t.className = 'hs-target';
-  const x = rn(5, 85), y = rn(5, 75);
-  t.style.cssText = `left:${x}%;top:${y}%`;
-  t.innerHTML = '<div class="hs-target-inner"></div>';
-  t.onclick = () => {
-    snd('hit'); hsScore++;
-    document.getElementById('hs-hits').textContent = hsScore;
-    const total = hsScore + hsMisses;
-    document.getElementById('hs-acc').textContent = Math.round(hsScore / total * 100) + '%';
-    t.remove(); if (hsActive) spawnHSTarget();
-  };
-  scene.appendChild(t);
-  hsTargetTimer = setTimeout(() => {
-    if (t.parentNode) {
-      snd('miss'); hsMisses++;
-      document.getElementById('hs-misses').textContent = hsMisses;
-      const total = hsScore + hsMisses;
-      document.getElementById('hs-acc').textContent = Math.round(hsScore / total * 100) + '%';
-      t.remove(); if (hsActive) spawnHSTarget();
-    }
-  }, 1800);
-}
-
-// GYRO SIMULATOR
-let gyroAngle = 0;
-function toggleGyro(el) {
-  snd(el.checked ? 'click' : 'nav');
-  document.getElementById('gyro-panel').style.display = el.checked ? 'block' : 'none';
-  toast('Gyroscope ' + (el.checked ? 'bật ✓' : 'tắt'));
-  if (el.checked) animateGyro();
-}
-
-let gyroIv = null;
-function animateGyro() {
-  if (gyroIv) clearInterval(gyroIv);
-  gyroIv = setInterval(() => {
-    if (!document.getElementById('gyro-toggle')?.checked) { clearInterval(gyroIv); return; }
-    gyroAngle += (Math.random() - .5) * 8;
-    const bh = document.getElementById('gyro-bar-h');
-    const bv = document.getElementById('gyro-bar-v');
-    if (bh) bh.style.top = (45 + Math.sin(gyroAngle * .05) * 15) + '%';
-    if (bv) bv.style.left = (45 + Math.cos(gyroAngle * .04) * 15) + '%';
-  }, 80);
-}
-
-// ── OPTIMIZE PAGE ─────────────────────
-const issueData = [
-  { level: 'critical', name: 'Bộ nhớ RAM cao bất thường', desc: 'Background app chiếm 68% RAM', fixed: false },
-  { level: 'warn',     name: 'Nhiệt độ CPU tăng', desc: 'CPU đang chạy ở 72°C — nên cool down', fixed: false },
-  { level: 'critical', name: 'Ping không ổn định', desc: 'Packet loss 3.2% — ảnh hưởng game', fixed: false },
-  { level: 'warn',     name: 'Storage đầy 78%', desc: 'Cache game chiếm 2.4GB bộ nhớ', fixed: false },
-  { level: 'ok',       name: 'GPU hoạt động bình thường', desc: 'GPU Load 45% — optimal', fixed: true },
-  { level: 'ok',       name: 'Kết nối WiFi ổn định', desc: 'Signal strength: -52dBm', fixed: true },
-];
-
-function buildIssuesList() {
-  const list = document.getElementById('issues-list');
-  if (!list) return;
-  issueData.forEach((issue, i) => {
-    const el = document.createElement('div'); el.className = 'issue-item'; el.id = 'issue-' + i;
-    el.innerHTML = `<div class="issue-dot ${issue.level}"></div>
-      <div class="issue-info"><div class="issue-name">${issue.name}</div><div class="issue-desc">${issue.desc}</div></div>
-      ${!issue.fixed ? `<button class="issue-fix fix-btn" onclick="fixIssue(${i},this)">FIX</button>` : '<span class="issue-fix fixed">FIXED</span>'}`;
-    list.appendChild(el);
-  });
-}
-
-function fixIssue(idx, btn) {
-  snd('ok');
-  issueData[idx].fixed = true;
-  btn.className = 'issue-fix fixed'; btn.textContent = 'FIXED';
-  const dot = document.getElementById('issue-' + idx)?.querySelector('.issue-dot');
-  if (dot) { dot.className = 'issue-dot ok'; }
-  toast('✅ Đã sửa: ' + issueData[idx].name);
-  if (idx === 0) { sim.ram = Math.max(18, sim.ram - rn(10, 18)); updateCards(sim); }
-  if (idx === 1) { sim.tmp = Math.max(34, sim.tmp - rn(6, 12)); updateCards(sim); }
-  if (idx === 2) { document.getElementById('net-ping').textContent = rn(4, 12) + 'ms'; }
-}
-
-function runScan() {
-  snd('boost');
-  const beam = document.getElementById('scan-beam');
-  const status = document.getElementById('scan-status');
-  if (beam) beam.style.animationPlayState = 'running';
-  if (status) status.textContent = 'SCANNING SYSTEM...';
-  toast('🔍 Đang quét hệ thống...', '#00e5ff');
-  setTimeout(() => {
-    if (status) status.textContent = 'FOUND ' + issueData.filter(i => !i.fixed).length + ' ISSUES';
-    snd('ok');
-    toast('✅ Quét xong — tìm thấy ' + issueData.filter(i => !i.fixed).length + ' vấn đề', '#ff1a1a');
-  }, 2500);
-}
-
-function fixAll() {
-  snd('boost');
-  issueData.forEach((issue, i) => {
-    if (!issue.fixed) setTimeout(() => fixIssue(i, document.querySelector(`#issue-${i} .fix-btn`)), i * 300);
-  });
-  setTimeout(() => {
-    toast('🔥 Tất cả vấn đề đã được xử lý!', '#39ff14');
-    updateScore();
-  }, issueData.filter(i => !i.fixed).length * 300 + 400);
-}
-
-// OPT TOOLS
-const optTools = [
-  { icon: '<path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6" stroke="#ff1a1a" stroke-width="2"/>', name: 'Deep Clean', desc: 'Xoá cache & file rác hệ thống', live: true },
-  { icon: '<path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="#ffc400" stroke-width="2"/>', name: 'CPU Boost', desc: 'Tăng xung nhịp & ưu tiên process', live: false },
-  { icon: '<rect x="2" y="6" width="20" height="14" rx="3" stroke="#00e5ff" stroke-width="2"/><path d="M8 13h4" stroke="#00e5ff" stroke-width="2"/>', name: 'RAM Flush', desc: 'Giải phóng RAM nhanh', live: true },
-  { icon: '<circle cx="12" cy="12" r="9" stroke="#39ff14" stroke-width="1.5"/><path d="M12 3c-2 3-3 6-3 9s1 6 3 9M3 12h18" stroke="#39ff14" stroke-width="1.5"/>', name: 'DNS Accelerate', desc: 'Đổi DNS nhanh cho game', live: false },
-  { icon: '<path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9" stroke="#c084fc" stroke-width="2"/>', name: 'App Terminator', desc: 'Kill tất cả app nền', live: false },
-  { icon: '<path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4" stroke="#ff8800" stroke-width="2"/>', name: 'Thermal Reset', desc: 'Reset bộ tản nhiệt phần mềm', live: true },
-];
-
-function buildOptTools() {
-  const g = document.getElementById('opt-tools-grid');
-  if (!g) return;
-  optTools.forEach(t => {
-    const el = document.createElement('div'); el.className = 'ot';
-    el.innerHTML = `${t.live ? '<div class="ot-badge"></div>' : ''}
-      <div class="ot-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none">${t.icon}</svg></div>
-      <div class="ot-name">${t.name}</div><div class="ot-desc">${t.desc}</div>`;
-    el.onclick = () => { snd('click'); runOptTool(t.name); };
-    g.appendChild(el);
-  });
-}
-
-function runOptTool(name) {
-  toast('⚡ ' + name + ' đang chạy...', '#ff1a1a');
-  setTimeout(() => {
-    sim.ram = Math.max(18, sim.ram - rn(2, 8)); updateCards(sim);
-    toast('✅ ' + name + ' hoàn thành!', '#39ff14'); snd('ok');
-  }, 1400);
-}
-
-// CLEAN TOOLS
-const cleanData = [
-  { icon: '<path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6" stroke="#ff1a1a" stroke-width="2"/>', title: 'Game Cache Cleaner', desc: 'Xoá cache Free Fire, FF MAX', size: '340MB' },
-  { icon: '<rect x="2" y="3" width="20" height="14" rx="2" stroke="#00e5ff" stroke-width="2"/>', title: 'System Log Cleaner', desc: 'Xoá log hệ thống & crash report', size: '128MB' },
-  { icon: '<circle cx="12" cy="12" r="9" stroke="#ffc400" stroke-width="1.5"/>', title: 'Thumbnail Cache', desc: 'Xoá ảnh thumbnail & preview', size: '85MB' },
-];
-
-function buildCleanTools() {
-  const list = document.getElementById('clean-list');
-  if (!list) return;
-  cleanData.forEach((c, i) => {
-    const el = document.createElement('div'); el.className = 'opt-clean-card';
-    el.innerHTML = `<div class="occ-header">
-        <div class="occ-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none">${c.icon}</svg></div>
-        <div class="occ-info"><div class="occ-title">${c.title}</div><div class="occ-desc">${c.desc} · <b style="color:var(--r1)">${c.size}</b></div></div>
-        <button class="occ-run" onclick="runClean(${i},this)">RUN</button>
-      </div>
-      <div class="occ-progress">
-        <div class="occ-bar"><div class="occ-fill" id="clean-fill-${i}" style="width:0%"></div></div>
-        <div class="occ-stat" id="clean-stat-${i}">Ready to clean</div>
-      </div>`;
-    list.appendChild(el);
-  });
-}
-
-function runClean(i, btn) {
-  snd('boost'); btn.disabled = true; btn.textContent = '...';
-  const fill = document.getElementById('clean-fill-' + i);
-  const stat = document.getElementById('clean-stat-' + i);
-  let p = 0;
-  const iv = setInterval(() => {
-    p += rn(8, 18); if (p > 100) p = 100;
-    if (fill) fill.style.width = p + '%';
-    if (stat) stat.textContent = 'Cleaning... ' + p + '%';
-    if (p >= 100) {
-      clearInterval(iv);
-      if (stat) stat.textContent = '✓ Cleaned ' + cleanData[i].size + ' freed!';
-      btn.textContent = 'DONE'; snd('ok');
-      toast('🧹 ' + cleanData[i].title + ' — ' + cleanData[i].size + ' freed!', '#39ff14');
-      sim.ram = Math.max(18, sim.ram - rn(3, 8)); updateCards(sim);
-    }
-  }, 150);
-}
-
-// ── KEY MODAL ─────────────────────────
-// ⚠️ Điền 2 dòng này sau khi tạo project Supabase
-const SUPABASE_URL = 'https://pjhdnvbssbcmbhepevcn.supabase.co';  // ← dán URL project vào đây
-const SUPABASE_KEY        = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBqaGRudmJzc2JjbWJoZXBldmNuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ2NTk4MzMsImV4cCI6MjA5MDIzNTgzM30.00MnFaNSNOJEHJO_OPbsMu45EftknC9o4_ukx5UHaE4';       // ← anon key (dùng để đọc)
-const SUPABASE_WRITE_KEY  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBqaGRudmJzc2JjbWJoZXBldmNuIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NDY1OTgzMywiZXhwIjoyMDkwMjM1ODMzfQ.63NAUMk4y-25eyjy9n96BhK3grB0b_64Ng04wIsSDVM';      // ← service_role key (dùng để bind device)
-
-// ============ DEVICE ID ============
+/* ──────────── DEVICE FINGERPRINT ──────────── */
 function getDeviceId() {
-  // Lấy ID đã lưu từ localStorage (ổn định, không đổi trừ khi xóa cache)
-  let id = localStorage.getItem('device_id');
+  let id = localStorage.getItem('bc_device_id');
   if (!id) {
-    // Tạo fingerprint từ thông tin thiết bị — KHÔNG dùng rand để ID ổn định
-    const ua = navigator.userAgent;
-    const scr = `${window.screen.width}x${window.screen.height}x${window.screen.colorDepth}`;
+    const ua   = navigator.userAgent;
+    const scr  = `${screen.width}x${screen.height}x${screen.colorDepth}`;
     const lang = navigator.language;
-    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    const cores = navigator.hardwareConcurrency || 0;
-    const mem = navigator.deviceMemory || 0;
-    const raw = `${ua}|${scr}|${lang}|${tz}|${cores}|${mem}`;
+    const tz   = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const cores= navigator.hardwareConcurrency || 0;
+    const mem  = navigator.deviceMemory || 0;
+    const raw  = `${ua}|${scr}|${lang}|${tz}|${cores}|${mem}`;
     let hash = 0;
-    for (let i = 0; i < raw.length; i++) {
-      hash = ((hash << 5) - hash) + raw.charCodeAt(i);
-      hash |= 0;
-    }
-    id = 'dev_' + Math.abs(hash).toString(16);
-    localStorage.setItem('device_id', id);
+    for (let i = 0; i < raw.length; i++) { hash = ((hash << 5) - hash) + raw.charCodeAt(i); hash |= 0; }
+    id = 'bc_' + Math.abs(hash).toString(16);
+    localStorage.setItem('bc_device_id', id);
   }
   return id;
 }
 
-function showKeyModal() {
-  document.getElementById('key-modal').style.display = 'flex';
-  document.getElementById('key-input').value = '';
-  document.getElementById('key-msg').textContent = '';
-  setTimeout(() => document.getElementById('key-input').focus(), 100);
+/* ──────────── TAB SWITCHER ──────────── */
+function switchKTab(tab) {
+  document.getElementById('ktab-panel-activate').style.display = tab === 'activate' ? '' : 'none';
+  document.getElementById('ktab-panel-info').style.display     = tab === 'info'     ? '' : 'none';
+  document.getElementById('ktab-activate').classList.toggle('km-tab-on', tab === 'activate');
+  document.getElementById('ktab-info').classList.toggle('km-tab-on',     tab === 'info');
 }
 
-// Không cho phép đóng modal nếu chưa kích hoạt
-function hideKeyModal() {
-  const isVip = localStorage.getItem('vip_key') && localStorage.getItem('vip_expires')
-    && new Date(localStorage.getItem('vip_expires')) > new Date();
-  if (!isVip) {
-    showToast('⚠️ Vui lòng nhập key để tiếp tục!');
+/* ──────────── SHOW / HIDE MODAL ──────────── */
+function showKey() {
+  document.getElementById('km').style.display = 'flex';
+  document.getElementById('km-msg').textContent = '';
+  document.getElementById('km-inp').value = '';
+  switchKTab('activate');
+  setTimeout(() => document.getElementById('km-inp').focus(), 120);
+}
+
+function hideKey() {
+  const isElite = localStorage.getItem('elite_key') && localStorage.getItem('elite_expires')
+    && new Date(localStorage.getItem('elite_expires')) > new Date();
+  if (!isElite) {
+    toast('⚠️ Vui lòng nhập key để tiếp tục!');
     return;
   }
-  document.getElementById('key-modal').style.display = 'none';
+  document.getElementById('km').style.display = 'none';
 }
 
+/* ──────────── ACTIVATE KEY (Supabase) ──────────── */
 async function activateKey() {
-  const key = document.getElementById('key-input').value.trim();
-  const msgEl = document.getElementById('key-msg');
-  const btn = document.getElementById('activate-btn');
-  const deviceId = getDeviceId();
+  const key   = document.getElementById('km-inp').value.trim();
+  const msgEl = document.getElementById('km-msg');
+  const btn   = document.getElementById('km-act-btn');
+  const devId = getDeviceId();
 
-  if (!key) { msgEl.style.color = '#ff4d6a'; msgEl.textContent = '⚠️ Vui lòng nhập key!'; return; }
+  if (!key) { msgEl.style.color = '#ff4444'; msgEl.textContent = '⚠️ Vui lòng nhập key!'; return; }
 
-  btn.textContent = 'ĐANG KIỂM TRA...';
+  btn.textContent = 'ĐANG XÁC THỰC...';
   btn.disabled = true;
   msgEl.style.color = '#aaa';
-  msgEl.textContent = 'Đang xác thực...';
+  msgEl.textContent = '🔍 Đang kiểm tra với server...';
 
   try {
-    // Lấy thông tin key bao gồm device_id đã bind
-    const res = await fetch(
+    const res  = await fetch(
       `${SUPABASE_URL}/rest/v1/keys?key=eq.${encodeURIComponent(key)}&select=expires_at,is_active,device_id`,
       { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }
     );
     const data = await res.json();
 
     if (!data.length) {
-      msgEl.style.color = '#ff4d6a'; msgEl.textContent = '❌ Key không tồn tại';
+      msgEl.style.color = '#ff4444'; msgEl.textContent = '❌ Key không tồn tại';
     } else {
       const { expires_at, is_active, device_id: boundDevice } = data[0];
-
       if (!is_active) {
-        msgEl.style.color = '#ff4d6a'; msgEl.textContent = '❌ Key đã bị thu hồi';
+        msgEl.style.color = '#ff4444'; msgEl.textContent = '❌ Key đã bị thu hồi';
       } else if (new Date(expires_at) < new Date()) {
-        msgEl.style.color = '#ff4d6a'; msgEl.textContent = '❌ Key đã hết hạn';
-      } else if (boundDevice && boundDevice !== deviceId) {
-        // Key đã được bind vào thiết bị khác
-        msgEl.style.color = '#ff4d6a'; msgEl.textContent = '❌ Key này đã được dùng trên thiết bị khác';
+        msgEl.style.color = '#ff4444'; msgEl.textContent = '❌ Key đã hết hạn';
+      } else if (boundDevice && boundDevice !== devId) {
+        msgEl.style.color = '#ff4444'; msgEl.textContent = '❌ Key này đã được dùng trên thiết bị khác';
       } else {
-        // Nếu chưa bind thì bind device_id vào key này
+        // Bind device nếu chưa bind
         if (!boundDevice) {
-          // Dùng service_role key để đảm bảo ghi được dù Supabase RLS bật
           const bindRes = await fetch(
             `${SUPABASE_URL}/rest/v1/keys?key=eq.${encodeURIComponent(key)}`,
             {
@@ -1891,112 +763,100 @@ async function activateKey() {
                 'Content-Type': 'application/json',
                 Prefer: 'return=minimal'
               },
-              body: JSON.stringify({ device_id: deviceId })
+              body: JSON.stringify({ device_id: devId })
             }
           );
           if (!bindRes.ok) {
-            msgEl.style.color = '#ff4d6a';
-            msgEl.textContent = '❌ Không thể bind thiết bị, thử lại sau';
+            msgEl.style.color = '#ff4444'; msgEl.textContent = '❌ Lỗi bind thiết bị, thử lại';
             btn.textContent = 'KÍCH HOẠT'; btn.disabled = false;
             return;
           }
         }
         const exp = expires_at.slice(0, 10);
-        localStorage.setItem('vip_key', key);
-        localStorage.setItem('vip_expires', exp);
-        msgEl.style.color = '#00ff88';
-        msgEl.textContent = '✅ Kích hoạt thành công!'; playSound('success');
+        localStorage.setItem('elite_key',     key);
+        localStorage.setItem('elite_expires', exp);
+        msgEl.style.color = '#39ff14';
+        msgEl.textContent = '✅ ELITE ACTIVATED!';
+        snd('ok');
         setTimeout(() => {
-          document.getElementById('key-modal').style.display = 'none';
-          unlockVIP(exp);
+          document.getElementById('km').style.display = 'none';
+          unlockElite(exp);
         }, 900);
       }
     }
   } catch (e) {
-    msgEl.style.color = '#ff4d6a';
-    msgEl.textContent = '❌ Không kết nối được Supabase';
+    msgEl.style.color = '#ff4444';
+    msgEl.textContent = '❌ Không kết nối được server. Thử lại!';
   }
 
-  btn.textContent = 'KÍCH HOẠT';
-  btn.disabled = false;
+  btn.textContent = 'KÍCH HOẠT'; btn.disabled = false;
 }
 
-function unlockVIP(expiresAt) {
-  // Mở khoá tất cả VIP toggles
-  const vipList = document.getElementById('feature-list-vip');
-  if (vipList) {
-    vipList.classList.remove('locked');
-    vipList.querySelectorAll('input[type=checkbox]').forEach(el => {
-      el.disabled = false;
-      el.onchange = function () {
-        onFeatureToggle(this, this.closest('.feat-item').querySelector('.feat-name').textContent);
-      };
-    });
-  }
+/* ──────────── UNLOCK ELITE ──────────── */
+function unlockElite(expiresAt) {
+  // Cập nhật badge
+  const badge = document.getElementById('tier-badge');
+  if (badge) { badge.textContent = 'ELITE'; badge.className = 'tb-badge elite'; }
+  const aboutTier = document.getElementById('about-tier');
+  if (aboutTier) aboutTier.textContent = 'ELITE';
 
-  // Đổi nút UPGRADE → đã kích hoạt
-  document.querySelectorAll('.upgrade-mini-btn').forEach(btn => {
-    btn.textContent = '👑 VIP';
-    btn.style.background = 'linear-gradient(135deg,#ffe94d,#ff9800)';
-    btn.style.color = '#000';
-    btn.onclick = null;
-  });
+  // Unlock elite wall
+  const wall = document.querySelector('.elite-wall');
+  if (wall) wall.style.display = 'none';
 
-  // Banner VIP ở đầu app
-  if (!document.getElementById('vip-banner')) {
+  // Banner elite ở đầu app
+  if (!document.getElementById('elite-banner')) {
     const banner = document.createElement('div');
-    banner.id = 'vip-banner';
-    banner.style.cssText = 'background:linear-gradient(90deg,#00ff8811,#00ff8822);border-bottom:1px solid #00ff8833;color:#00ff88;padding:7px 16px;text-align:center;font-size:11px;font-weight:700;letter-spacing:1px;';
-    banner.innerHTML = `👑 VIP ACTIVE &nbsp;|&nbsp; Hết hạn: ${expiresAt}`;
+    banner.id = 'elite-banner';
+    banner.style.cssText = 'background:linear-gradient(90deg,#ff1a1a11,#ff1a1a22);border-bottom:1px solid #ff1a1a44;color:#ff1a1a;padding:6px 16px;text-align:center;font-size:10px;font-weight:700;letter-spacing:2px;font-family:"DM Mono",monospace';
+    banner.innerHTML = `👑 ELITE ACTIVE &nbsp;|&nbsp; HẾT HẠN: ${expiresAt} &nbsp;|&nbsp; <span style="color:#aaa;cursor:pointer" onclick="showKey()">ĐỔI KEY</span>`;
     document.getElementById('app').prepend(banner);
   }
 
-  showToast('👑 VIP kích hoạt thành công! Hết hạn ' + expiresAt);
+  toast('👑 ELITE UNLOCKED! Hết hạn ' + expiresAt, '#ffc400');
+
+  // Unlock elite power toggles nếu có
+  document.querySelectorAll('.pt-elite').forEach(el => {
+    el.classList.remove('pt-locked');
+    el.style.opacity = '1';
+  });
 }
 
+/* ──────────── CHECK SAVED KEY on load ──────────── */
 async function checkSavedKey() {
-  const key = localStorage.getItem('vip_key');
-  const exp = localStorage.getItem('vip_expires');
+  const key = localStorage.getItem('elite_key');
+  const exp = localStorage.getItem('elite_expires');
 
-  // Không có key trong localStorage → bắt nhập ngay
   if (!key || !exp || new Date(exp) <= new Date()) {
-    localStorage.removeItem('vip_key');
-    localStorage.removeItem('vip_expires');
-    showKeyModal();
+    localStorage.removeItem('elite_key');
+    localStorage.removeItem('elite_expires');
+    showKey();
     return;
   }
 
-  // Có key → verify lại với Supabase mỗi lần mở app
   try {
-    const deviceId = getDeviceId();
-    const res = await fetch(
+    const devId = getDeviceId();
+    const res   = await fetch(
       `${SUPABASE_URL}/rest/v1/keys?key=eq.${encodeURIComponent(key)}&select=expires_at,is_active,device_id`,
       { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }
     );
-    const data = await res.json();
+    const data  = await res.json();
 
-    if (
-      !data.length ||
-      !data[0].is_active ||
-      new Date(data[0].expires_at) < new Date() ||
-      (data[0].device_id && data[0].device_id !== deviceId)
-    ) {
-      localStorage.removeItem('vip_key');
-      localStorage.removeItem('vip_expires');
-      showKeyModal();
+    if (!data.length || !data[0].is_active || new Date(data[0].expires_at) < new Date()
+        || (data[0].device_id && data[0].device_id !== devId)) {
+      localStorage.removeItem('elite_key');
+      localStorage.removeItem('elite_expires');
+      showKey();
       return;
     }
-
-    unlockVIP(data[0].expires_at.slice(0, 10));
-
-  } catch (e) {
-    // Mất mạng → cho vào tạm dựa trên localStorage
-    unlockVIP(exp);
+    unlockElite(data[0].expires_at.slice(0, 10));
+  } catch {
+    // Offline → dùng localStorage tạm
+    unlockElite(exp);
   }
 }
-</script>
-<!-- Extra helpers not in script.js -->
-<script>
+
+/* ──────────── BATTERY OPTIMIZER ──────────── */
 function setBattery(el, mode) {
   snd('click');
   document.querySelectorAll('[onclick^="setBattery"]').forEach(b => {
@@ -2006,9 +866,67 @@ function setBattery(el, mode) {
   el.style.background = 'var(--rg4)';
   el.querySelector('div:nth-child(2)').style.color = 'var(--r1)';
   el.style.borderTop = '2px solid var(--r1)';
-  const msgs = { save: '🔋 Battery Saver ON — tiết kiệm pin', balance: '⚖️ Balanced mode', perf: '⚡ Performance mode — pin tiêu thụ nhanh hơn' };
+  const msgs = { save: '🔋 Battery Saver ON', balance: '⚖️ Balanced mode', perf: '⚡ Performance mode' };
   toast(msgs[mode]);
 }
+
+/* ──────────── CLOSE MODAL ON BACKDROP ──────────── */
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('km')?.addEventListener('click', function(e) {
+    if (e.target === this) hideKey();
+  });
+  // Display device ID in settings
+  const devEl = document.getElementById('dev-id-display');
+  if (devEl) devEl.textContent = getDeviceId();
+  renderEliteInfo();
+  renderBoostEliteStatus();
+  // Trigger key check after splash
+  setTimeout(checkSavedKey, 2600);
+});
+
+/* ═══════════════════════════════════════════════════════
+   EXTRA FEATURES — thêm vào BloodCore
+   ═══════════════════════════════════════════════════════ */
+
+/* 1. ELITE KEY INFO hiển thị trong Settings */
+function renderEliteInfo() {
+  const key = localStorage.getItem('elite_key');
+  const exp = localStorage.getItem('elite_expires');
+  const el  = document.getElementById('elite-key-info');
+  if (!el) return;
+  if (key) {
+    const masked = key.length > 8 ? key.slice(0, 5) + '****' + key.slice(-4) : key;
+    el.innerHTML = `<div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--r1);margin-top:4px">KEY: ${masked} · Hết hạn: ${exp || 'N/A'}</div>`;
+  } else {
+    el.innerHTML = `<div style="font-size:10px;color:var(--txt3);margin-top:4px">Chưa kích hoạt</div>`;
+  }
+}
+
+/* 2. KEY STATUS in BOOST page */
+function renderBoostEliteStatus() {
+  const key = localStorage.getItem('elite_key');
+  const exp = localStorage.getItem('elite_expires');
+  const wall = document.querySelector('.elite-wall');
+  if (!wall) return;
+  if (key && exp && new Date(exp) > new Date()) {
+    wall.style.display = 'none';
+  }
+}
+
+/* 3. DEVICE ID display (for support) */
+function copyDeviceId() {
+  const id = getDeviceId();
+  navigator.clipboard?.writeText(id).then(() => toast('📋 Device ID đã copy!')).catch(() => toast('Device ID: ' + id));
+}
+
+/* 4. LOGOUT KEY */
+function logoutKey() {
+  if (!confirm('Bạn có chắc muốn đăng xuất key? Bạn sẽ cần nhập lại key.')) return;
+  localStorage.removeItem('elite_key');
+  localStorage.removeItem('elite_expires');
+  location.reload();
+}
 </script>
+
 </body>
 </html>
