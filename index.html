@@ -1171,7 +1171,8 @@ canvas{display:block;width:100%;border-radius:4px}
 </div>
 
 <script src="performace-optimizer.js"></script>
-<script>/* ═══════════════════════════════════════
+<script>
+/* ═══════════════════════════════════════
 BLOODCORE OPTIMIZER — script.js v4.0
 ═══════════════════════════════════════ */
 
@@ -1296,14 +1297,14 @@ dmGo(id, lbl[id] || id.toUpperCase());
 }
 
 // ── SPLASH ────────────────────────────
-window.addEventListener(‘DOMContentLoaded’, function () {
+function runSplash() {
 const fill   = document.getElementById(‘sp-fill’);
 const status = document.getElementById(‘sp-status’);
 const msgs   = [‘BOOT SEQUENCE…’, ‘LOAD AI ENGINE…’, ‘INIT SENSORS…’, ‘CALIBRATE CORE…’, ‘BLOODCORE READY!’];
-if (!fill || !status) { hideSplash(); return; } // safety fallback
+if (!fill || !status) { hideSplash(); return; }
 let p = 0;
 const iv = setInterval(() => {
-p += Math.random() * 22 + 8; // nhanh hơn
+p += Math.random() * 22 + 8;
 if (p > 100) p = 100;
 fill.style.width = p + ‘%’;
 status.textContent = msgs[Math.min(Math.floor(p / 22), 4)];
@@ -1313,7 +1314,14 @@ status.textContent = ‘BLOODCORE READY!’;
 setTimeout(hideSplash, 400);
 }
 }, 150);
-});
+}
+
+// Script load ở cuối body → DOM đã sẵn sàng → chạy ngay
+if (document.readyState === ‘loading’) {
+window.addEventListener(‘DOMContentLoaded’, runSplash);
+} else {
+runSplash();
+}
 
 function hideSplash() {
 const splash = document.getElementById(‘splash’);
@@ -2102,14 +2110,6 @@ localStorage.removeItem(‘elite_key’);
 localStorage.removeItem(‘elite_expires’);
 location.reload();
 }
-</script>
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-  var km = document.getElementById("km");
-  if (km) km.addEventListener("click", function(e) { if (e.target === this) hideKey(); });
-  var devEl = document.getElementById("dev-id-display");
-  if (devEl) devEl.textContent = getDeviceId();
-});
 </script>
 
 </body>
