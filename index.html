@@ -1169,9 +1169,10 @@ canvas{display:block;width:100%;border-radius:4px}
     </div>
   </div>
 </div>
+
 <script>
 /* ═══════════════════════════════════════
-BLOODCORE OPTIMIZER — script.js v4.0
+   BLOODCORE OPTIMIZER — script.js v4.0
 ═══════════════════════════════════════ */
 
 // ── AUDIO ENGINE ──────────────────────
@@ -1180,158 +1181,158 @@ let _ac = null;
 const ac = () => { if (!_ac) _ac = new AC(); return _ac; };
 
 function snd(t) {
-try {
-if (!document.getElementById(‘s-sound’)?.checked) return;
-const ctx = ac(), g = ctx.createGain();
-g.connect(ctx.destination);
-if (t === ‘click’) {
-const o = ctx.createOscillator();
-o.type = ‘triangle’;
-o.frequency.setValueAtTime(1100, ctx.currentTime);
-o.frequency.exponentialRampToValueAtTime(550, ctx.currentTime + .07);
-g.gain.setValueAtTime(.1, ctx.currentTime);
-g.gain.exponentialRampToValueAtTime(.001, ctx.currentTime + .09);
-o.connect(g); o.start(); o.stop(ctx.currentTime + .1);
-} else if (t === ‘boost’) {
-const o = ctx.createOscillator();
-o.type = ‘sawtooth’;
-o.frequency.setValueAtTime(100, ctx.currentTime);
-o.frequency.exponentialRampToValueAtTime(1600, ctx.currentTime + .6);
-g.gain.setValueAtTime(.09, ctx.currentTime);
-g.gain.exponentialRampToValueAtTime(.001, ctx.currentTime + .6);
-o.connect(g); o.start(); o.stop(ctx.currentTime + .6);
-} else if (t === ‘ok’) {
-[523, 784].forEach((f, i) => {
-const o = ctx.createOscillator(), gg = ctx.createGain();
-o.frequency.value = f;
-gg.gain.setValueAtTime(0, ctx.currentTime + i * .1);
-gg.gain.linearRampToValueAtTime(.08, ctx.currentTime + i * .1 + .04);
-gg.gain.exponentialRampToValueAtTime(.001, ctx.currentTime + i * .1 + .2);
-o.connect(gg); gg.connect(ctx.destination);
-o.start(ctx.currentTime + i * .1); o.stop(ctx.currentTime + i * .1 + .22);
-});
-} else if (t === ‘nav’) {
-const o = ctx.createOscillator();
-o.type = ‘sine’;
-o.frequency.setValueAtTime(550, ctx.currentTime);
-o.frequency.exponentialRampToValueAtTime(770, ctx.currentTime + .06);
-g.gain.setValueAtTime(.07, ctx.currentTime);
-g.gain.exponentialRampToValueAtTime(.001, ctx.currentTime + .08);
-o.connect(g); o.start(); o.stop(ctx.currentTime + .08);
-} else if (t === ‘err’) {
-const o = ctx.createOscillator();
-o.type = ‘sawtooth’;
-o.frequency.setValueAtTime(280, ctx.currentTime);
-o.frequency.exponentialRampToValueAtTime(90, ctx.currentTime + .22);
-g.gain.setValueAtTime(.1, ctx.currentTime);
-g.gain.exponentialRampToValueAtTime(.001, ctx.currentTime + .24);
-o.connect(g); o.start(); o.stop(ctx.currentTime + .24);
-} else if (t === ‘hit’) {
-const o = ctx.createOscillator();
-o.type = ‘square’;
-o.frequency.setValueAtTime(660, ctx.currentTime);
-o.frequency.exponentialRampToValueAtTime(330, ctx.currentTime + .05);
-g.gain.setValueAtTime(.12, ctx.currentTime);
-g.gain.exponentialRampToValueAtTime(.001, ctx.currentTime + .07);
-o.connect(g); o.start(); o.stop(ctx.currentTime + .08);
-} else if (t === ‘miss’) {
-const o = ctx.createOscillator();
-o.type = ‘sine’;
-o.frequency.setValueAtTime(200, ctx.currentTime);
-g.gain.setValueAtTime(.05, ctx.currentTime);
-g.gain.exponentialRampToValueAtTime(.001, ctx.currentTime + .1);
-o.connect(g); o.start(); o.stop(ctx.currentTime + .1);
-}
-} catch (e) {}
+  try {
+    if (!document.getElementById('s-sound')?.checked) return;
+    const ctx = ac(), g = ctx.createGain();
+    g.connect(ctx.destination);
+    if (t === 'click') {
+      const o = ctx.createOscillator();
+      o.type = 'triangle';
+      o.frequency.setValueAtTime(1100, ctx.currentTime);
+      o.frequency.exponentialRampToValueAtTime(550, ctx.currentTime + .07);
+      g.gain.setValueAtTime(.1, ctx.currentTime);
+      g.gain.exponentialRampToValueAtTime(.001, ctx.currentTime + .09);
+      o.connect(g); o.start(); o.stop(ctx.currentTime + .1);
+    } else if (t === 'boost') {
+      const o = ctx.createOscillator();
+      o.type = 'sawtooth';
+      o.frequency.setValueAtTime(100, ctx.currentTime);
+      o.frequency.exponentialRampToValueAtTime(1600, ctx.currentTime + .6);
+      g.gain.setValueAtTime(.09, ctx.currentTime);
+      g.gain.exponentialRampToValueAtTime(.001, ctx.currentTime + .6);
+      o.connect(g); o.start(); o.stop(ctx.currentTime + .6);
+    } else if (t === 'ok') {
+      [523, 784].forEach((f, i) => {
+        const o = ctx.createOscillator(), gg = ctx.createGain();
+        o.frequency.value = f;
+        gg.gain.setValueAtTime(0, ctx.currentTime + i * .1);
+        gg.gain.linearRampToValueAtTime(.08, ctx.currentTime + i * .1 + .04);
+        gg.gain.exponentialRampToValueAtTime(.001, ctx.currentTime + i * .1 + .2);
+        o.connect(gg); gg.connect(ctx.destination);
+        o.start(ctx.currentTime + i * .1); o.stop(ctx.currentTime + i * .1 + .22);
+      });
+    } else if (t === 'nav') {
+      const o = ctx.createOscillator();
+      o.type = 'sine';
+      o.frequency.setValueAtTime(550, ctx.currentTime);
+      o.frequency.exponentialRampToValueAtTime(770, ctx.currentTime + .06);
+      g.gain.setValueAtTime(.07, ctx.currentTime);
+      g.gain.exponentialRampToValueAtTime(.001, ctx.currentTime + .08);
+      o.connect(g); o.start(); o.stop(ctx.currentTime + .08);
+    } else if (t === 'err') {
+      const o = ctx.createOscillator();
+      o.type = 'sawtooth';
+      o.frequency.setValueAtTime(280, ctx.currentTime);
+      o.frequency.exponentialRampToValueAtTime(90, ctx.currentTime + .22);
+      g.gain.setValueAtTime(.1, ctx.currentTime);
+      g.gain.exponentialRampToValueAtTime(.001, ctx.currentTime + .24);
+      o.connect(g); o.start(); o.stop(ctx.currentTime + .24);
+    } else if (t === 'hit') {
+      const o = ctx.createOscillator();
+      o.type = 'square';
+      o.frequency.setValueAtTime(660, ctx.currentTime);
+      o.frequency.exponentialRampToValueAtTime(330, ctx.currentTime + .05);
+      g.gain.setValueAtTime(.12, ctx.currentTime);
+      g.gain.exponentialRampToValueAtTime(.001, ctx.currentTime + .07);
+      o.connect(g); o.start(); o.stop(ctx.currentTime + .08);
+    } else if (t === 'miss') {
+      const o = ctx.createOscillator();
+      o.type = 'sine';
+      o.frequency.setValueAtTime(200, ctx.currentTime);
+      g.gain.setValueAtTime(.05, ctx.currentTime);
+      g.gain.exponentialRampToValueAtTime(.001, ctx.currentTime + .1);
+      o.connect(g); o.start(); o.stop(ctx.currentTime + .1);
+    }
+  } catch (e) {}
 }
 
 // ── TOAST ──────────────────────────────
-function toast(msg, col = ‘#ff1a1a’) {
-const t = document.getElementById(‘toast’);
-t.textContent = msg;
-t.style.borderColor = col;
-t.style.boxShadow = `0 0 18px ${col}55`;
-t.classList.add(‘show’);
-clearTimeout(t._t);
-t._t = setTimeout(() => t.classList.remove(‘show’), 2200);
+function toast(msg, col = '#ff1a1a') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.borderColor = col;
+  t.style.boxShadow = `0 0 18px ${col}55`;
+  t.classList.add('show');
+  clearTimeout(t._t);
+  t._t = setTimeout(() => t.classList.remove('show'), 2200);
 }
 
 // ── DRAWER NAVIGATION ──────────────────
-let cur = ‘dash’;
+let cur = 'dash';
 let drawerOpen = false;
 
 function toggleDrawer() { drawerOpen ? closeDrawer() : openDrawer(); }
 
 function openDrawer() {
-drawerOpen = true;
-document.getElementById(‘drawer’).classList.add(‘open’);
-document.getElementById(‘drawer-bd’).classList.add(‘open’);
-document.getElementById(‘hbg-btn’).classList.add(‘open’);
-snd(‘click’);
+  drawerOpen = true;
+  document.getElementById('drawer').classList.add('open');
+  document.getElementById('drawer-bd').classList.add('open');
+  document.getElementById('hbg-btn').classList.add('open');
+  snd('click');
 }
 
 function closeDrawer() {
-drawerOpen = false;
-document.getElementById(‘drawer’).classList.remove(‘open’);
-document.getElementById(‘drawer-bd’).classList.remove(‘open’);
-document.getElementById(‘hbg-btn’).classList.remove(‘open’);
+  drawerOpen = false;
+  document.getElementById('drawer').classList.remove('open');
+  document.getElementById('drawer-bd').classList.remove('open');
+  document.getElementById('hbg-btn').classList.remove('open');
 }
 
 function dmGo(id, label) {
-closeDrawer();
-if (id === cur) return;
-snd(‘nav’);
-document.getElementById(‘page-’ + cur).classList.remove(‘active’);
-document.getElementById(‘page-’ + id).classList.add(‘active’);
-document.querySelectorAll(’.dm-btn’).forEach(b => b.classList.remove(‘dm-on’));
-document.getElementById(‘dm-’ + id).classList.add(‘dm-on’);
-document.getElementById(‘nav-cur-name’).textContent = label;
-cur = id;
+  closeDrawer();
+  if (id === cur) return;
+  snd('nav');
+  document.getElementById('page-' + cur).classList.remove('active');
+  document.getElementById('page-' + id).classList.add('active');
+  document.querySelectorAll('.dm-btn').forEach(b => b.classList.remove('dm-on'));
+  document.getElementById('dm-' + id).classList.add('dm-on');
+  document.getElementById('nav-cur-name').textContent = label;
+  cur = id;
 }
 
 function go(id) {
-const lbl = { dash: ‘DASHBOARD’, monitor: ‘MONITOR’, boost: ‘BOOST’, aim: ‘AIM LAB’, optimize: ‘OPTIMIZE’, contact: ‘ADMIN’, set: ‘SETTINGS’ };
-dmGo(id, lbl[id] || id.toUpperCase());
+  const lbl = { dash: 'DASHBOARD', monitor: 'MONITOR', boost: 'BOOST', aim: 'AIM LAB', optimize: 'OPTIMIZE', contact: 'ADMIN', set: 'SETTINGS' };
+  dmGo(id, lbl[id] || id.toUpperCase());
 }
 
 // ── SPLASH ────────────────────────────
 function runSplash() {
-const fill   = document.getElementById(‘sp-fill’);
-const status = document.getElementById(‘sp-status’);
-const msgs   = [‘BOOT SEQUENCE…’, ‘LOAD AI ENGINE…’, ‘INIT SENSORS…’, ‘CALIBRATE CORE…’, ‘BLOODCORE READY!’];
-if (!fill || !status) { hideSplash(); return; }
-let p = 0;
-const iv = setInterval(() => {
-p += Math.random() * 22 + 8;
-if (p > 100) p = 100;
-fill.style.width = p + ‘%’;
-status.textContent = msgs[Math.min(Math.floor(p / 22), 4)];
-if (p >= 100) {
-clearInterval(iv);
-status.textContent = ‘BLOODCORE READY!’;
-setTimeout(hideSplash, 400);
-}
-}, 150);
+  const fill   = document.getElementById('sp-fill');
+  const status = document.getElementById('sp-status');
+  const msgs   = ['BOOT SEQUENCE...', 'LOAD AI ENGINE...', 'INIT SENSORS...', 'CALIBRATE CORE...', 'BLOODCORE READY!'];
+  if (!fill || !status) { hideSplash(); return; }
+  let p = 0;
+  const iv = setInterval(() => {
+    p += Math.random() * 22 + 8;
+    if (p > 100) p = 100;
+    fill.style.width = p + '%';
+    status.textContent = msgs[Math.min(Math.floor(p / 22), 4)];
+    if (p >= 100) {
+      clearInterval(iv);
+      status.textContent = 'BLOODCORE READY!';
+      setTimeout(hideSplash, 400);
+    }
+  }, 150);
 }
 
 // Script load ở cuối body → DOM đã sẵn sàng → chạy ngay
-if (document.readyState === ‘loading’) {
-window.addEventListener(‘DOMContentLoaded’, runSplash);
+if (document.readyState === 'loading') {
+  window.addEventListener('DOMContentLoaded', runSplash);
 } else {
-runSplash();
+  runSplash();
 }
 
 function hideSplash() {
-const splash = document.getElementById(‘splash’);
-const app    = document.getElementById(‘app’);
-if (!splash || !app) return;
-splash.style.transition = ‘opacity .5s’;
-splash.style.opacity = ‘0’;
-setTimeout(() => {
-splash.style.display = ‘none’;
-app.style.display = ‘flex’;
-initApp();
-}, 500);
+  const splash = document.getElementById('splash');
+  const app    = document.getElementById('app');
+  if (!splash || !app) return;
+  splash.style.transition = 'opacity .5s';
+  splash.style.opacity = '0';
+  setTimeout(() => {
+    splash.style.display = 'none';
+    app.style.display = 'flex';
+    initApp();
+  }, 500);
 }
 
 // ── APP INIT ─────────────────────────
@@ -1340,14 +1341,14 @@ let hist = { fps: [], cpu: [], ram: [], tmp: [] };
 let statsIv = null;
 
 function initApp() {
-buildBoostModes();
-buildPowerToggles();
-buildIssuesList();
-buildOptTools();
-buildCleanTools();
-setTimeout(initCanvases, 100);
-setTimeout(initialScan, 400);
-checkSavedKey();
+  buildBoostModes();
+  buildPowerToggles();
+  buildIssuesList();
+  buildOptTools();
+  buildCleanTools();
+  setTimeout(initCanvases, 100);
+  setTimeout(initialScan, 400);
+  checkSavedKey();
 }
 
 // ── HELPERS ───────────────────────────
@@ -1356,757 +1357,792 @@ const drift = (v, mn, mx, s) => Math.max(mn, Math.min(mx, v + (Math.random() - .
 
 // ── STATS ─────────────────────────────
 function initialScan() {
-let i = 0;
-const iv = setInterval(() => {
-i++;
-sim.fps = drift(sim.fps, 30, 120, 9);
-sim.cpu = drift(sim.cpu, 8, 85, 9);
-sim.ram = drift(sim.ram, 30, 88, 6);
-sim.tmp = drift(sim.tmp, 35, 78, 6);
-updateCards(sim);
-if (i >= 8) { clearInterval(iv); startLive(); updateScore(); }
-}, 220);
+  let i = 0;
+  const iv = setInterval(() => {
+    i++;
+    sim.fps = drift(sim.fps, 30, 120, 9);
+    sim.cpu = drift(sim.cpu, 8, 85, 9);
+    sim.ram = drift(sim.ram, 30, 88, 6);
+    sim.tmp = drift(sim.tmp, 35, 78, 6);
+    updateCards(sim);
+    if (i >= 8) { clearInterval(iv); startLive(); updateScore(); }
+  }, 220);
 }
 
 function startLive() {
-if (statsIv) clearInterval(statsIv);
-statsIv = setInterval(() => {
-sim.fps = drift(sim.fps, 28, 120, 4);
-sim.cpu = drift(sim.cpu, 8, 82, 4);
-sim.ram = drift(sim.ram, 28, 88, 3);
-sim.tmp = drift(sim.tmp, 34, 78, 3);
-updateCards(sim);
-[‘fps’, ‘cpu’, ‘ram’, ‘tmp’].forEach(k => {
-hist[k].push(sim[k]);
-if (hist[k].length > 45) hist[k].shift();
-});
-drawAllCharts();
-updateRTCards(sim);
-updateNetStats();
-}, 1100);
+  if (statsIv) clearInterval(statsIv);
+  statsIv = setInterval(() => {
+    sim.fps = drift(sim.fps, 28, 120, 4);
+    sim.cpu = drift(sim.cpu, 8, 82, 4);
+    sim.ram = drift(sim.ram, 28, 88, 3);
+    sim.tmp = drift(sim.tmp, 34, 78, 3);
+    updateCards(sim);
+    ['fps', 'cpu', 'ram', 'tmp'].forEach(k => {
+      hist[k].push(sim[k]);
+      if (hist[k].length > 45) hist[k].shift();
+    });
+    drawAllCharts();
+    updateRTCards(sim);
+    updateNetStats();
+  }, 1100);
 }
 
 function updateCards({ fps, cpu, ram, tmp }) {
-document.getElementById(‘v-fps’).textContent = Math.round(fps);
-document.getElementById(‘b-fps’).style.width = Math.min(fps / 120 * 100, 100) + ‘%’;
-document.getElementById(‘v-fps’).className = ‘sc-val’ + (fps > 60 ? ’ hot’ : ‘’);
-document.getElementById(‘s-fps’).textContent = fps > 75 ? ‘smooth ▲’ : fps > 45 ? ‘ok ●’ : ‘low ▼’;
-document.getElementById(‘v-cpu’).innerHTML = Math.round(cpu) + ‘<sup>%</sup>’;
-document.getElementById(‘b-cpu’).style.width = cpu + ‘%’;
-document.getElementById(‘s-cpu’).textContent = cpu < 45 ? ‘normal’ : cpu < 70 ? ‘medium’ : ‘high ⚠’;
-document.getElementById(‘v-ram’).innerHTML = Math.round(ram) + ‘<sup>%</sup>’;
-document.getElementById(‘b-ram’).style.width = ram + ‘%’;
-document.getElementById(‘s-ram’).textContent = ram < 55 ? ‘ok’ : ram < 75 ? ‘moderate’ : ‘high ⚠’;
-document.getElementById(‘v-tmp’).innerHTML = Math.round(tmp) + ‘<sup>°</sup>’;
-document.getElementById(‘b-tmp’).style.width = Math.min(tmp / 85 * 100, 100) + ‘%’;
-document.getElementById(‘s-tmp’).textContent = tmp < 48 ? ‘cool’ : tmp < 62 ? ‘warm’ : ‘hot ⚠’;
+  document.getElementById('v-fps').textContent = Math.round(fps);
+  document.getElementById('b-fps').style.width = Math.min(fps / 120 * 100, 100) + '%';
+  document.getElementById('v-fps').className = 'sc-val' + (fps > 60 ? ' hot' : '');
+  document.getElementById('s-fps').textContent = fps > 75 ? 'smooth ▲' : fps > 45 ? 'ok ●' : 'low ▼';
+  document.getElementById('v-cpu').innerHTML = Math.round(cpu) + '<sup>%</sup>';
+  document.getElementById('b-cpu').style.width = cpu + '%';
+  document.getElementById('s-cpu').textContent = cpu < 45 ? 'normal' : cpu < 70 ? 'medium' : 'high ⚠';
+  document.getElementById('v-ram').innerHTML = Math.round(ram) + '<sup>%</sup>';
+  document.getElementById('b-ram').style.width = ram + '%';
+  document.getElementById('s-ram').textContent = ram < 55 ? 'ok' : ram < 75 ? 'moderate' : 'high ⚠';
+  document.getElementById('v-tmp').innerHTML = Math.round(tmp) + '<sup>°</sup>';
+  document.getElementById('b-tmp').style.width = Math.min(tmp / 85 * 100, 100) + '%';
+  document.getElementById('s-tmp').textContent = tmp < 48 ? 'cool' : tmp < 62 ? 'warm' : 'hot ⚠';
 }
 
 function updateRTCards({ fps, cpu, ram, tmp }) {
-document.getElementById(‘rt-fps’).textContent = Math.round(fps);
-document.getElementById(‘rt-cpu’).textContent = Math.round(cpu) + ‘%’;
-document.getElementById(‘rt-ram’).textContent = Math.round(ram) + ‘%’;
-document.getElementById(‘rt-tmp’).textContent = Math.round(tmp) + ‘°’;
-document.getElementById(‘fps-now’).textContent = Math.round(fps);
-document.getElementById(‘cpu-now’).textContent = Math.round(cpu) + ‘%’;
-document.getElementById(‘ram-now’).textContent = Math.round(ram) + ‘%’;
-document.getElementById(‘tmp-now’).textContent = Math.round(tmp) + ‘°’;
-const calc = (arr, sfx) => {
-if (!arr.length) return null;
-return { mn: Math.min(…arr) + sfx, av: Math.round(arr.reduce((a, b) => a + b) / arr.length) + sfx, mx: Math.max(…arr) + sfx };
-};
-const d = [[‘fps’, ‘’], [‘cpu’, ‘%’], [‘ram’, ‘%’], [‘tmp’, ‘°’]];
-d.forEach(([k, s]) => {
-const v = calc(hist[k], s);
-if (v) { document.getElementById(k + ‘-min’).textContent = v.mn; document.getElementById(k + ‘-avg’).textContent = v.av; document.getElementById(k + ‘-max’).textContent = v.mx; }
-});
+  document.getElementById('rt-fps').textContent = Math.round(fps);
+  document.getElementById('rt-cpu').textContent = Math.round(cpu) + '%';
+  document.getElementById('rt-ram').textContent = Math.round(ram) + '%';
+  document.getElementById('rt-tmp').textContent = Math.round(tmp) + '°';
+  document.getElementById('fps-now').textContent = Math.round(fps);
+  document.getElementById('cpu-now').textContent = Math.round(cpu) + '%';
+  document.getElementById('ram-now').textContent = Math.round(ram) + '%';
+  document.getElementById('tmp-now').textContent = Math.round(tmp) + '°';
+  const calc = (arr, sfx) => {
+    if (!arr.length) return null;
+    return { mn: Math.min(...arr) + sfx, av: Math.round(arr.reduce((a, b) => a + b) / arr.length) + sfx, mx: Math.max(...arr) + sfx };
+  };
+  const d = [['fps', ''], ['cpu', '%'], ['ram', '%'], ['tmp', '°']];
+  d.forEach(([k, s]) => {
+    const v = calc(hist[k], s);
+    if (v) { document.getElementById(k + '-min').textContent = v.mn; document.getElementById(k + '-avg').textContent = v.av; document.getElementById(k + '-max').textContent = v.mx; }
+  });
 }
 
 function updateNetStats() {
-document.getElementById(‘net-dl’).textContent = (Math.random() * 5 + .5).toFixed(1) + ‘M’;
-document.getElementById(‘net-ul’).textContent = (Math.random() * 2 + .2).toFixed(1) + ‘M’;
-document.getElementById(‘net-ping’).textContent = rn(4, 32) + ‘ms’;
+  document.getElementById('net-dl').textContent = (Math.random() * 5 + .5).toFixed(1) + 'M';
+  document.getElementById('net-ul').textContent = (Math.random() * 2 + .2).toFixed(1) + 'M';
+  document.getElementById('net-ping').textContent = rn(4, 32) + 'ms';
 }
 
 function updateScore() {
-const s = Math.round((sim.fps / 120 * 40) + ((100 - sim.cpu) / 100 * 30) + ((100 - sim.ram) / 100 * 20) + ((85 - sim.tmp) / 85 * 10));
-let c = 0;
-const el = document.getElementById(‘core-score’);
-const prog = document.getElementById(‘sb-prog’);
-const grade = document.getElementById(‘core-grade’);
-const iv = setInterval(() => {
-c += Math.ceil((s - c) / 5) || 1;
-if (c >= s) { c = s; clearInterval(iv); }
-el.textContent = c;
-prog.style.width = c + ‘%’;
-grade.textContent = c > 88 ? ‘S — GODLIKE’ : c > 75 ? ‘A — EXCELLENT’ : c > 60 ? ‘B — GOOD’ : ‘C — AVERAGE’;
-}, 28);
+  const s = Math.round((sim.fps / 120 * 40) + ((100 - sim.cpu) / 100 * 30) + ((100 - sim.ram) / 100 * 20) + ((85 - sim.tmp) / 85 * 10));
+  let c = 0;
+  const el = document.getElementById('core-score');
+  const prog = document.getElementById('sb-prog');
+  const grade = document.getElementById('core-grade');
+  const iv = setInterval(() => {
+    c += Math.ceil((s - c) / 5) || 1;
+    if (c >= s) { c = s; clearInterval(iv); }
+    el.textContent = c;
+    prog.style.width = c + '%';
+    grade.textContent = c > 88 ? 'S — GODLIKE' : c > 75 ? 'A — EXCELLENT' : c > 60 ? 'B — GOOD' : 'C — AVERAGE';
+  }, 28);
 }
 
 // ── CANVAS CHARTS ─────────────────────
 const cvCfg = {
-fps: { id: ‘cv-fps’, col: ‘#ff1a1a’, shadow: ‘rgba(255,26,26,.45)’, range: [0, 120] },
-cpu: { id: ‘cv-cpu’, col: ‘#ff8800’, shadow: ‘rgba(255,136,0,.35)’, range: [0, 100] },
-ram: { id: ‘cv-ram’, col: ‘#00e5ff’, shadow: ‘rgba(0,229,255,.3)’, range: [0, 100] },
-tmp: { id: ‘cv-tmp’, col: ‘#39ff14’, shadow: ‘rgba(57,255,20,.35)’, range: [0, 90] }
+  fps: { id: 'cv-fps', col: '#ff1a1a', shadow: 'rgba(255,26,26,.45)', range: [0, 120] },
+  cpu: { id: 'cv-cpu', col: '#ff8800', shadow: 'rgba(255,136,0,.35)', range: [0, 100] },
+  ram: { id: 'cv-ram', col: '#00e5ff', shadow: 'rgba(0,229,255,.3)', range: [0, 100] },
+  tmp: { id: 'cv-tmp', col: '#39ff14', shadow: 'rgba(57,255,20,.35)', range: [0, 90] }
 };
 
 function initCanvases() {
-Object.values(cvCfg).forEach(cfg => {
-const cv = document.getElementById(cfg.id);
-if (cv) { cv.width = cv.offsetWidth || 340; cv.height = 55; }
-});
+  Object.values(cvCfg).forEach(cfg => {
+    const cv = document.getElementById(cfg.id);
+    if (cv) { cv.width = cv.offsetWidth || 340; cv.height = 55; }
+  });
 }
 
 function drawChart(key, data) {
-const cfg = cvCfg[key];
-const cv = document.getElementById(cfg.id);
-if (!cv || !data.length) return;
-const ctx = cv.getContext(‘2d’);
-const w = cv.width, h = cv.height;
-const [mn, mx] = cfg.range;
-ctx.clearRect(0, 0, w, h);
-// grid
-ctx.strokeStyle = ‘rgba(255,255,255,.04)’; ctx.lineWidth = 1;
-for (let i = 1; i < 4; i++) { const y = Math.round(h * i / 4) + .5; ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke(); }
-const pts = data.map((v, i) => ({ x: (i / Math.max(data.length - 1, 1)) * w, y: h - ((v - mn) / (mx - mn)) * h * .86 - 4 }));
-// fill
-const grad = ctx.createLinearGradient(0, 0, 0, h);
-grad.addColorStop(0, cfg.shadow); grad.addColorStop(1, ‘transparent’);
-ctx.beginPath();
-pts.forEach((p, i) => i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y));
-ctx.lineTo(w, h); ctx.lineTo(0, h); ctx.closePath();
-ctx.fillStyle = grad; ctx.fill();
-// line
-ctx.beginPath();
-pts.forEach((p, i) => i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y));
-ctx.strokeStyle = cfg.col; ctx.lineWidth = 2;
-ctx.shadowColor = cfg.col; ctx.shadowBlur = 6;
-ctx.stroke(); ctx.shadowBlur = 0;
-// dot
-if (pts.length) {
-const last = pts[pts.length - 1];
-ctx.beginPath(); ctx.arc(last.x, last.y, 3.5, 0, Math.PI * 2);
-ctx.fillStyle = cfg.col; ctx.shadowColor = cfg.col; ctx.shadowBlur = 8;
-ctx.fill(); ctx.shadowBlur = 0;
-}
+  const cfg = cvCfg[key];
+  const cv = document.getElementById(cfg.id);
+  if (!cv || !data.length) return;
+  const ctx = cv.getContext('2d');
+  const w = cv.width, h = cv.height;
+  const [mn, mx] = cfg.range;
+  ctx.clearRect(0, 0, w, h);
+  // grid
+  ctx.strokeStyle = 'rgba(255,255,255,.04)'; ctx.lineWidth = 1;
+  for (let i = 1; i < 4; i++) { const y = Math.round(h * i / 4) + .5; ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke(); }
+  const pts = data.map((v, i) => ({ x: (i / Math.max(data.length - 1, 1)) * w, y: h - ((v - mn) / (mx - mn)) * h * .86 - 4 }));
+  // fill
+  const grad = ctx.createLinearGradient(0, 0, 0, h);
+  grad.addColorStop(0, cfg.shadow); grad.addColorStop(1, 'transparent');
+  ctx.beginPath();
+  pts.forEach((p, i) => i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y));
+  ctx.lineTo(w, h); ctx.lineTo(0, h); ctx.closePath();
+  ctx.fillStyle = grad; ctx.fill();
+  // line
+  ctx.beginPath();
+  pts.forEach((p, i) => i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y));
+  ctx.strokeStyle = cfg.col; ctx.lineWidth = 2;
+  ctx.shadowColor = cfg.col; ctx.shadowBlur = 6;
+  ctx.stroke(); ctx.shadowBlur = 0;
+  // dot
+  if (pts.length) {
+    const last = pts[pts.length - 1];
+    ctx.beginPath(); ctx.arc(last.x, last.y, 3.5, 0, Math.PI * 2);
+    ctx.fillStyle = cfg.col; ctx.shadowColor = cfg.col; ctx.shadowBlur = 8;
+    ctx.fill(); ctx.shadowBlur = 0;
+  }
 }
 
 function drawAllCharts() {
-drawChart(‘fps’, hist.fps); drawChart(‘cpu’, hist.cpu);
-drawChart(‘ram’, hist.ram); drawChart(‘tmp’, hist.tmp);
+  drawChart('fps', hist.fps); drawChart('cpu', hist.cpu);
+  drawChart('ram', hist.ram); drawChart('tmp', hist.tmp);
 }
 
 // ── BOOST ─────────────────────────────
 function runBoost() {
-snd(‘boost’);
-const ov = document.getElementById(‘bov’), txt = document.getElementById(‘bov-txt’);
-const pct = document.getElementById(‘bov-pct’), arc = document.getElementById(‘bov-arc’);
-ov.style.display = ‘flex’;
-const steps = [‘CLEARING CACHE…’, ‘KILL BG APPS…’, ‘TUNE CPU CLOCK…’, ‘TURBO GPU…’, ‘NET ACCELERATE…’, ‘BLOODCORE HOT!’];
-let p = 0;
-const iv = setInterval(() => {
-p += rn(9, 18);
-if (p >= 100) {
-p = 100; clearInterval(iv);
-setTimeout(() => {
-ov.style.display = ‘none’;
-sim.fps = Math.min(120, sim.fps + rn(12, 22));
-sim.cpu = Math.max(5, sim.cpu - rn(10, 18));
-sim.ram = Math.max(18, sim.ram - rn(10, 20));
-sim.tmp = Math.max(34, sim.tmp - rn(3, 9));
-updateCards(sim); updateScore();
-toast(‘🔥 IGNITION COMPLETE!’, ‘#ff1a1a’); snd(‘ok’);
-}, 350); return;
-}
-arc.style.strokeDashoffset = 327 - (327 * p / 100);
-pct.textContent = p + ‘%’;
-txt.textContent = steps[Math.min(Math.floor(p / 18), 5)];
-}, 170);
+  snd('boost');
+  const ov = document.getElementById('bov'), txt = document.getElementById('bov-txt');
+  const pct = document.getElementById('bov-pct'), arc = document.getElementById('bov-arc');
+  ov.style.display = 'flex';
+  const steps = ['CLEARING CACHE...', 'KILL BG APPS...', 'TUNE CPU CLOCK...', 'TURBO GPU...', 'NET ACCELERATE...', 'BLOODCORE HOT!'];
+  let p = 0;
+  const iv = setInterval(() => {
+    p += rn(9, 18);
+    if (p >= 100) {
+      p = 100; clearInterval(iv);
+      setTimeout(() => {
+        ov.style.display = 'none';
+        sim.fps = Math.min(120, sim.fps + rn(12, 22));
+        sim.cpu = Math.max(5, sim.cpu - rn(10, 18));
+        sim.ram = Math.max(18, sim.ram - rn(10, 20));
+        sim.tmp = Math.max(34, sim.tmp - rn(3, 9));
+        updateCards(sim); updateScore();
+        toast('🔥 IGNITION COMPLETE!', '#ff1a1a'); snd('ok');
+      }, 350); return;
+    }
+    arc.style.strokeDashoffset = 327 - (327 * p / 100);
+    pct.textContent = p + '%';
+    txt.textContent = steps[Math.min(Math.floor(p / 18), 5)];
+  }, 170);
 }
 
 // ── QUICK ACTIONS ─────────────────────
 function qa(t) {
-snd(‘click’);
-const m = { ram: ‘🗑 Memory cleared +14%’, cool: ‘❄️ Thermal -7°C’, fps: ‘⚡ FPS boosted’, net: ‘📡 Network optimized’, game: ‘🎮 Game Mode ON’, junk: ‘🧹 Junk purged 240MB’ };
-toast(m[t]);
-if (t === ‘ram’) { sim.ram = Math.max(18, sim.ram - rn(8, 16)); updateCards(sim); }
-if (t === ‘cool’) { sim.tmp = Math.max(34, sim.tmp - rn(5, 9)); updateCards(sim); }
-if (t === ‘fps’) { sim.fps = Math.min(120, sim.fps + rn(5, 14)); updateCards(sim); }
-if (t === ‘junk’) { sim.ram = Math.max(18, sim.ram - rn(3, 8)); updateCards(sim); }
+  snd('click');
+  const m = { ram: '🗑 Memory cleared +14%', cool: '❄️ Thermal -7°C', fps: '⚡ FPS boosted', net: '📡 Network optimized', game: '🎮 Game Mode ON', junk: '🧹 Junk purged 240MB' };
+  toast(m[t]);
+  if (t === 'ram') { sim.ram = Math.max(18, sim.ram - rn(8, 16)); updateCards(sim); }
+  if (t === 'cool') { sim.tmp = Math.max(34, sim.tmp - rn(5, 9)); updateCards(sim); }
+  if (t === 'fps') { sim.fps = Math.min(120, sim.fps + rn(5, 14)); updateCards(sim); }
+  if (t === 'junk') { sim.ram = Math.max(18, sim.ram - rn(3, 8)); updateCards(sim); }
 }
 
 // ── LAUNCH GAME ───────────────────────
 function launchGame(which) {
-snd(‘boost’);
-const isMax = which === ‘ffmax’;
-const name = isMax ? ‘Free Fire MAX’ : ‘Free Fire’;
-const uri = isMax
-? ‘intent://com.dts.freefiremax/#Intent;package=com.dts.freefiremax;scheme=app;end’
-: ‘intent://com.dts.freefireth/#Intent;package=com.dts.freefireth;scheme=app;end’;
-toast(’🔥 Đang mở ’ + name + ‘…’, isMax ? ‘#ff1a1a’ : ‘#ff8c00’);
-const ov = document.getElementById(‘bov’);
-document.getElementById(‘bov-txt’).textContent = ’LAUNCHING ’ + name.toUpperCase();
-document.getElementById(‘bov-pct’).textContent = ‘PLEASE WAIT…’;
-document.getElementById(‘bov-arc’).style.strokeDashoffset = ‘0’;
-ov.style.display = ‘flex’;
-setTimeout(() => {
-ov.style.display = ‘none’;
-try { window.location.href = uri; } catch (e) {}
-setTimeout(() => {
-const store = isMax
-? ‘https://play.google.com/store/apps/details?id=com.dts.freefiremax’
-: ‘https://play.google.com/store/apps/details?id=com.dts.freefireth’;
-window.open(store, ‘_blank’);
-}, 1200);
-}, 1200);
+  snd('boost');
+  const isMax = which === 'ffmax';
+  const name = isMax ? 'Free Fire MAX' : 'Free Fire';
+  const uri = isMax
+    ? 'intent://com.dts.freefiremax/#Intent;package=com.dts.freefiremax;scheme=app;end'
+    : 'intent://com.dts.freefireth/#Intent;package=com.dts.freefireth;scheme=app;end';
+  toast('🔥 Đang mở ' + name + '...', isMax ? '#ff1a1a' : '#ff8c00');
+  const ov = document.getElementById('bov');
+  document.getElementById('bov-txt').textContent = 'LAUNCHING ' + name.toUpperCase();
+  document.getElementById('bov-pct').textContent = 'PLEASE WAIT...';
+  document.getElementById('bov-arc').style.strokeDashoffset = '0';
+  ov.style.display = 'flex';
+  setTimeout(() => {
+    ov.style.display = 'none';
+    try { window.location.href = uri; } catch (e) {}
+    setTimeout(() => {
+      const store = isMax
+        ? 'https://play.google.com/store/apps/details?id=com.dts.freefiremax'
+        : 'https://play.google.com/store/apps/details?id=com.dts.freefireth';
+      window.open(store, '_blank');
+    }, 1200);
+  }, 1200);
 }
 
 // ── BOOST MODES ───────────────────────
 const bmData = [
-{ id: ‘balance’, icon: ‘<path d="M12 3v18M5 8l7-5 7 5M3 12h4l2 6H5M15 12h4l2 6h-4" stroke="#ff1a1a" stroke-width="2"/>’, name: ‘BALANCED’, desc: ‘Cân bằng FPS & nhiệt’, badge: ‘HOT’, bc: ‘hot’, sel: true },
-{ id: ‘sniper’,  icon: ‘<circle cx="12" cy="12" r="9" stroke="#ff1a1a" stroke-width="1.5"/><circle cx="12" cy="12" r="3" fill="#ff1a1a"/>’, name: ‘SNIPER’, desc: ‘Ổn định, ít drop’, badge: null, sel: false },
-{ id: ‘rush’,   icon: ‘<path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="#ffc400" stroke-width="2"/>’, name: ‘RUSH’, desc: ‘Max FPS, phản xạ nhanh’, badge: ‘NEW’, bc: ‘new’, sel: false },
-{ id: ‘thermal’,icon: ‘<path d="M12 2v20M4.93 4.93l14.14 14.14M2 12h20" stroke="#00e5ff" stroke-width="2"/>’, name: ‘THERMAL’, desc: ‘Ưu tiên kiểm soát nhiệt’, badge: null, sel: false },
+  { id: 'balance', icon: '<path d="M12 3v18M5 8l7-5 7 5M3 12h4l2 6H5M15 12h4l2 6h-4" stroke="#ff1a1a" stroke-width="2"/>', name: 'BALANCED', desc: 'Cân bằng FPS & nhiệt', badge: 'HOT', bc: 'hot', sel: true },
+  { id: 'sniper',  icon: '<circle cx="12" cy="12" r="9" stroke="#ff1a1a" stroke-width="1.5"/><circle cx="12" cy="12" r="3" fill="#ff1a1a"/>', name: 'SNIPER', desc: 'Ổn định, ít drop', badge: null, sel: false },
+  { id: 'rush',   icon: '<path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="#ffc400" stroke-width="2"/>', name: 'RUSH', desc: 'Max FPS, phản xạ nhanh', badge: 'NEW', bc: 'new', sel: false },
+  { id: 'thermal',icon: '<path d="M12 2v20M4.93 4.93l14.14 14.14M2 12h20" stroke="#00e5ff" stroke-width="2"/>', name: 'THERMAL', desc: 'Ưu tiên kiểm soát nhiệt', badge: null, sel: false },
 ];
 
 function buildBoostModes() {
-const g = document.getElementById(‘bm-grid’);
-bmData.forEach(m => {
-const el = document.createElement(‘div’);
-el.className = ‘bm’ + (m.sel ? ’ sel’ : ‘’); el.id = ‘bm-’ + m.id;
-el.innerHTML = (m.badge ? `<div class="bm-badge ${m.bc}">${m.badge}</div>` : ‘’) +
-`<div class="bm-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none">${m.icon}</svg></div> <div class="bm-name">${m.name}</div><div class="bm-desc">${m.desc}</div>`;
-el.onclick = () => { snd(‘click’); document.querySelectorAll(’.bm’).forEach(b => b.classList.remove(‘sel’)); el.classList.add(‘sel’); toast(’Mode: ’ + m.name); };
-g.appendChild(el);
-});
+  const g = document.getElementById('bm-grid');
+  bmData.forEach(m => {
+    const el = document.createElement('div');
+    el.className = 'bm' + (m.sel ? ' sel' : ''); el.id = 'bm-' + m.id;
+    el.innerHTML = (m.badge ? `<div class="bm-badge ${m.bc}">${m.badge}</div>` : '') +
+      `<div class="bm-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none">${m.icon}</svg></div>
+       <div class="bm-name">${m.name}</div><div class="bm-desc">${m.desc}</div>`;
+    el.onclick = () => { snd('click'); document.querySelectorAll('.bm').forEach(b => b.classList.remove('sel')); el.classList.add('sel'); toast('Mode: ' + m.name); };
+    g.appendChild(el);
+  });
 }
 
 const ptData = [
-{ ico: ‘<path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="#ff1a1a" stroke-width="2"/>’, name: ‘FPS Unlocker’, desc: ‘Mở khoá giới hạn khung hình’, on: true },
-{ ico: ‘<path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6" stroke="#ff1a1a" stroke-width="2"/>’, name: ‘RAM Optimizer’, desc: ‘Dọn bộ nhớ tự động’, on: true },
-{ ico: ‘<rect x="2" y="6" width="20" height="14" rx="3" stroke="#ff8800" stroke-width="2"/><path d="M8 13h4M10 11v4M15 13h.01" stroke="#ff8800" stroke-width="2"/>’, name: ‘Game Priority’, desc: ‘Ưu tiên tài nguyên cho game’, on: false },
-{ ico: ‘<path d="M1 6s4-4 11-4 11 4 11 4M5 10s2.5-2.5 7-2.5S19 10 19 10M9 14s1-1 3-1 3 1 3 1" stroke="#39ff14" stroke-width="2"/>’, name: ‘Network Boost’, desc: ‘Giảm ping, ổn định kết nối’, on: true },
-{ ico: ‘<path d="M18 20V10M12 20V4M6 20v-6" stroke="#ff1a1a" stroke-width="2" stroke-linecap="round"/>’, name: ‘CPU Turbo’, desc: ‘Tăng xung nhịp CPU max’, on: false },
-{ ico: ‘<path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4" stroke="#00e5ff" stroke-width="2"/>’, name: ‘Thermal Shield’, desc: ‘Bảo vệ quá nhiệt 85°+’, on: true },
-{ ico: ‘<path d="M11 5L6 9H2v6h4l5 4V5z" stroke="#ff8800" stroke-width="2"/><path d="M15.54 8.46a5 5 0 010 7.07" stroke="#ff8800" stroke-width="2"/>’, name: ‘Sound Enhancer’, desc: ‘Tăng cường âm thanh 3D’, on: false },
-{ ico: ‘<rect x="2" y="3" width="20" height="14" rx="2" stroke="#c084fc" stroke-width="2"/><path d="M8 21h8M12 17v4" stroke="#c084fc" stroke-width="2"/>’, name: ‘Display Optimizer’, desc: ‘Tối ưu màn hình, tăng HDR’, on: false },
-{ ico: ‘<path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9" stroke="#ffc400" stroke-width="2"/>’, name: ‘Anti-Lag Engine’, desc: ‘Giảm input lag xuống tối thiểu’, on: true },
+  { ico: '<path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="#ff1a1a" stroke-width="2"/>', name: 'FPS Unlocker', desc: 'Mở khoá giới hạn khung hình', on: true },
+  { ico: '<path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6" stroke="#ff1a1a" stroke-width="2"/>', name: 'RAM Optimizer', desc: 'Dọn bộ nhớ tự động', on: true },
+  { ico: '<rect x="2" y="6" width="20" height="14" rx="3" stroke="#ff8800" stroke-width="2"/><path d="M8 13h4M10 11v4M15 13h.01" stroke="#ff8800" stroke-width="2"/>', name: 'Game Priority', desc: 'Ưu tiên tài nguyên cho game', on: false },
+  { ico: '<path d="M1 6s4-4 11-4 11 4 11 4M5 10s2.5-2.5 7-2.5S19 10 19 10M9 14s1-1 3-1 3 1 3 1" stroke="#39ff14" stroke-width="2"/>', name: 'Network Boost', desc: 'Giảm ping, ổn định kết nối', on: true },
+  { ico: '<path d="M18 20V10M12 20V4M6 20v-6" stroke="#ff1a1a" stroke-width="2" stroke-linecap="round"/>', name: 'CPU Turbo', desc: 'Tăng xung nhịp CPU max', on: false },
+  { ico: '<path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4" stroke="#00e5ff" stroke-width="2"/>', name: 'Thermal Shield', desc: 'Bảo vệ quá nhiệt 85°+', on: true },
+  { ico: '<path d="M11 5L6 9H2v6h4l5 4V5z" stroke="#ff8800" stroke-width="2"/><path d="M15.54 8.46a5 5 0 010 7.07" stroke="#ff8800" stroke-width="2"/>', name: 'Sound Enhancer', desc: 'Tăng cường âm thanh 3D', on: false },
+  { ico: '<rect x="2" y="3" width="20" height="14" rx="2" stroke="#c084fc" stroke-width="2"/><path d="M8 21h8M12 17v4" stroke="#c084fc" stroke-width="2"/>', name: 'Display Optimizer', desc: 'Tối ưu màn hình, tăng HDR', on: false },
+  { ico: '<path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9" stroke="#ffc400" stroke-width="2"/>', name: 'Anti-Lag Engine', desc: 'Giảm input lag xuống tối thiểu', on: true },
 ];
 
 function buildPowerToggles() {
-const l = document.getElementById(‘pt-list’);
-ptData.forEach(p => {
-const el = document.createElement(‘div’); el.className = ‘pt-item’;
-el.innerHTML = `<div class="pt-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none">${p.ico}</svg></div> <div class="pt-info"><div class="pt-name">${p.name}</div><div class="pt-desc">${p.desc}</div></div> <label class="toggle"><input type="checkbox" ${p.on ? 'checked' : ''} onchange="snd(this.checked?'click':'nav');toast('${p.name} '+(this.checked?'✓ Bật':'✗ Tắt'))"><span class="ttrack"></span></label>`;
-l.appendChild(el);
-});
+  const l = document.getElementById('pt-list');
+  ptData.forEach(p => {
+    const el = document.createElement('div'); el.className = 'pt-item';
+    el.innerHTML = `<div class="pt-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none">${p.ico}</svg></div>
+      <div class="pt-info"><div class="pt-name">${p.name}</div><div class="pt-desc">${p.desc}</div></div>
+      <label class="toggle"><input type="checkbox" ${p.on ? 'checked' : ''} onchange="snd(this.checked?'click':'nav');toast('${p.name} '+(this.checked?'✓ Bật':'✗ Tắt'))"><span class="ttrack"></span></label>`;
+    l.appendChild(el);
+  });
 }
 
 // ── AIM LAB ───────────────────────────
 const lockData = {
-v1: { r: ‘18px’, s: ‘Slow’,        t: ‘Chest only’ },
-v2: { r: ‘28px’, s: ‘Medium’,      t: ‘Head’ },
-v3: { r: ‘38px’, s: ‘Medium-Fast’, t: ‘Head + Chest’ },
-v4: { r: ‘55px’, s: ‘Fast’,        t: ‘Auto Target’ }
+  v1: { r: '18px', s: 'Slow',        t: 'Chest only' },
+  v2: { r: '28px', s: 'Medium',      t: 'Head' },
+  v3: { r: '38px', s: 'Medium-Fast', t: 'Head + Chest' },
+  v4: { r: '55px', s: 'Fast',        t: 'Auto Target' }
 };
 
 function setLock(el, v) {
-snd(‘click’);
-document.querySelectorAll(’.lb’).forEach(b => b.classList.remove(‘on’));
-el.classList.add(‘on’);
-const d = lockData[v];
-document.getElementById(‘li-r’).textContent = d.r;
-document.getElementById(‘li-s’).textContent = d.s;
-document.getElementById(‘li-t’).textContent = d.t;
-document.getElementById(‘ch-lock’).textContent = v;
-toast(’Lock: ’ + v.toUpperCase());
+  snd('click');
+  document.querySelectorAll('.lb').forEach(b => b.classList.remove('on'));
+  el.classList.add('on');
+  const d = lockData[v];
+  document.getElementById('li-r').textContent = d.r;
+  document.getElementById('li-s').textContent = d.s;
+  document.getElementById('li-t').textContent = d.t;
+  document.getElementById('ch-lock').textContent = v;
+  toast('Lock: ' + v.toUpperCase());
 }
 
-function sv(k, v) { document.getElementById(‘sv-’ + k).textContent = v; }
+function sv(k, v) { document.getElementById('sv-' + k).textContent = v; }
 
 const presets = {
-bal:  { g: 100, a: 80,  s2: 65, s4: 50, s8: 35, gyv: 60, gyh: 55 },
-snp:  { g: 75,  a: 55,  s2: 42, s4: 30, s8: 20, gyv: 40, gyh: 35 },
-rush: { g: 130, a: 105, s2: 88, s4: 72, s8: 58, gyv: 80, gyh: 75 },
-pro:  { g: 110, a: 88,  s2: 72, s4: 56, s8: 42, gyv: 65, gyh: 60 },
+  bal:  { g: 100, a: 80,  s2: 65, s4: 50, s8: 35, gyv: 60, gyh: 55 },
+  snp:  { g: 75,  a: 55,  s2: 42, s4: 30, s8: 20, gyv: 40, gyh: 35 },
+  rush: { g: 130, a: 105, s2: 88, s4: 72, s8: 58, gyv: 80, gyh: 75 },
+  pro:  { g: 110, a: 88,  s2: 72, s4: 56, s8: 42, gyv: 65, gyh: 60 },
 };
 
 function setPreset(el, k) {
-snd(‘click’);
-document.querySelectorAll(’.sp-item’).forEach(b => b.classList.remove(‘on’));
-el.classList.add(‘on’);
-const p = presets[k];
-Object.entries(p).forEach(([key, val]) => {
-const sl = document.querySelector(`[oninput="sv('${key}',this.value)"]`);
-if (sl) { sl.value = val; document.getElementById(‘sv-’ + key).textContent = val; }
-});
-toast(’Preset: ’ + k.toUpperCase());
+  snd('click');
+  document.querySelectorAll('.sp-item').forEach(b => b.classList.remove('on'));
+  el.classList.add('on');
+  const p = presets[k];
+  Object.entries(p).forEach(([key, val]) => {
+    const sl = document.querySelector(`[oninput="sv('${key}',this.value)"]`);
+    if (sl) { sl.value = val; document.getElementById('sv-' + key).textContent = val; }
+  });
+  toast('Preset: ' + k.toUpperCase());
 }
 
 function applyAim() {
-snd(‘ok’);
-document.getElementById(‘ch-score’).textContent = rn(82, 98);
-toast(‘✅ Aim settings applied!’);
+  snd('ok');
+  document.getElementById('ch-score').textContent = rn(82, 98);
+  toast('✅ Aim settings applied!');
 }
 
 // FINGER LAYOUT
 function selectFinger(el, mode) {
-snd(‘click’);
-document.querySelectorAll(’.fg-btn’).forEach(b => b.classList.remove(‘on’));
-el.classList.add(‘on’);
-const tips = {
-‘2’: ‘Ngón cái trái: di chuyển · Ngón cái phải: ngắm & bắn’,
-‘3’: ‘Ngón cái trái: di chuyển · Trỏ: bắn · Ngón cái phải: scope’,
-‘4’: ‘Ngón cái: di chuyển & ngắm · Trỏ 2 tay: bắn & scope’,
-‘claw’: ‘Claw grip: 3-4 ngón duỗi thẳng · Tốt cho phản xạ nhanh’,
-};
-toast(’Layout: ’ + tips[mode]);
+  snd('click');
+  document.querySelectorAll('.fg-btn').forEach(b => b.classList.remove('on'));
+  el.classList.add('on');
+  const tips = {
+    '2': 'Ngón cái trái: di chuyển · Ngón cái phải: ngắm & bắn',
+    '3': 'Ngón cái trái: di chuyển · Trỏ: bắn · Ngón cái phải: scope',
+    '4': 'Ngón cái: di chuyển & ngắm · Trỏ 2 tay: bắn & scope',
+    'claw': 'Claw grip: 3-4 ngón duỗi thẳng · Tốt cho phản xạ nhanh',
+  };
+  toast('Layout: ' + tips[mode]);
 }
 
 // RECOIL CONTROL
 function setRecoil(el, mode) {
-snd(‘click’);
-document.querySelectorAll(’.rb-btn’).forEach(b => b.classList.remove(‘on’));
-el.classList.add(‘on’);
-const msgs = { auto: ‘🔫 Auto recoil compensation ON’, manual: ‘🎯 Manual recoil mode’, off: ‘Recoil control tắt’ };
-toast(msgs[mode] || ‘Done’);
-drawRecoilPattern(mode);
+  snd('click');
+  document.querySelectorAll('.rb-btn').forEach(b => b.classList.remove('on'));
+  el.classList.add('on');
+  const msgs = { auto: '🔫 Auto recoil compensation ON', manual: '🎯 Manual recoil mode', off: 'Recoil control tắt' };
+  toast(msgs[mode] || 'Done');
+  drawRecoilPattern(mode);
 }
 
 function drawRecoilPattern(mode) {
-const cv = document.getElementById(‘cv-recoil’);
-if (!cv) return;
-const ctx = cv.getContext(‘2d’);
-const w = cv.width, h = cv.height;
-ctx.clearRect(0, 0, w, h);
-ctx.strokeStyle = ‘#ff1a1a’; ctx.lineWidth = 1.5;
-ctx.shadowColor = ‘#ff1a1a’; ctx.shadowBlur = 4;
-ctx.beginPath();
-if (mode === ‘auto’) {
-ctx.moveTo(w / 2, 10);
-for (let i = 0; i < 12; i++) {
-ctx.lineTo(w / 2 + Math.sin(i * .8) * 8, 10 + i * 5);
-}
-} else if (mode === ‘manual’) {
-ctx.moveTo(w / 2, 10);
-for (let i = 0; i < 12; i++) {
-ctx.lineTo(w / 2 + (Math.random() - .5) * 20, 10 + i * 5);
-}
-} else {
-ctx.moveTo(w / 2, 10);
-for (let i = 0; i < 12; i++) ctx.lineTo(w / 2, 10 + i * 5);
-}
-ctx.stroke(); ctx.shadowBlur = 0;
+  const cv = document.getElementById('cv-recoil');
+  if (!cv) return;
+  const ctx = cv.getContext('2d');
+  const w = cv.width, h = cv.height;
+  ctx.clearRect(0, 0, w, h);
+  ctx.strokeStyle = '#ff1a1a'; ctx.lineWidth = 1.5;
+  ctx.shadowColor = '#ff1a1a'; ctx.shadowBlur = 4;
+  ctx.beginPath();
+  if (mode === 'auto') {
+    ctx.moveTo(w / 2, 10);
+    for (let i = 0; i < 12; i++) {
+      ctx.lineTo(w / 2 + Math.sin(i * .8) * 8, 10 + i * 5);
+    }
+  } else if (mode === 'manual') {
+    ctx.moveTo(w / 2, 10);
+    for (let i = 0; i < 12; i++) {
+      ctx.lineTo(w / 2 + (Math.random() - .5) * 20, 10 + i * 5);
+    }
+  } else {
+    ctx.moveTo(w / 2, 10);
+    for (let i = 0; i < 12; i++) ctx.lineTo(w / 2, 10 + i * 5);
+  }
+  ctx.stroke(); ctx.shadowBlur = 0;
 }
 
 // HEADSHOT TRAINER
 let hsActive = false, hsScore = 0, hsMisses = 0, hsTargetTimer = null;
 
 function initHSTrainer() {
-const cv = document.getElementById(‘cv-recoil’); // reuse canvas not needed
-startHSTrainer();
+  const cv = document.getElementById('cv-recoil'); // reuse canvas not needed
+  startHSTrainer();
 }
 
 function startHSTrainer() {
-hsActive = true; hsScore = 0; hsMisses = 0;
-document.getElementById(‘hs-hits’).textContent = 0;
-document.getElementById(‘hs-misses’).textContent = 0;
-document.getElementById(‘hs-acc’).textContent = ‘0%’;
-document.querySelector(’.hs-ctrl-btn.start’).textContent = ‘STOP’;
-document.querySelector(’.hs-ctrl-btn.start’).onclick = stopHSTrainer;
-spawnHSTarget();
+  hsActive = true; hsScore = 0; hsMisses = 0;
+  document.getElementById('hs-hits').textContent = 0;
+  document.getElementById('hs-misses').textContent = 0;
+  document.getElementById('hs-acc').textContent = '0%';
+  document.querySelector('.hs-ctrl-btn.start').textContent = 'STOP';
+  document.querySelector('.hs-ctrl-btn.start').onclick = stopHSTrainer;
+  spawnHSTarget();
 }
 
 function stopHSTrainer() {
-hsActive = false;
-clearTimeout(hsTargetTimer);
-const scene = document.getElementById(‘hs-scene’);
-scene.querySelectorAll(’.hs-target’).forEach(t => t.remove());
-document.querySelector(’.hs-ctrl-btn.start’).textContent = ‘START’;
-document.querySelector(’.hs-ctrl-btn.start’).onclick = startHSTrainer;
-const total = hsScore + hsMisses;
-const acc = total > 0 ? Math.round(hsScore / total * 100) : 0;
-document.getElementById(‘aim-score-display’).textContent = rn(75, 98);
-toast(acc > 80 ? ’🎯 Excellent aim! ’ + acc + ‘%’ : ’🎯 Accuracy: ’ + acc + ‘%’);
+  hsActive = false;
+  clearTimeout(hsTargetTimer);
+  const scene = document.getElementById('hs-scene');
+  scene.querySelectorAll('.hs-target').forEach(t => t.remove());
+  document.querySelector('.hs-ctrl-btn.start').textContent = 'START';
+  document.querySelector('.hs-ctrl-btn.start').onclick = startHSTrainer;
+  const total = hsScore + hsMisses;
+  const acc = total > 0 ? Math.round(hsScore / total * 100) : 0;
+  document.getElementById('aim-score-display').textContent = rn(75, 98);
+  toast(acc > 80 ? '🎯 Excellent aim! ' + acc + '%' : '🎯 Accuracy: ' + acc + '%');
 }
 
 function spawnHSTarget() {
-if (!hsActive) return;
-const scene = document.getElementById(‘hs-scene’);
-scene.querySelectorAll(’.hs-target’).forEach(t => t.remove());
-const t = document.createElement(‘div’); t.className = ‘hs-target’;
-const x = rn(5, 85), y = rn(5, 75);
-t.style.cssText = `left:${x}%;top:${y}%`;
-t.innerHTML = ‘<div class="hs-target-inner"></div>’;
-t.onclick = () => {
-snd(‘hit’); hsScore++;
-document.getElementById(‘hs-hits’).textContent = hsScore;
-const total = hsScore + hsMisses;
-document.getElementById(‘hs-acc’).textContent = Math.round(hsScore / total * 100) + ‘%’;
-t.remove(); if (hsActive) spawnHSTarget();
-};
-scene.appendChild(t);
-hsTargetTimer = setTimeout(() => {
-if (t.parentNode) {
-snd(‘miss’); hsMisses++;
-document.getElementById(‘hs-misses’).textContent = hsMisses;
-const total = hsScore + hsMisses;
-document.getElementById(‘hs-acc’).textContent = Math.round(hsScore / total * 100) + ‘%’;
-t.remove(); if (hsActive) spawnHSTarget();
-}
-}, 1800);
+  if (!hsActive) return;
+  const scene = document.getElementById('hs-scene');
+  scene.querySelectorAll('.hs-target').forEach(t => t.remove());
+  const t = document.createElement('div'); t.className = 'hs-target';
+  const x = rn(5, 85), y = rn(5, 75);
+  t.style.cssText = `left:${x}%;top:${y}%`;
+  t.innerHTML = '<div class="hs-target-inner"></div>';
+  t.onclick = () => {
+    snd('hit'); hsScore++;
+    document.getElementById('hs-hits').textContent = hsScore;
+    const total = hsScore + hsMisses;
+    document.getElementById('hs-acc').textContent = Math.round(hsScore / total * 100) + '%';
+    t.remove(); if (hsActive) spawnHSTarget();
+  };
+  scene.appendChild(t);
+  hsTargetTimer = setTimeout(() => {
+    if (t.parentNode) {
+      snd('miss'); hsMisses++;
+      document.getElementById('hs-misses').textContent = hsMisses;
+      const total = hsScore + hsMisses;
+      document.getElementById('hs-acc').textContent = Math.round(hsScore / total * 100) + '%';
+      t.remove(); if (hsActive) spawnHSTarget();
+    }
+  }, 1800);
 }
 
 // GYRO SIMULATOR
 let gyroAngle = 0;
 function toggleGyro(el) {
-snd(el.checked ? ‘click’ : ‘nav’);
-document.getElementById(‘gyro-panel’).style.display = el.checked ? ‘block’ : ‘none’;
-toast(’Gyroscope ’ + (el.checked ? ‘bật ✓’ : ‘tắt’));
-if (el.checked) animateGyro();
+  snd(el.checked ? 'click' : 'nav');
+  document.getElementById('gyro-panel').style.display = el.checked ? 'block' : 'none';
+  toast('Gyroscope ' + (el.checked ? 'bật ✓' : 'tắt'));
+  if (el.checked) animateGyro();
 }
 
 let gyroIv = null;
 function animateGyro() {
-if (gyroIv) clearInterval(gyroIv);
-gyroIv = setInterval(() => {
-if (!document.getElementById(‘gyro-toggle’)?.checked) { clearInterval(gyroIv); return; }
-gyroAngle += (Math.random() - .5) * 8;
-const bh = document.getElementById(‘gyro-bar-h’);
-const bv = document.getElementById(‘gyro-bar-v’);
-if (bh) bh.style.top = (45 + Math.sin(gyroAngle * .05) * 15) + ‘%’;
-if (bv) bv.style.left = (45 + Math.cos(gyroAngle * .04) * 15) + ‘%’;
-}, 80);
+  if (gyroIv) clearInterval(gyroIv);
+  gyroIv = setInterval(() => {
+    if (!document.getElementById('gyro-toggle')?.checked) { clearInterval(gyroIv); return; }
+    gyroAngle += (Math.random() - .5) * 8;
+    const bh = document.getElementById('gyro-bar-h');
+    const bv = document.getElementById('gyro-bar-v');
+    if (bh) bh.style.top = (45 + Math.sin(gyroAngle * .05) * 15) + '%';
+    if (bv) bv.style.left = (45 + Math.cos(gyroAngle * .04) * 15) + '%';
+  }, 80);
 }
 
 // ── OPTIMIZE PAGE ─────────────────────
 const issueData = [
-{ level: ‘critical’, name: ‘Bộ nhớ RAM cao bất thường’, desc: ‘Background app chiếm 68% RAM’, fixed: false },
-{ level: ‘warn’,     name: ‘Nhiệt độ CPU tăng’, desc: ‘CPU đang chạy ở 72°C — nên cool down’, fixed: false },
-{ level: ‘critical’, name: ‘Ping không ổn định’, desc: ‘Packet loss 3.2% — ảnh hưởng game’, fixed: false },
-{ level: ‘warn’,     name: ‘Storage đầy 78%’, desc: ‘Cache game chiếm 2.4GB bộ nhớ’, fixed: false },
-{ level: ‘ok’,       name: ‘GPU hoạt động bình thường’, desc: ‘GPU Load 45% — optimal’, fixed: true },
-{ level: ‘ok’,       name: ‘Kết nối WiFi ổn định’, desc: ‘Signal strength: -52dBm’, fixed: true },
+  { level: 'critical', name: 'Bộ nhớ RAM cao bất thường', desc: 'Background app chiếm 68% RAM', fixed: false },
+  { level: 'warn',     name: 'Nhiệt độ CPU tăng', desc: 'CPU đang chạy ở 72°C — nên cool down', fixed: false },
+  { level: 'critical', name: 'Ping không ổn định', desc: 'Packet loss 3.2% — ảnh hưởng game', fixed: false },
+  { level: 'warn',     name: 'Storage đầy 78%', desc: 'Cache game chiếm 2.4GB bộ nhớ', fixed: false },
+  { level: 'ok',       name: 'GPU hoạt động bình thường', desc: 'GPU Load 45% — optimal', fixed: true },
+  { level: 'ok',       name: 'Kết nối WiFi ổn định', desc: 'Signal strength: -52dBm', fixed: true },
 ];
 
 function buildIssuesList() {
-const list = document.getElementById(‘issues-list’);
-if (!list) return;
-issueData.forEach((issue, i) => {
-const el = document.createElement(‘div’); el.className = ‘issue-item’; el.id = ‘issue-’ + i;
-el.innerHTML = `<div class="issue-dot ${issue.level}"></div> <div class="issue-info"><div class="issue-name">${issue.name}</div><div class="issue-desc">${issue.desc}</div></div> ${!issue.fixed ? `<button class="issue-fix fix-btn" onclick="fixIssue(${i},this)">FIX</button>` : '<span class="issue-fix fixed">FIXED</span>'}`;
-list.appendChild(el);
-});
+  const list = document.getElementById('issues-list');
+  if (!list) return;
+  issueData.forEach((issue, i) => {
+    const el = document.createElement('div'); el.className = 'issue-item'; el.id = 'issue-' + i;
+    el.innerHTML = `<div class="issue-dot ${issue.level}"></div>
+      <div class="issue-info"><div class="issue-name">${issue.name}</div><div class="issue-desc">${issue.desc}</div></div>
+      ${!issue.fixed ? `<button class="issue-fix fix-btn" onclick="fixIssue(${i},this)">FIX</button>` : '<span class="issue-fix fixed">FIXED</span>'}`;
+    list.appendChild(el);
+  });
 }
 
 function fixIssue(idx, btn) {
-snd(‘ok’);
-issueData[idx].fixed = true;
-btn.className = ‘issue-fix fixed’; btn.textContent = ‘FIXED’;
-const dot = document.getElementById(‘issue-’ + idx)?.querySelector(’.issue-dot’);
-if (dot) { dot.className = ‘issue-dot ok’; }
-toast(’✅ Đã sửa: ’ + issueData[idx].name);
-if (idx === 0) { sim.ram = Math.max(18, sim.ram - rn(10, 18)); updateCards(sim); }
-if (idx === 1) { sim.tmp = Math.max(34, sim.tmp - rn(6, 12)); updateCards(sim); }
-if (idx === 2) { document.getElementById(‘net-ping’).textContent = rn(4, 12) + ‘ms’; }
+  snd('ok');
+  issueData[idx].fixed = true;
+  btn.className = 'issue-fix fixed'; btn.textContent = 'FIXED';
+  const dot = document.getElementById('issue-' + idx)?.querySelector('.issue-dot');
+  if (dot) { dot.className = 'issue-dot ok'; }
+  toast('✅ Đã sửa: ' + issueData[idx].name);
+  if (idx === 0) { sim.ram = Math.max(18, sim.ram - rn(10, 18)); updateCards(sim); }
+  if (idx === 1) { sim.tmp = Math.max(34, sim.tmp - rn(6, 12)); updateCards(sim); }
+  if (idx === 2) { document.getElementById('net-ping').textContent = rn(4, 12) + 'ms'; }
 }
 
 function runScan() {
-snd(‘boost’);
-const beam = document.getElementById(‘scan-beam’);
-const status = document.getElementById(‘scan-status’);
-if (beam) beam.style.animationPlayState = ‘running’;
-if (status) status.textContent = ‘SCANNING SYSTEM…’;
-toast(‘🔍 Đang quét hệ thống…’, ‘#00e5ff’);
-setTimeout(() => {
-if (status) status.textContent = ‘FOUND ’ + issueData.filter(i => !i.fixed).length + ’ ISSUES’;
-snd(‘ok’);
-toast(‘✅ Quét xong — tìm thấy ’ + issueData.filter(i => !i.fixed).length + ’ vấn đề’, ‘#ff1a1a’);
-}, 2500);
+  snd('boost');
+  const beam = document.getElementById('scan-beam');
+  const status = document.getElementById('scan-status');
+  if (beam) beam.style.animationPlayState = 'running';
+  if (status) status.textContent = 'SCANNING SYSTEM...';
+  toast('🔍 Đang quét hệ thống...', '#00e5ff');
+  setTimeout(() => {
+    if (status) status.textContent = 'FOUND ' + issueData.filter(i => !i.fixed).length + ' ISSUES';
+    snd('ok');
+    toast('✅ Quét xong — tìm thấy ' + issueData.filter(i => !i.fixed).length + ' vấn đề', '#ff1a1a');
+  }, 2500);
 }
 
 function fixAll() {
-snd(‘boost’);
-issueData.forEach((issue, i) => {
-if (!issue.fixed) setTimeout(() => fixIssue(i, document.querySelector(`#issue-${i} .fix-btn`)), i * 300);
-});
-setTimeout(() => {
-toast(‘🔥 Tất cả vấn đề đã được xử lý!’, ‘#39ff14’);
-updateScore();
-}, issueData.filter(i => !i.fixed).length * 300 + 400);
+  snd('boost');
+  issueData.forEach((issue, i) => {
+    if (!issue.fixed) setTimeout(() => fixIssue(i, document.querySelector(`#issue-${i} .fix-btn`)), i * 300);
+  });
+  setTimeout(() => {
+    toast('🔥 Tất cả vấn đề đã được xử lý!', '#39ff14');
+    updateScore();
+  }, issueData.filter(i => !i.fixed).length * 300 + 400);
 }
 
 // OPT TOOLS
 const optTools = [
-{ icon: ‘<path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6" stroke="#ff1a1a" stroke-width="2"/>’, name: ‘Deep Clean’, desc: ‘Xoá cache & file rác hệ thống’, live: true },
-{ icon: ‘<path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="#ffc400" stroke-width="2"/>’, name: ‘CPU Boost’, desc: ‘Tăng xung nhịp & ưu tiên process’, live: false },
-{ icon: ‘<rect x="2" y="6" width="20" height="14" rx="3" stroke="#00e5ff" stroke-width="2"/><path d="M8 13h4" stroke="#00e5ff" stroke-width="2"/>’, name: ‘RAM Flush’, desc: ‘Giải phóng RAM nhanh’, live: true },
-{ icon: ‘<circle cx="12" cy="12" r="9" stroke="#39ff14" stroke-width="1.5"/><path d="M12 3c-2 3-3 6-3 9s1 6 3 9M3 12h18" stroke="#39ff14" stroke-width="1.5"/>’, name: ‘DNS Accelerate’, desc: ‘Đổi DNS nhanh cho game’, live: false },
-{ icon: ‘<path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9" stroke="#c084fc" stroke-width="2"/>’, name: ‘App Terminator’, desc: ‘Kill tất cả app nền’, live: false },
-{ icon: ‘<path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4" stroke="#ff8800" stroke-width="2"/>’, name: ‘Thermal Reset’, desc: ‘Reset bộ tản nhiệt phần mềm’, live: true },
+  { icon: '<path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6" stroke="#ff1a1a" stroke-width="2"/>', name: 'Deep Clean', desc: 'Xoá cache & file rác hệ thống', live: true },
+  { icon: '<path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="#ffc400" stroke-width="2"/>', name: 'CPU Boost', desc: 'Tăng xung nhịp & ưu tiên process', live: false },
+  { icon: '<rect x="2" y="6" width="20" height="14" rx="3" stroke="#00e5ff" stroke-width="2"/><path d="M8 13h4" stroke="#00e5ff" stroke-width="2"/>', name: 'RAM Flush', desc: 'Giải phóng RAM nhanh', live: true },
+  { icon: '<circle cx="12" cy="12" r="9" stroke="#39ff14" stroke-width="1.5"/><path d="M12 3c-2 3-3 6-3 9s1 6 3 9M3 12h18" stroke="#39ff14" stroke-width="1.5"/>', name: 'DNS Accelerate', desc: 'Đổi DNS nhanh cho game', live: false },
+  { icon: '<path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9" stroke="#c084fc" stroke-width="2"/>', name: 'App Terminator', desc: 'Kill tất cả app nền', live: false },
+  { icon: '<path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4" stroke="#ff8800" stroke-width="2"/>', name: 'Thermal Reset', desc: 'Reset bộ tản nhiệt phần mềm', live: true },
 ];
 
 function buildOptTools() {
-const g = document.getElementById(‘opt-tools-grid’);
-if (!g) return;
-optTools.forEach(t => {
-const el = document.createElement(‘div’); el.className = ‘ot’;
-el.innerHTML = `${t.live ? '<div class="ot-badge"></div>' : ''} <div class="ot-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none">${t.icon}</svg></div> <div class="ot-name">${t.name}</div><div class="ot-desc">${t.desc}</div>`;
-el.onclick = () => { snd(‘click’); runOptTool(t.name); };
-g.appendChild(el);
-});
+  const g = document.getElementById('opt-tools-grid');
+  if (!g) return;
+  optTools.forEach(t => {
+    const el = document.createElement('div'); el.className = 'ot';
+    el.innerHTML = `${t.live ? '<div class="ot-badge"></div>' : ''}
+      <div class="ot-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none">${t.icon}</svg></div>
+      <div class="ot-name">${t.name}</div><div class="ot-desc">${t.desc}</div>`;
+    el.onclick = () => { snd('click'); runOptTool(t.name); };
+    g.appendChild(el);
+  });
 }
 
 function runOptTool(name) {
-toast(‘⚡ ’ + name + ’ đang chạy…’, ‘#ff1a1a’);
-setTimeout(() => {
-sim.ram = Math.max(18, sim.ram - rn(2, 8)); updateCards(sim);
-toast(‘✅ ’ + name + ’ hoàn thành!’, ‘#39ff14’); snd(‘ok’);
-}, 1400);
+  toast('⚡ ' + name + ' đang chạy...', '#ff1a1a');
+  setTimeout(() => {
+    sim.ram = Math.max(18, sim.ram - rn(2, 8)); updateCards(sim);
+    toast('✅ ' + name + ' hoàn thành!', '#39ff14'); snd('ok');
+  }, 1400);
 }
 
 // CLEAN TOOLS
 const cleanData = [
-{ icon: ‘<path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6" stroke="#ff1a1a" stroke-width="2"/>’, title: ‘Game Cache Cleaner’, desc: ‘Xoá cache Free Fire, FF MAX’, size: ‘340MB’ },
-{ icon: ‘<rect x="2" y="3" width="20" height="14" rx="2" stroke="#00e5ff" stroke-width="2"/>’, title: ‘System Log Cleaner’, desc: ‘Xoá log hệ thống & crash report’, size: ‘128MB’ },
-{ icon: ‘<circle cx="12" cy="12" r="9" stroke="#ffc400" stroke-width="1.5"/>’, title: ‘Thumbnail Cache’, desc: ‘Xoá ảnh thumbnail & preview’, size: ‘85MB’ },
+  { icon: '<path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6" stroke="#ff1a1a" stroke-width="2"/>', title: 'Game Cache Cleaner', desc: 'Xoá cache Free Fire, FF MAX', size: '340MB' },
+  { icon: '<rect x="2" y="3" width="20" height="14" rx="2" stroke="#00e5ff" stroke-width="2"/>', title: 'System Log Cleaner', desc: 'Xoá log hệ thống & crash report', size: '128MB' },
+  { icon: '<circle cx="12" cy="12" r="9" stroke="#ffc400" stroke-width="1.5"/>', title: 'Thumbnail Cache', desc: 'Xoá ảnh thumbnail & preview', size: '85MB' },
 ];
 
 function buildCleanTools() {
-const list = document.getElementById(‘clean-list’);
-if (!list) return;
-cleanData.forEach((c, i) => {
-const el = document.createElement(‘div’); el.className = ‘opt-clean-card’;
-el.innerHTML = `<div class="occ-header"> <div class="occ-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none">${c.icon}</svg></div> <div class="occ-info"><div class="occ-title">${c.title}</div><div class="occ-desc">${c.desc} · <b style="color:var(--r1)">${c.size}</b></div></div> <button class="occ-run" onclick="runClean(${i},this)">RUN</button> </div> <div class="occ-progress"> <div class="occ-bar"><div class="occ-fill" id="clean-fill-${i}" style="width:0%"></div></div> <div class="occ-stat" id="clean-stat-${i}">Ready to clean</div> </div>`;
-list.appendChild(el);
-});
+  const list = document.getElementById('clean-list');
+  if (!list) return;
+  cleanData.forEach((c, i) => {
+    const el = document.createElement('div'); el.className = 'opt-clean-card';
+    el.innerHTML = `<div class="occ-header">
+        <div class="occ-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none">${c.icon}</svg></div>
+        <div class="occ-info"><div class="occ-title">${c.title}</div><div class="occ-desc">${c.desc} · <b style="color:var(--r1)">${c.size}</b></div></div>
+        <button class="occ-run" onclick="runClean(${i},this)">RUN</button>
+      </div>
+      <div class="occ-progress">
+        <div class="occ-bar"><div class="occ-fill" id="clean-fill-${i}" style="width:0%"></div></div>
+        <div class="occ-stat" id="clean-stat-${i}">Ready to clean</div>
+      </div>`;
+    list.appendChild(el);
+  });
 }
 
 function runClean(i, btn) {
-snd(‘boost’); btn.disabled = true; btn.textContent = ‘…’;
-const fill = document.getElementById(‘clean-fill-’ + i);
-const stat = document.getElementById(‘clean-stat-’ + i);
-let p = 0;
-const iv = setInterval(() => {
-p += rn(8, 18); if (p > 100) p = 100;
-if (fill) fill.style.width = p + ‘%’;
-if (stat) stat.textContent = ’Cleaning… ’ + p + ‘%’;
-if (p >= 100) {
-clearInterval(iv);
-if (stat) stat.textContent = ‘✓ Cleaned ’ + cleanData[i].size + ’ freed!’;
-btn.textContent = ‘DONE’; snd(‘ok’);
-toast(‘🧹 ’ + cleanData[i].title + ’ — ’ + cleanData[i].size + ’ freed!’, ‘#39ff14’);
-sim.ram = Math.max(18, sim.ram - rn(3, 8)); updateCards(sim);
+  snd('boost'); btn.disabled = true; btn.textContent = '...';
+  const fill = document.getElementById('clean-fill-' + i);
+  const stat = document.getElementById('clean-stat-' + i);
+  let p = 0;
+  const iv = setInterval(() => {
+    p += rn(8, 18); if (p > 100) p = 100;
+    if (fill) fill.style.width = p + '%';
+    if (stat) stat.textContent = 'Cleaning... ' + p + '%';
+    if (p >= 100) {
+      clearInterval(iv);
+      if (stat) stat.textContent = '✓ Cleaned ' + cleanData[i].size + ' freed!';
+      btn.textContent = 'DONE'; snd('ok');
+      toast('🧹 ' + cleanData[i].title + ' — ' + cleanData[i].size + ' freed!', '#39ff14');
+      sim.ram = Math.max(18, sim.ram - rn(3, 8)); updateCards(sim);
+    }
+  }, 150);
 }
-}, 150);
-}
+
+
 
 // ═══════════════════════════════════════════════════════
 // BLOODCORE KEY SYSTEM — y chang spernew (Supabase)
 // ═══════════════════════════════════════════════════════
 
-const SUPABASE_URL       = ‘https://pjhdnvbssbcmbhepevcn.supabase.co’;
-const SUPABASE_KEY       = ‘eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBqaGRudmJzc2JjbWJoZXBldmNuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ2NTk4MzMsImV4cCI6MjA5MDIzNTgzM30.00MnFaNSNOJEHJO_OPbsMu45EftknC9o4_ukx5UHaE4’;
-const SUPABASE_WRITE_KEY = ‘eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBqaGRudmJzc2JjbWJoZXBldmNuIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NDY1OTgzMywiZXhwIjoyMDkwMjM1ODMzfQ.63NAUMk4y-25eyjy9n96BhK3grB0b_64Ng04wIsSDVM’;
+const SUPABASE_URL       = 'https://pjhdnvbssbcmbhepevcn.supabase.co';
+const SUPABASE_KEY       = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBqaGRudmJzc2JjbWJoZXBldmNuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ2NTk4MzMsImV4cCI6MjA5MDIzNTgzM30.00MnFaNSNOJEHJO_OPbsMu45EftknC9o4_ukx5UHaE4';
+const SUPABASE_WRITE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBqaGRudmJzc2JjbWJoZXBldmNuIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NDY1OTgzMywiZXhwIjoyMDkwMjM1ODMzfQ.63NAUMk4y-25eyjy9n96BhK3grB0b_64Ng04wIsSDVM';
 
 // ── DEVICE ID ──
 function getDeviceId() {
-let id = localStorage.getItem(‘bc_device_id’);
-if (!id) {
-const ua   = navigator.userAgent;
-const scr  = `${screen.width}x${screen.height}x${screen.colorDepth}`;
-const lang = navigator.language;
-const tz   = Intl.DateTimeFormat().resolvedOptions().timeZone;
-const cores= navigator.hardwareConcurrency || 0;
-const mem  = navigator.deviceMemory || 0;
-const raw  = `${ua}|${scr}|${lang}|${tz}|${cores}|${mem}`;
-let hash = 0;
-for (let i = 0; i < raw.length; i++) { hash = ((hash << 5) - hash) + raw.charCodeAt(i); hash |= 0; }
-id = ‘bc_’ + Math.abs(hash).toString(16);
-localStorage.setItem(‘bc_device_id’, id);
-}
-return id;
+  let id = localStorage.getItem('bc_device_id');
+  if (!id) {
+    const ua   = navigator.userAgent;
+    const scr  = `${screen.width}x${screen.height}x${screen.colorDepth}`;
+    const lang = navigator.language;
+    const tz   = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const cores= navigator.hardwareConcurrency || 0;
+    const mem  = navigator.deviceMemory || 0;
+    const raw  = `${ua}|${scr}|${lang}|${tz}|${cores}|${mem}`;
+    let hash = 0;
+    for (let i = 0; i < raw.length; i++) { hash = ((hash << 5) - hash) + raw.charCodeAt(i); hash |= 0; }
+    id = 'bc_' + Math.abs(hash).toString(16);
+    localStorage.setItem('bc_device_id', id);
+  }
+  return id;
 }
 
 // ── SHOW / HIDE MODAL ──
 function showKey() {
-document.getElementById(‘km’).style.display = ‘flex’;
-document.getElementById(‘km-inp’).value = ‘’;
-document.getElementById(‘km-msg’).textContent = ‘’;
-setTimeout(() => document.getElementById(‘km-inp’).focus(), 100);
+  document.getElementById('km').style.display = 'flex';
+  document.getElementById('km-inp').value = '';
+  document.getElementById('km-msg').textContent = '';
+  setTimeout(() => document.getElementById('km-inp').focus(), 100);
 }
 
 function hideKey() {
-const isElite = localStorage.getItem(‘elite_key’) && localStorage.getItem(‘elite_expires’)
-&& new Date(localStorage.getItem(‘elite_expires’)) > new Date();
-if (!isElite) { toast(‘⚠️ Vui lòng nhập key để tiếp tục!’); return; }
-document.getElementById(‘km’).style.display = ‘none’;
+  const isElite = localStorage.getItem('elite_key') && localStorage.getItem('elite_expires')
+    && new Date(localStorage.getItem('elite_expires')) > new Date();
+  if (!isElite) { toast('⚠️ Vui lòng nhập key để tiếp tục!'); return; }
+  document.getElementById('km').style.display = 'none';
 }
 
 // ── TAB SWITCHER ──
 function switchKTab(tab) {
-document.getElementById(‘ktab-panel-activate’).style.display = tab === ‘activate’ ? ‘’ : ‘none’;
-document.getElementById(‘ktab-panel-info’).style.display     = tab === ‘info’     ? ‘’ : ‘none’;
-document.getElementById(‘ktab-activate’).classList.toggle(‘km-tab-on’, tab === ‘activate’);
-document.getElementById(‘ktab-info’).classList.toggle(‘km-tab-on’,     tab === ‘info’);
+  document.getElementById('ktab-panel-activate').style.display = tab === 'activate' ? '' : 'none';
+  document.getElementById('ktab-panel-info').style.display     = tab === 'info'     ? '' : 'none';
+  document.getElementById('ktab-activate').classList.toggle('km-tab-on', tab === 'activate');
+  document.getElementById('ktab-info').classList.toggle('km-tab-on',     tab === 'info');
 }
 
 // ── ACTIVATE KEY ──
 async function activateKey() {
-const key   = document.getElementById(‘km-inp’).value.trim();
-const msgEl = document.getElementById(‘km-msg’);
-const btn   = document.getElementById(‘km-act-btn’);
-const devId = getDeviceId();
+  const key   = document.getElementById('km-inp').value.trim();
+  const msgEl = document.getElementById('km-msg');
+  const btn   = document.getElementById('km-act-btn');
+  const devId = getDeviceId();
 
-if (!key) { msgEl.style.color = ‘#ff4444’; msgEl.textContent = ‘⚠️ Vui lòng nhập key!’; return; }
+  if (!key) { msgEl.style.color = '#ff4444'; msgEl.textContent = '⚠️ Vui lòng nhập key!'; return; }
 
-btn.textContent = ‘ĐANG KIỂM TRA…’;
-btn.disabled = true;
-msgEl.style.color = ‘#aaa’;
-msgEl.textContent = ‘Đang xác thực với server…’;
+  btn.textContent = 'ĐANG KIỂM TRA...';
+  btn.disabled = true;
+  msgEl.style.color = '#aaa';
+  msgEl.textContent = 'Đang xác thực với server...';
 
-try {
-const res = await fetch(
-`${SUPABASE_URL}/rest/v1/keys?key=eq.${encodeURIComponent(key)}&select=expires_at,is_active,device_id`,
-{ headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }
-);
-const data = await res.json();
+  try {
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/keys?key=eq.${encodeURIComponent(key)}&select=expires_at,is_active,device_id`,
+      { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }
+    );
+    const data = await res.json();
 
-```
-if (!data.length) {
-  msgEl.style.color = '#ff4444'; msgEl.textContent = '❌ Key không tồn tại';
-} else {
-  const { expires_at, is_active, device_id: boundDevice } = data[0];
-  if (!is_active) {
-    msgEl.style.color = '#ff4444'; msgEl.textContent = '❌ Key đã bị thu hồi';
-  } else if (new Date(expires_at) < new Date()) {
-    msgEl.style.color = '#ff4444'; msgEl.textContent = '❌ Key đã hết hạn';
-  } else if (boundDevice && boundDevice !== devId) {
-    msgEl.style.color = '#ff4444'; msgEl.textContent = '❌ Key đã được dùng trên thiết bị khác';
-  } else {
-    if (!boundDevice) {
-      const bindRes = await fetch(
-        `${SUPABASE_URL}/rest/v1/keys?key=eq.${encodeURIComponent(key)}`,
-        {
-          method: 'PATCH',
-          headers: {
-            apikey: SUPABASE_WRITE_KEY,
-            Authorization: `Bearer ${SUPABASE_WRITE_KEY}`,
-            'Content-Type': 'application/json',
-            Prefer: 'return=minimal'
-          },
-          body: JSON.stringify({ device_id: devId })
+    if (!data.length) {
+      msgEl.style.color = '#ff4444'; msgEl.textContent = '❌ Key không tồn tại';
+    } else {
+      const { expires_at, is_active, device_id: boundDevice } = data[0];
+      if (!is_active) {
+        msgEl.style.color = '#ff4444'; msgEl.textContent = '❌ Key đã bị thu hồi';
+      } else if (new Date(expires_at) < new Date()) {
+        msgEl.style.color = '#ff4444'; msgEl.textContent = '❌ Key đã hết hạn';
+      } else if (boundDevice && boundDevice !== devId) {
+        msgEl.style.color = '#ff4444'; msgEl.textContent = '❌ Key đã được dùng trên thiết bị khác';
+      } else {
+        if (!boundDevice) {
+          const bindRes = await fetch(
+            `${SUPABASE_URL}/rest/v1/keys?key=eq.${encodeURIComponent(key)}`,
+            {
+              method: 'PATCH',
+              headers: {
+                apikey: SUPABASE_WRITE_KEY,
+                Authorization: `Bearer ${SUPABASE_WRITE_KEY}`,
+                'Content-Type': 'application/json',
+                Prefer: 'return=minimal'
+              },
+              body: JSON.stringify({ device_id: devId })
+            }
+          );
+          if (!bindRes.ok) {
+            msgEl.style.color = '#ff4444'; msgEl.textContent = '❌ Lỗi bind thiết bị, thử lại';
+            btn.textContent = 'KÍCH HOẠT'; btn.disabled = false;
+            return;
+          }
         }
-      );
-      if (!bindRes.ok) {
-        msgEl.style.color = '#ff4444'; msgEl.textContent = '❌ Lỗi bind thiết bị, thử lại';
-        btn.textContent = 'KÍCH HOẠT'; btn.disabled = false;
-        return;
+        const exp = expires_at.slice(0, 10);
+        localStorage.setItem('elite_key', key);
+        localStorage.setItem('elite_expires', exp);
+        msgEl.style.color = '#39ff14'; msgEl.textContent = '✅ ELITE ACTIVATED!';
+        snd('ok');
+        setTimeout(() => {
+          document.getElementById('km').style.display = 'none';
+          unlockElite(exp);
+        }, 900);
       }
     }
-    const exp = expires_at.slice(0, 10);
-    localStorage.setItem('elite_key', key);
-    localStorage.setItem('elite_expires', exp);
-    msgEl.style.color = '#39ff14'; msgEl.textContent = '✅ ELITE ACTIVATED!';
-    snd('ok');
-    setTimeout(() => {
-      document.getElementById('km').style.display = 'none';
-      unlockElite(exp);
-    }, 900);
+  } catch (e) {
+    msgEl.style.color = '#ff4444';
+    msgEl.textContent = '❌ Không kết nối được server';
   }
-}
-```
 
-} catch (e) {
-msgEl.style.color = ‘#ff4444’;
-msgEl.textContent = ‘❌ Không kết nối được server’;
-}
-
-btn.textContent = ‘KÍCH HOẠT’; btn.disabled = false;
+  btn.textContent = 'KÍCH HOẠT'; btn.disabled = false;
 }
 
 // ── UNLOCK ELITE ──
 function unlockElite(expiresAt) {
-const badge = document.getElementById(‘tier-badge’);
-if (badge) { badge.textContent = ‘ELITE’; badge.className = ‘tb-badge elite’; }
-const aboutTier = document.getElementById(‘about-tier’);
-if (aboutTier) aboutTier.textContent = ‘ELITE’;
+  const badge = document.getElementById('tier-badge');
+  if (badge) { badge.textContent = 'ELITE'; badge.className = 'tb-badge elite'; }
+  const aboutTier = document.getElementById('about-tier');
+  if (aboutTier) aboutTier.textContent = 'ELITE';
 
-const wall = document.querySelector(’.elite-wall’);
-if (wall) wall.style.display = ‘none’;
+  const wall = document.querySelector('.elite-wall');
+  if (wall) wall.style.display = 'none';
 
-if (!document.getElementById(‘elite-banner’)) {
-const banner = document.createElement(‘div’);
-banner.id = ‘elite-banner’;
-banner.style.cssText = ‘background:linear-gradient(90deg,#ff1a1a11,#ff1a1a22);border-bottom:1px solid #ff1a1a44;color:#ff1a1a;padding:6px 16px;text-align:center;font-size:10px;font-weight:700;letter-spacing:2px;font-family:“DM Mono”,monospace’;
-banner.innerHTML = `👑 ELITE ACTIVE &nbsp;|&nbsp; HẾT HẠN: ${expiresAt}`;
-document.getElementById(‘app’).prepend(banner);
-}
+  if (!document.getElementById('elite-banner')) {
+    const banner = document.createElement('div');
+    banner.id = 'elite-banner';
+    banner.style.cssText = 'background:linear-gradient(90deg,#ff1a1a11,#ff1a1a22);border-bottom:1px solid #ff1a1a44;color:#ff1a1a;padding:6px 16px;text-align:center;font-size:10px;font-weight:700;letter-spacing:2px;font-family:"DM Mono",monospace';
+    banner.innerHTML = `👑 ELITE ACTIVE &nbsp;|&nbsp; HẾT HẠN: ${expiresAt}`;
+    document.getElementById('app').prepend(banner);
+  }
 
-toast(’👑 ELITE UNLOCKED! Hết hạn ’ + expiresAt, ‘#ffc400’);
+  toast('👑 ELITE UNLOCKED! Hết hạn ' + expiresAt, '#ffc400');
 }
 
 // ── CHECK SAVED KEY — gọi từ initApp() ──
 async function checkSavedKey() {
-const key = localStorage.getItem(‘elite_key’);
-const exp = localStorage.getItem(‘elite_expires’);
+  const key = localStorage.getItem('elite_key');
+  const exp = localStorage.getItem('elite_expires');
 
-// Không có key hoặc hết hạn → hiện modal ngay, không đợi network
-if (!key || !exp || new Date(exp) <= new Date()) {
-localStorage.removeItem(‘elite_key’);
-localStorage.removeItem(‘elite_expires’);
-showKey();
-return;
-}
+  // Không có key hoặc hết hạn → hiện modal ngay, không đợi network
+  if (!key || !exp || new Date(exp) <= new Date()) {
+    localStorage.removeItem('elite_key');
+    localStorage.removeItem('elite_expires');
+    showKey();
+    return;
+  }
 
-// Có key hợp lệ trong localStorage → unlock ngay, verify Supabase ngầm
-unlockElite(exp);
+  // Có key hợp lệ trong localStorage → unlock ngay, verify Supabase ngầm
+  unlockElite(exp);
 
-// Verify ngầm với Supabase (không block UI)
-try {
-const devId = getDeviceId();
-const ctrl  = new AbortController();
-setTimeout(() => ctrl.abort(), 6000); // timeout 6s
-const res = await fetch(
-`${SUPABASE_URL}/rest/v1/keys?key=eq.${encodeURIComponent(key)}&select=expires_at,is_active,device_id`,
-{ headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` }, signal: ctrl.signal }
-);
-const data = await res.json();
+  // Verify ngầm với Supabase (không block UI)
+  try {
+    const devId = getDeviceId();
+    const ctrl  = new AbortController();
+    setTimeout(() => ctrl.abort(), 6000); // timeout 6s
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/keys?key=eq.${encodeURIComponent(key)}&select=expires_at,is_active,device_id`,
+      { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` }, signal: ctrl.signal }
+    );
+    const data = await res.json();
 
-```
-if (!data.length || !data[0].is_active || new Date(data[0].expires_at) < new Date()
-    || (data[0].device_id && data[0].device_id !== devId)) {
-  // Key không hợp lệ → thu hồi và bắt nhập lại
-  localStorage.removeItem('elite_key');
-  localStorage.removeItem('elite_expires');
-  // Xoá banner nếu có
-  const banner = document.getElementById('elite-banner');
-  if (banner) banner.remove();
-  const badge = document.getElementById('tier-badge');
-  if (badge) { badge.textContent = 'FREE'; badge.className = 'tb-badge'; }
-  showKey();
-}
-// Nếu valid → đã unlock rồi, không cần làm gì thêm
-```
-
-} catch (e) {
-// Mất mạng hoặc timeout → giữ nguyên trạng thái đã unlock
-}
+    if (!data.length || !data[0].is_active || new Date(data[0].expires_at) < new Date()
+        || (data[0].device_id && data[0].device_id !== devId)) {
+      // Key không hợp lệ → thu hồi và bắt nhập lại
+      localStorage.removeItem('elite_key');
+      localStorage.removeItem('elite_expires');
+      // Xoá banner nếu có
+      const banner = document.getElementById('elite-banner');
+      if (banner) banner.remove();
+      const badge = document.getElementById('tier-badge');
+      if (badge) { badge.textContent = 'FREE'; badge.className = 'tb-badge'; }
+      showKey();
+    }
+    // Nếu valid → đã unlock rồi, không cần làm gì thêm
+  } catch (e) {
+    // Mất mạng hoặc timeout → giữ nguyên trạng thái đã unlock
+  }
 }
 
 // ── HELPER: COPY DEVICE ID ──
 function copyDeviceId() {
-const id = getDeviceId();
-navigator.clipboard?.writeText(id).then(() => toast(‘📋 Device ID đã copy!’)).catch(() => toast(’ID: ’ + id));
+  const id = getDeviceId();
+  navigator.clipboard?.writeText(id).then(() => toast('📋 Device ID đã copy!')).catch(() => toast('ID: ' + id));
 }
 
 // ── HELPER: LOGOUT KEY ──
 function logoutKey() {
-if (!confirm(‘Xoá key khỏi thiết bị này?’)) return;
-localStorage.removeItem(‘elite_key’);
-localStorage.removeItem(‘elite_expires’);
-location.reload();
+  if (!confirm('Xoá key khỏi thiết bị này?')) return;
+  localStorage.removeItem('elite_key');
+  localStorage.removeItem('elite_expires');
+  location.reload();
+}
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var km = document.getElementById('km');
+  if (km) km.addEventListener('click', function(e) { if (e.target === this) hideKey(); });
+  var devEl = document.getElementById('dev-id-display');
+  if (devEl) devEl.textContent = getDeviceId();
+});
+function setBattery(el, mode) {
+  snd('click');
+  document.querySelectorAll('[onclick^="setBattery"]').forEach(function(b) {
+    b.style.background = '';
+    var label = b.querySelector('div:nth-child(2)');
+    if (label) label.style.color = 'var(--txt2)';
+    b.style.borderTop = '';
+  });
+  el.style.background = 'var(--rg4)';
+  var lbl = el.querySelector('div:nth-child(2)');
+  if (lbl) lbl.style.color = 'var(--r1)';
+  el.style.borderTop = '2px solid var(--r1)';
+  var msgs = { save: '🔋 Battery Saver ON', balance: '⚖️ Balanced mode', perf: '⚡ Performance mode' };
+  toast(msgs[mode] || mode);
 }
 </script>
 
