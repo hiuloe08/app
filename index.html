@@ -1,1755 +1,583 @@
 <!DOCTYPE html>
-
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>BLOODCORE — Elite Gaming Optimizer</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
-<style>
-:root {
-  --red:    #ff1a1a;
-  --red2:   #cc0000;
-  --red3:   rgba(255,26,26,0.18);
-  --red4:   rgba(255,26,26,0.08);
-  --crimson:#ff3333;
-  --gold:   #ffcc00;
-  --gold2:  #ff9900;
-  --orange: #ff6600;
-  --bg:     #0a0202;
-  --bg2:    #100505;
-  --bg3:    #150808;
-  --bg4:    #1a0a0a;
-  --card:   #0f0404;
-  --card2:  #140606;
-  --border:  rgba(255,26,26,0.12);
-  --border2: rgba(255,26,26,0.28);
-  --text:    #ffe4e4;
-  --text2:   #b06060;
-  --text3:   #501818;
-  --font-main: 'Orbitron', monospace;
-  --font-body: 'Rajdhani', sans-serif;
-  --font-mono: 'Share Tech Mono', monospace;
-  --nav-h: 66px;
-  --top-h: 54px;
-  --safe-bottom: env(safe-area-inset-bottom, 0px);
-  --glow-r: 0 0 10px #ff1a1a, 0 0 30px rgba(255,26,26,0.4);
-  --glow-g: 0 0 10px #ffcc00, 0 0 30px rgba(255,204,0,0.3);
-}
-
-- { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
-  html,body { height:100%; overflow:hidden; background:var(–bg); color:var(–text); font-family:var(–font-body); }
-
-body::after {
-content:’’; position:fixed; inset:0; pointer-events:none; z-index:9997;
-background:repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.06) 2px, rgba(0,0,0,0.06) 4px);
-}
-
-/* ══ SPLASH ══ */
-#splash-screen {
-position:fixed; inset:0; z-index:1000;
-background:radial-gradient(ellipse 140% 110% at 50% 0%, #1a0505 0%, #0a0202 65%);
-display:flex; align-items:center; justify-content:center; overflow:hidden;
-}
-.splash-bg {
-position:absolute; inset:0;
-background:
-radial-gradient(ellipse 60% 40% at 25% 50%, rgba(255,26,26,0.06) 0%, transparent 65%),
-radial-gradient(ellipse 60% 40% at 75% 50%, rgba(255,100,0,0.04) 0%, transparent 65%);
-}
-.splash-grid {
-position:absolute; inset:0;
-background-image:
-linear-gradient(rgba(255,26,26,0.05) 1px, transparent 1px),
-linear-gradient(90deg, rgba(255,26,26,0.05) 1px, transparent 1px);
-background-size:50px 50px;
-animation:gridDrift 6s ease-in-out infinite;
-}
-.splash-grid::after {
-content:’’; position:absolute; bottom:0; left:0; right:0; height:50%;
-background:linear-gradient(to bottom, transparent, var(–bg));
-}
-@keyframes gridDrift { 0%,100%{opacity:.4;transform:translateY(0)} 50%{opacity:.9;transform:translateY(-8px)} }
-
-.splash-content { position:relative; z-index:2; display:flex; flex-direction:column; align-items:center; gap:8px; }
-.splash-logo-wrap { position:relative; width:160px; height:160px; display:flex; align-items:center; justify-content:center; }
-.splash-target {
-width:110px; height:110px; display:flex; align-items:center; justify-content:center;
-filter:drop-shadow(0 0 20px rgba(255,26,26,0.8));
-animation:targetPulse 2s ease-in-out infinite;
-}
-@keyframes targetPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.05)} }
-.splash-rings { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; }
-.ring { position:absolute; border-radius:50%; animation:ringPulse 2.8s ease-in-out infinite; }
-.ring-1 { width:120px; height:120px; border:1px solid rgba(255,26,26,0.6); }
-.ring-2 { width:138px; height:138px; border:1px solid rgba(255,26,26,0.3); animation-delay:.45s; }
-.ring-3 { width:156px; height:156px; border:1px solid rgba(255,26,26,0.12); animation-delay:.9s; }
-@keyframes ringPulse { 0%,100%{transform:scale(1);opacity:.5} 50%{transform:scale(1.07);opacity:1} }
-.splash-title {
-font-family:var(–font-main); font-size:34px; font-weight:900; letter-spacing:6px; margin-top:8px;
-background:linear-gradient(135deg, #ff1a1a 0%, #ff6600 50%, #ff1a1a 100%);
--webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
-animation:titlePulse 3s ease-in-out infinite;
-}
-@keyframes titlePulse {
-0%,100%{filter:drop-shadow(0 0 12px rgba(255,26,26,0.8))}
-50%{filter:drop-shadow(0 0 28px rgba(255,26,26,1)) drop-shadow(0 0 55px rgba(255,100,0,0.5))}
-}
-.splash-sub { font-family:var(–font-main); font-size:10px; color:var(–text2); letter-spacing:16px; margin-top:-4px; }
-.splash-tagline { font-family:var(–font-body); font-size:12px; color:rgba(255,100,100,0.5); letter-spacing:4px; margin-top:4px; }
-.splash-loader { width:260px; margin-top:20px; }
-.loader-bar { height:2px; background:rgba(255,26,26,0.15); border-radius:2px; overflow:hidden; }
-.loader-fill { height:100%; background:linear-gradient(90deg,#ff1a1a,#ff6600,#ff1a1a); border-radius:2px; width:0%; transition:width .3s ease; box-shadow:0 0 10px #ff1a1a; }
-.loader-text { font-family:var(–font-mono); font-size:10px; color:rgba(255,80,80,0.5); text-align:center; margin-top:8px; letter-spacing:2px; }
-.splash-version { font-family:var(–font-mono); font-size:9px; color:var(–text3); margin-top:8px; letter-spacing:2px; }
-.splash-particles { position:absolute; inset:0; pointer-events:none; }
-.particle { position:absolute; background:#ff1a1a; border-radius:50%; opacity:0; animation:particleRise 4s ease-out infinite; }
-@keyframes particleRise { 0%{transform:translateY(0);opacity:0} 20%{opacity:.8} 100%{transform:translateY(-120px);opacity:0} }
-
-/* ══ APP LAYOUT ══ */
-#app { display:none; flex-direction:column; height:100%; position:relative; overflow:hidden; }
-
-/* ══ TOPBAR ══ */
-.topbar {
-height:var(–top-h); display:flex; align-items:center; justify-content:space-between;
-padding:0 16px; background:rgba(10,2,2,0.95); backdrop-filter:blur(20px);
-border-bottom:1px solid var(–border); position:relative; z-index:10; flex-shrink:0;
-padding-top:env(safe-area-inset-top,0px);
-}
-.topbar-logo { display:flex; align-items:center; gap:8px; }
-.topbar-logo span { font-family:var(–font-main); font-size:14px; font-weight:900; letter-spacing:2px; color:var(–red); text-shadow:0 0 10px rgba(255,26,26,0.6); }
-.tier-badge {
-font-family:var(–font-main); font-size:9px; font-weight:700; letter-spacing:2px;
-padding:3px 10px; border-radius:3px; background:rgba(255,26,26,0.12); border:1px solid var(–border2); color:var(–red);
-}
-.tier-badge.vip { background:linear-gradient(135deg,rgba(255,204,0,0.2),rgba(255,100,0,0.2)); border-color:rgba(255,204,0,0.5); color:var(–gold); }
-.topbar-right { display:flex; align-items:center; gap:6px; }
-.status-dot { width:7px; height:7px; border-radius:50%; background:#ff1a1a; box-shadow:0 0 8px #ff1a1a; animation:dotBlink 2s ease-in-out infinite; }
-.status-dot.online { background:#00ff88; box-shadow:0 0 8px #00ff88; }
-@keyframes dotBlink { 0%,100%{opacity:1} 50%{opacity:.4} }
-.status-text { font-family:var(–font-mono); font-size:10px; color:var(–text2); letter-spacing:1px; }
-
-/* ══ PAGES ══ */
-.pages-container { flex:1; overflow:hidden; position:relative; }
-.page { position:absolute; inset:0; display:none; flex-direction:column; }
-.page.active { display:flex; }
-.page-scroll { flex:1; overflow-y:auto; padding:16px 16px calc(var(–nav-h) + var(–safe-bottom) + 16px); }
-.page-scroll::-webkit-scrollbar { display:none; }
-
-/* ══ HERO ══ */
-.hero-section { display:flex; align-items:center; justify-content:space-between; padding:16px; background:linear-gradient(135deg,rgba(255,26,26,0.07),rgba(255,100,0,0.03)); border:1px solid var(–border); border-radius:12px; margin-bottom:16px; }
-.hero-title { font-family:var(–font-main); font-size:18px; font-weight:900; line-height:1.1; }
-.hero-title span { color:var(–red); text-shadow:var(–glow-r); }
-.hero-desc { font-size:11px; color:var(–text2); margin-top:6px; letter-spacing:.5px; }
-.boost-btn {
-display:flex; flex-direction:column; align-items:center; gap:6px; padding:14px 18px;
-background:linear-gradient(135deg,#ff1a1a,#cc0000); border:none; border-radius:10px; cursor:pointer;
-box-shadow:0 0 20px rgba(255,26,26,0.4), inset 0 1px 0 rgba(255,255,255,0.1);
-transition:all .2s; position:relative; overflow:hidden; color:#fff;
-}
-.boost-btn:active { transform:scale(.96); }
-.boost-btn span { font-family:var(–font-main); font-size:9px; font-weight:700; letter-spacing:2px; white-space:nowrap; }
-
-/* ══ STATS GRID ══ */
-.stats-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px; }
-.stat-card { background:var(–card); border:1px solid var(–border); border-radius:10px; padding:12px; position:relative; overflow:hidden; }
-.stat-card::before { content:’’; position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(90deg,transparent,var(–red),transparent); opacity:.4; }
-.stat-label { font-family:var(–font-main); font-size:9px; color:var(–text2); letter-spacing:2px; }
-.stat-value { font-family:var(–font-main); font-size:26px; font-weight:900; margin:4px 0; }
-.stat-value span { font-size:13px; color:var(–text2); }
-.stat-bar { height:3px; background:rgba(255,255,255,0.06); border-radius:2px; overflow:hidden; margin-bottom:4px; }
-.stat-bar-fill { height:100%; border-radius:2px; transition:width 1s ease; }
-.stat-bar-fill.red { background:linear-gradient(90deg,#ff1a1a,#ff6600); box-shadow:0 0 6px #ff1a1a; }
-.stat-bar-fill.yellow { background:linear-gradient(90deg,#ffcc00,#ff9900); box-shadow:0 0 6px #ffcc00; }
-.stat-bar-fill.blue { background:linear-gradient(90deg,#00aaff,#0066ff); box-shadow:0 0 6px #00aaff; }
-.stat-bar-fill.green { background:linear-gradient(90deg,#00ff88,#00cc66); box-shadow:0 0 6px #00ff88; }
-.stat-status { font-size:10px; color:var(–text2); }
-
-/* ══ PERF SCORE ══ */
-.perf-score-card { background:var(–card); border:1px solid var(–border); border-radius:12px; padding:16px; display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
-.perf-label { font-family:var(–font-main); font-size:9px; color:var(–text2); letter-spacing:2px; margin-bottom:4px; }
-.perf-score-val { font-family:var(–font-main); font-size:38px; font-weight:900; color:var(–red); text-shadow:var(–glow-r); }
-.perf-grade { font-family:var(–font-body); font-size:13px; color:var(–text2); letter-spacing:1px; }
-.score-ring { width:80px; height:80px; }
-
-/* ══ SECTION TITLES ══ */
-.section-title { font-family:var(–font-main); font-size:10px; letter-spacing:3px; color:var(–text2); margin-bottom:10px; padding-bottom:6px; border-bottom:1px solid var(–border); }
-.section-header { margin-bottom:18px; }
-.section-title-lg { font-family:var(–font-main); font-size:20px; font-weight:900; letter-spacing:4px; color:var(–red); text-shadow:var(–glow-r); }
-.section-sub { font-size:12px; color:var(–text2); margin-top:4px; }
-
-/* ══ QUICK ACTIONS ══ */
-.quick-actions { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-bottom:16px; }
-.qa-btn {
-display:flex; flex-direction:column; align-items:center; gap:6px; padding:14px 8px;
-background:var(–card2); border:1px solid var(–border); border-radius:10px;
-color:var(–red); cursor:pointer; font-size:9px; font-family:var(–font-main); letter-spacing:.5px;
-transition:all .2s; position:relative; overflow:hidden;
-}
-.qa-btn:active { background:var(–red3); border-color:var(–border2); }
-.qa-btn svg { stroke:var(–red); }
-
-/* ══ RIPPLE ══ */
-.ripple-wave { position:absolute; border-radius:50%; transform:translate(-50%,-50%) scale(0); background:rgba(255,26,26,0.3); width:120px; height:120px; animation:ripple .6s ease-out forwards; pointer-events:none; }
-@keyframes ripple { to{transform:translate(-50%,-50%) scale(2.5);opacity:0} }
-
-/* ══ FEATURES PAGE ══ */
-.feat-group-label { display:flex; align-items:center; gap:8px; margin:16px 0 10px; font-family:var(–font-main); font-size:10px; letter-spacing:2px; color:var(–text2); }
-.badge-free { background:rgba(100,100,255,0.15); border:1px solid rgba(100,100,255,0.3); color:#8888ff; padding:2px 8px; border-radius:4px; font-size:9px; }
-.badge-vip { background:linear-gradient(135deg,rgba(255,204,0,0.2),rgba(255,100,0,0.2)); border:1px solid rgba(255,204,0,0.4); color:var(–gold); padding:2px 8px; border-radius:4px; font-size:9px; }
-.upgrade-mini-btn { margin-left:auto; background:linear-gradient(135deg,#ff1a1a,#cc0000); border:none; color:#fff; padding:4px 12px; border-radius:4px; font-family:var(–font-main); font-size:9px; cursor:pointer; }
-.feature-list { display:flex; flex-direction:column; gap:8px; margin-bottom:8px; }
-.feature-list.locked { opacity:.5; pointer-events:none; position:relative; }
-.feature-list.locked::after { content:‘🔒 VIP REQUIRED’; position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-family:var(–font-main); font-size:11px; color:var(–gold); background:rgba(10,2,2,0.6); border-radius:8px; letter-spacing:2px; }
-.feat-item { background:var(–card); border:1px solid var(–border); border-radius:10px; padding:12px 14px; display:flex; align-items:center; gap:12px; }
-.feat-icon { width:36px; height:36px; border-radius:8px; background:var(–red3); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
-.feat-icon svg { stroke:var(–red); }
-.feat-info { flex:1; }
-.feat-name { font-family:var(–font-main); font-size:11px; font-weight:700; margin-bottom:2px; }
-.feat-desc { font-size:11px; color:var(–text2); }
-.toggle { position:relative; width:44px; height:24px; flex-shrink:0; }
-.toggle input { opacity:0; width:0; height:0; position:absolute; }
-.toggle-track { position:absolute; inset:0; background:rgba(255,255,255,0.08); border-radius:12px; cursor:pointer; transition:all .3s; border:1px solid var(–border); }
-.toggle input:checked + .toggle-track { background:var(–red); border-color:var(–red); box-shadow:0 0 10px rgba(255,26,26,0.4); }
-.toggle-track::after { content:’’; position:absolute; left:3px; top:3px; width:16px; height:16px; border-radius:50%; background:#fff; transition:all .3s; }
-.toggle input:checked + .toggle-track::after { transform:translateX(20px); }
-
-/* ══ STATS PAGE ══ */
-.realtime-grid { display:flex; flex-direction:column; gap:12px; }
-.rt-card { background:var(–card); border:1px solid var(–border); border-radius:12px; padding:14px; }
-.rt-card-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
-.rt-label { font-family:var(–font-main); font-size:9px; color:var(–text2); letter-spacing:2px; }
-.rt-value { font-family:var(–font-main); font-size:22px; font-weight:900; }
-.rt-value.red { color:var(–red); text-shadow:0 0 8px rgba(255,26,26,0.6); }
-.rt-value.yellow { color:var(–gold); text-shadow:0 0 8px rgba(255,204,0,0.5); }
-.rt-value.blue { color:#00aaff; text-shadow:0 0 8px rgba(0,170,255,0.5); }
-.rt-value.green { color:#00ff88; text-shadow:0 0 8px rgba(0,255,136,0.5); }
-.rt-graph { height:50px; position:relative; overflow:hidden; }
-.rt-graph canvas { width:100%; height:100%; }
-.rt-info { display:flex; justify-content:space-between; margin-top:8px; font-size:11px; color:var(–text2); }
-.rt-info b { color:var(–text); }
-.net-stats { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:10px; }
-.net-item { background:var(–card); border:1px solid var(–border); border-radius:10px; padding:12px; text-align:center; }
-.net-icon { font-size:20px; margin-bottom:6px; color:var(–red); }
-.net-val { font-family:var(–font-main); font-size:13px; font-weight:700; color:var(–text); }
-.net-lbl { font-size:10px; color:var(–text2); margin-top:2px; }
-
-/* ══ VIP PAGE ══ */
-.vip-plans { display:flex; flex-direction:column; gap:12px; margin-bottom:20px; }
-.vip-plan {
-background:var(–card); border:1px solid var(–border); border-radius:14px; padding:18px; position:relative; overflow:hidden;
-}
-.vip-plan.featured { border-color:rgba(255,204,0,0.4); background:linear-gradient(135deg,rgba(255,26,26,0.06),rgba(255,204,0,0.04)); }
-.vip-plan.featured::before { content:‘HOT’; position:absolute; top:12px; right:12px; background:linear-gradient(135deg,#ff1a1a,#ff6600); color:#fff; font-family:var(–font-main); font-size:8px; padding:3px 8px; border-radius:4px; letter-spacing:1px; }
-.vip-plan-name { font-family:var(–font-main); font-size:13px; font-weight:900; color:var(–gold); letter-spacing:2px; }
-.vip-plan-price { font-family:var(–font-main); font-size:28px; font-weight:900; color:var(–red); margin:8px 0; }
-.vip-plan-price span { font-size:12px; color:var(–text2); }
-.vip-plan-features { list-style:none; display:flex; flex-direction:column; gap:6px; margin-bottom:14px; }
-.vip-plan-features li { font-size:12px; color:var(–text2); display:flex; align-items:center; gap:8px; }
-.vip-plan-features li::before { content:‘✓’; color:var(–red); font-weight:bold; }
-.vip-buy-btn { width:100%; padding:12px; background:linear-gradient(135deg,#ff1a1a,#cc0000); border:none; color:#fff; font-family:var(–font-main); font-size:11px; letter-spacing:2px; border-radius:8px; cursor:pointer; box-shadow:0 4px 15px rgba(255,26,26,0.4); }
-
-/* ══ AIM LAB PAGE ══ */
-.aim-header { background:linear-gradient(135deg,rgba(255,26,26,0.1),rgba(255,100,0,0.05)); border:1px solid var(–border); border-radius:12px; padding:14px; margin-bottom:14px; display:flex; align-items:center; justify-content:space-between; }
-.aim-status-badge { font-family:var(–font-mono); font-size:10px; color:var(–text2); }
-.aim-score-wrap { text-align:right; }
-.aim-score-val { font-family:var(–font-main); font-size:28px; font-weight:900; color:var(–red); }
-.aim-score-lbl { font-size:9px; color:var(–text2); letter-spacing:2px; }
-.aim-section-title { font-family:var(–font-main); font-size:10px; letter-spacing:3px; color:var(–text2); margin:16px 0 10px; display:flex; align-items:center; gap:6px; }
-.aim-section-title svg { stroke:var(–red); }
-
-/* AIM LOCK */
-.aimlock-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-bottom:10px; }
-.aimlock-btn {
-background:var(–card2); border:1px solid var(–border); border-radius:10px; padding:10px 6px;
-display:flex; flex-direction:column; align-items:center; gap:3px; cursor:pointer;
-transition:all .2s; color:var(–text2);
-}
-.aimlock-btn.active { background:var(–red3); border-color:var(–red); color:var(–red); box-shadow:0 0 12px rgba(255,26,26,0.2); }
-.al-ver { font-family:var(–font-main); font-size:13px; font-weight:900; }
-.al-name { font-size:11px; font-weight:700; }
-.al-desc { font-size:9px; opacity:.7; }
-.aimlock-detail { background:var(–card2); border:1px solid var(–border); border-radius:10px; padding:12px; display:flex; flex-direction:column; gap:8px; margin-bottom:10px; }
-.ald-row { display:flex; justify-content:space-between; align-items:center; font-size:12px; color:var(–text2); }
-.ald-val { font-family:var(–font-mono); font-size:12px; color:var(–red); }
-
-/* SLIDERS */
-.sens-slider { width:100%; -webkit-appearance:none; height:4px; border-radius:2px; background:rgba(255,255,255,0.08); outline:none; cursor:pointer; margin-top:6px; }
-.sens-slider::-webkit-slider-thumb { -webkit-appearance:none; width:18px; height:18px; border-radius:50%; background:var(–red); box-shadow:0 0 8px rgba(255,26,26,0.6); cursor:pointer; }
-.sens-row { margin-bottom:12px; }
-.sens-label { font-size:12px; color:var(–text2); display:flex; justify-content:space-between; margin-bottom:4px; }
-.sens-val { font-family:var(–font-mono); color:var(–red); }
-.smooth-card,.assist-card,.hold-card { background:var(–card2); border:1px solid var(–border); border-radius:12px; padding:14px; margin-bottom:10px; }
-.smooth-preview-row { display:flex; align-items:center; gap:12px; margin-bottom:10px; }
-.smooth-bar-wrap { flex:1; }
-.smooth-bar-track { height:6px; background:rgba(255,255,255,0.08); border-radius:3px; overflow:hidden; }
-.smooth-bar-fill { height:100%; background:linear-gradient(90deg,#ff1a1a,#ff6600); border-radius:3px; transition:width .3s; }
-.smooth-labels { display:flex; justify-content:space-between; font-size:10px; color:var(–text2); margin-top:4px; }
-.smooth-pct { font-family:var(–font-main); font-size:18px; font-weight:900; color:var(–red); width:45px; text-align:right; }
-.smooth-presets { display:flex; gap:8px; margin-top:10px; }
-.smooth-pre-btn { flex:1; padding:8px; background:var(–card); border:1px solid var(–border); border-radius:6px; color:var(–text2); font-size:11px; cursor:pointer; transition:all .2s; }
-.smooth-pre-btn.active { background:var(–red3); border-color:var(–red); color:var(–red); }
-.assist-toggle-row { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:10px; }
-.assist-title { font-family:var(–font-main); font-size:11px; font-weight:700; }
-.assist-sub { font-size:11px; color:var(–text2); }
-.assist-opt-row { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; font-size:12px; color:var(–text2); }
-.assist-lvl-btns { display:flex; gap:4px; }
-.assist-lvl,.assist-target,.assist-when { padding:5px 10px; background:var(–card); border:1px solid var(–border); border-radius:4px; color:var(–text2); font-size:10px; cursor:pointer; transition:all .2s; }
-.assist-lvl.active,.assist-target.active,.assist-when.active { background:var(–red3); border-color:var(–red); color:var(–red); }
-.hold-toggle-row { display:flex; align-items:center; justify-content:space-between; gap:12px; }
-.hold-title { font-family:var(–font-main); font-size:11px; font-weight:700; }
-.hold-sub { font-size:11px; color:var(–text2); }
-.gyro-mode-btns { display:flex; gap:4px; flex-wrap:wrap; }
-.gyro-mode-btn { padding:5px 10px; background:var(–card); border:1px solid var(–border); border-radius:4px; color:var(–text2); font-size:10px; cursor:pointer; }
-.gyro-mode-btn.active { background:var(–red3); border-color:var(–red); color:var(–red); }
-.gyro-mode-lbl { font-size:12px; color:var(–text2); margin-bottom:6px; }
-.sens-preset-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-bottom:14px; }
-.sens-preset-btn { background:var(–card2); border:1px solid var(–border); border-radius:10px; padding:10px 6px; display:flex; flex-direction:column; align-items:center; gap:4px; cursor:pointer; transition:all .2s; }
-.sens-preset-btn.active { background:var(–red3); border-color:var(–red); }
-.sp-icon svg { stroke:var(–red); }
-.sp-name { font-family:var(–font-main); font-size:9px; font-weight:700; color:var(–text); }
-.sp-desc { font-size:9px; color:var(–text2); }
-.aim-apply-btn-full { width:100%; padding:14px; background:linear-gradient(135deg,#ff1a1a,#cc0000); border:none; color:#fff; font-family:var(–font-main); font-size:11px; letter-spacing:3px; border-radius:10px; cursor:pointer; margin-top:16px; box-shadow:0 4px 20px rgba(255,26,26,0.4); }
-
-/* ══ ADMIN PAGE ══ */
-.admin-contact-card {
-display:flex; align-items:center; gap:14px; background:var(–card); border:1px solid var(–border);
-border-radius:12px; padding:14px 16px; margin-bottom:10px; text-decoration:none; color:inherit;
-position:relative; overflow:hidden; transition:all .2s; cursor:pointer;
-}
-.admin-contact-card:active { transform:scale(.98); }
-.acc-icon-wrap { width:44px; height:44px; border-radius:10px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
-.acc-info { flex:1; }
-.acc-platform { font-family:var(–font-main); font-size:11px; font-weight:700; }
-.acc-handle { font-size:12px; color:var(–text2); margin-top:2px; }
-.acc-desc { font-size:11px; color:var(–text3); margin-top:2px; }
-.acc-arrow { color:var(–text2); opacity:.5; }
-.acc-glow { position:absolute; right:-20px; top:50%; transform:translateY(-50%); width:80px; height:80px; border-radius:50%; filter:blur(25px); opacity:.3; }
-.zalo-icon { background:rgba(0,120,240,0.15); }
-.zalo-glow { background:#0078f0; }
-.fb-glow { background:#1877F2; }
-.tg-icon { background:rgba(34,158,217,0.15); }
-.tg-glow { background:#229ED9; }
-.admin-stats-row { display:flex; justify-content:space-around; padding:16px; background:var(–card); border:1px solid var(–border); border-radius:12px; margin-bottom:14px; }
-.admin-stat-val { font-family:var(–font-main); font-size:18px; font-weight:900; color:var(–red); text-align:center; }
-.admin-stat-lbl { font-size:11px; color:var(–text2); text-align:center; margin-top:2px; }
-.admin-stat-divider { width:1px; background:var(–border); }
-.admin-note { display:flex; gap:8px; font-size:11px; color:var(–text2); background:rgba(255,26,26,0.05); border:1px solid rgba(255,26,26,0.1); border-radius:8px; padding:10px 12px; }
-
-/* ══ SETTINGS PAGE ══ */
-.settings-section { background:var(–card); border:1px solid var(–border); border-radius:12px; overflow:hidden; margin-bottom:14px; }
-.settings-item { display:flex; align-items:center; justify-content:space-between; padding:14px 16px; border-bottom:1px solid var(–border); gap:12px; }
-.settings-item:last-child { border-bottom:none; }
-.settings-item-left { display:flex; align-items:center; gap:12px; }
-.settings-item-icon { width:34px; height:34px; border-radius:8px; background:var(–red3); display:flex; align-items:center; justify-content:center; }
-.settings-item-icon svg { stroke:var(–red); }
-.settings-item-title { font-family:var(–font-main); font-size:11px; font-weight:700; }
-.settings-item-sub { font-size:11px; color:var(–text2); margin-top:1px; }
-.select-btn { background:var(–card2); border:1px solid var(–border); border-radius:6px; color:var(–text2); font-family:var(–font-mono); font-size:10px; padding:5px 10px; cursor:pointer; }
-.select-btn.active { border-color:var(–red); color:var(–red); background:var(–red3); }
-.theme-row { display:flex; gap:6px; }
-.theme-dot { width:22px; height:22px; border-radius:50%; cursor:pointer; border:2px solid transparent; transition:all .2s; }
-.theme-dot.active { border-color:#fff; box-shadow:0 0 8px rgba(255,255,255,0.5); }
-
-/* ══ BOTTOM NAV ══ */
-.bottom-nav {
-position:fixed; bottom:0; left:0; right:0; height:calc(var(–nav-h) + var(–safe-bottom));
-background:rgba(10,2,2,0.97); backdrop-filter:blur(20px); border-top:1px solid var(–border);
-display:flex; align-items:flex-start; padding-top:4px; z-index:100;
-padding-bottom:var(–safe-bottom);
-}
-.bnav-btn {
-flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; padding:8px 4px;
-background:none; border:none; color:var(–text2); cursor:pointer; font-size:9px; font-family:var(–font-main);
-letter-spacing:.5px; transition:all .2s; position:relative;
-}
-.bnav-btn.active { color:var(–red); }
-.bnav-btn.active svg { stroke:var(–red); filter:drop-shadow(0 0 4px rgba(255,26,26,0.6)); }
-.bnav-btn::after { content:’’; position:absolute; top:0; left:50%; transform:translateX(-50%); width:0; height:2px; background:var(–red); border-radius:0 0 2px 2px; transition:width .3s; }
-.bnav-btn.active::after { width:24px; }
-
-/* ══ TOAST ══ */
-.toast {
-position:fixed; bottom:calc(var(–nav-h) + var(–safe-bottom) + 12px); left:50%; transform:translateX(-50%) translateY(20px);
-background:rgba(15,5,5,0.95); border:1px solid var(–border2); color:var(–text); padding:10px 20px;
-border-radius:8px; font-size:12px; font-family:var(–font-body); white-space:nowrap;
-opacity:0; transition:all .3s; z-index:9999; pointer-events:none;
-box-shadow:0 4px 20px rgba(0,0,0,0.5);
-}
-.toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
-
-/* ══ BOOST OVERLAY ══ */
-.boost-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.92); z-index:999; display:none; align-items:center; justify-content:center; }
-.boost-overlay-inner { display:flex; flex-direction:column; align-items:center; gap:16px; }
-.boost-overlay-ring { width:120px; height:120px; border:3px solid rgba(255,26,26,0.2); border-top-color:var(–red); border-radius:50%; animation:spin 1s linear infinite; box-shadow:0 0 30px rgba(255,26,26,0.3); }
-@keyframes spin { to{transform:rotate(360deg)} }
-.boost-overlay-text { font-family:var(–font-main); font-size:13px; letter-spacing:4px; color:var(–red); }
-.boost-overlay-percent { font-family:var(–font-main); font-size:36px; font-weight:900; color:var(–text); }
-
-/* ══ KEY MODAL — MAIN FEATURE ══ */
-#key-modal {
-position:fixed; inset:0; z-index:9998; display:none;
-align-items:center; justify-content:center;
-background:rgba(0,0,0,0.88);
-backdrop-filter:blur(12px);
-}
-.key-modal-bg {
-position:absolute; inset:0;
-background:
-radial-gradient(ellipse 80% 50% at 50% 0%, rgba(255,26,26,0.08) 0%, transparent 70%),
-radial-gradient(ellipse 60% 40% at 80% 100%, rgba(255,100,0,0.04) 0%, transparent 60%);
-}
-.key-modal-scanlines {
-position:absolute; inset:0; pointer-events:none;
-background:repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,26,26,0.02) 2px, rgba(255,26,26,0.02) 4px);
-}
-
-.key-modal-box {
-position:relative; z-index:1;
-width:calc(100% - 40px); max-width:380px;
-background:linear-gradient(145deg, #0f0303, #150606, #0f0303);
-border:1px solid rgba(255,26,26,0.3);
-border-radius:16px;
-padding:28px 24px;
-box-shadow:
-0 0 0 1px rgba(255,26,26,0.08),
-0 0 40px rgba(255,26,26,0.15),
-0 20px 60px rgba(0,0,0,0.7),
-inset 0 1px 0 rgba(255,255,255,0.04);
-animation:modalAppear .4s cubic-bezier(.34,1.56,.64,1);
-}
-@keyframes modalAppear { from{transform:scale(.85) translateY(30px);opacity:0} to{transform:scale(1) translateY(0);opacity:1} }
-
-/* Corner decorations */
-.corner { position:absolute; width:16px; height:16px; }
-.corner-tl { top:-1px; left:-1px; border-top:2px solid var(–red); border-left:2px solid var(–red); border-radius:2px 0 0 0; }
-.corner-tr { top:-1px; right:-1px; border-top:2px solid var(–red); border-right:2px solid var(–red); border-radius:0 2px 0 0; }
-.corner-bl { bottom:-1px; left:-1px; border-bottom:2px solid var(–red); border-left:2px solid var(–red); border-radius:0 0 0 2px; }
-.corner-br { bottom:-1px; right:-1px; border-bottom:2px solid var(–red); border-right:2px solid var(–red); border-radius:0 0 2px 0; }
-
-/* Logo target in modal */
-.key-modal-logo { display:flex; justify-content:center; margin-bottom:16px; }
-.key-modal-target {
-position:relative; width:80px; height:80px; display:flex; align-items:center; justify-content:center;
-}
-.key-modal-target svg { filter:drop-shadow(0 0 12px rgba(255,26,26,0.7)); animation:targetSpin 8s linear infinite; }
-.key-modal-target-center { position:absolute; width:20px; height:20px; background:var(–red); border-radius:50%; box-shadow:0 0 15px rgba(255,26,26,0.8); animation:corePulse 1.5s ease-in-out infinite; }
-@keyframes targetSpin { to{transform:rotate(360deg)} }
-@keyframes corePulse { 0%,100%{transform:scale(1);box-shadow:0 0 10px rgba(255,26,26,0.8)} 50%{transform:scale(1.3);box-shadow:0 0 20px rgba(255,26,26,1),0 0 40px rgba(255,26,26,0.5)} }
-
-.key-modal-badge {
-display:flex; justify-content:center; margin-bottom:8px;
-}
-.key-modal-badge span {
-font-family:var(–font-mono); font-size:9px; letter-spacing:3px; color:rgba(255,100,100,0.5);
-border:1px solid rgba(255,26,26,0.2); padding:3px 12px; border-radius:20px;
-background:rgba(255,26,26,0.05);
-}
-
-.key-modal-title {
-font-family:var(–font-main); font-size:22px; font-weight:900; text-align:center;
-letter-spacing:4px; margin-bottom:4px;
-background:linear-gradient(135deg,#ff4444,#ff1a1a,#cc0000);
--webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
-filter:drop-shadow(0 0 10px rgba(255,26,26,0.5));
-}
-.key-modal-sub { font-size:12px; color:var(–text2); text-align:center; margin-bottom:20px; letter-spacing:.5px; }
-
-/* Key input area */
-.key-input-wrapper { position:relative; margin-bottom:8px; }
-.key-input-label { font-family:var(–font-mono); font-size:9px; color:rgba(255,100,100,0.4); letter-spacing:2px; margin-bottom:6px; display:block; }
-.key-input-field {
-width:100%; background:rgba(255,26,26,0.05);
-border:1px solid rgba(255,26,26,0.25); border-radius:8px;
-color:var(–red); font-family:var(–font-mono); font-size:14px;
-padding:13px 44px 13px 14px; outline:none;
-transition:all .3s; letter-spacing:1px;
-text-align:center;
-}
-.key-input-field::placeholder { color:rgba(255,100,100,0.25); letter-spacing:2px; font-size:11px; }
-.key-input-field:focus {
-border-color:rgba(255,26,26,0.6);
-background:rgba(255,26,26,0.08);
-box-shadow:0 0 20px rgba(255,26,26,0.15), inset 0 0 10px rgba(255,26,26,0.05);
-}
-.key-input-icon {
-position:absolute; right:12px; top:50%; transform:translateY(-50%);
-color:rgba(255,100,100,0.3); pointer-events:none;
-}
-.key-input-field.success { border-color:rgba(0,255,136,0.5); background:rgba(0,255,136,0.05); color:#00ff88; }
-.key-input-field.error { border-color:rgba(255,50,50,0.6); animation:shake .4s ease; }
-@keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-8px)} 75%{transform:translateX(8px)} }
-
-/* Key type selector */
-.key-type-row { display:flex; gap:6px; margin-bottom:16px; }
-.key-type-btn {
-flex:1; padding:8px 6px; background:var(–card); border:1px solid var(–border);
-border-radius:6px; color:var(–text2); font-family:var(–font-main); font-size:8px;
-letter-spacing:1px; cursor:pointer; transition:all .2s; text-align:center;
-}
-.key-type-btn.active { background:var(–red3); border-color:var(–border2); color:var(–red); }
-.key-type-btn .kt-icon { font-size:14px; display:block; margin-bottom:3px; }
-.key-type-btn .kt-duration { font-size:9px; color:var(–gold); display:block; margin-top:2px; font-family:var(–font-mono); }
-
-/* Device lock info */
-.device-info-bar {
-display:flex; align-items:center; gap:8px; padding:8px 12px;
-background:rgba(255,26,26,0.04); border:1px solid rgba(255,26,26,0.1);
-border-radius:6px; margin-bottom:12px;
-}
-.device-info-bar svg { stroke:rgba(255,100,100,0.4); flex-shrink:0; }
-.device-info-text { font-family:var(–font-mono); font-size:9px; color:rgba(255,100,100,0.4); letter-spacing:1px; }
-.device-id-val { color:rgba(255,100,100,0.6); }
-
-/* Message */
-#key-msg {
-min-height:18px; font-family:var(–font-mono); font-size:11px;
-text-align:center; margin-bottom:12px; letter-spacing:.5px;
-}
-
-/* Activate button */
-#activate-btn {
-width:100%; padding:14px; border:none; border-radius:10px; cursor:pointer;
-font-family:var(–font-main); font-size:12px; letter-spacing:3px; font-weight:700;
-background:linear-gradient(135deg,#ff1a1a 0%,#cc0000 50%,#ff1a1a 100%);
-background-size:200% 100%; color:#fff;
-box-shadow:0 0 0 1px rgba(255,26,26,0.3), 0 4px 20px rgba(255,26,26,0.4), inset 0 1px 0 rgba(255,255,255,0.1);
-transition:all .3s; position:relative; overflow:hidden;
-animation:btnGlow 3s ease-in-out infinite;
-}
-@keyframes btnGlow {
-0%,100%{box-shadow:0 0 0 1px rgba(255,26,26,0.3),0 4px 20px rgba(255,26,26,0.4),inset 0 1px 0 rgba(255,255,255,0.1)}
-50%{box-shadow:0 0 0 1px rgba(255,26,26,0.5),0 4px 30px rgba(255,26,26,0.6),inset 0 1px 0 rgba(255,255,255,0.15)}
-}
-#activate-btn:active { transform:scale(.97); }
-#activate-btn::before { content:’’; position:absolute; inset:0; background:linear-gradient(135deg,rgba(255,255,255,0.1),transparent); }
-#activate-btn:disabled { opacity:.6; cursor:not-allowed; }
-#activate-btn .btn-icon { display:inline-block; margin-right:8px; vertical-align:middle; }
-
-/* Secondary button */
-.key-secondary-btn {
-width:100%; padding:11px; border:1px solid rgba(255,26,26,0.25); border-radius:8px; cursor:pointer;
-font-family:var(–font-main); font-size:10px; letter-spacing:2px;
-background:transparent; color:rgba(255,100,100,0.6);
-transition:all .2s; margin-top:8px;
-}
-.key-secondary-btn:active { background:rgba(255,26,26,0.08); }
-
-/* Footer info */
-.key-modal-footer { margin-top:16px; display:flex; flex-direction:column; gap:8px; }
-.key-modal-lock {
-display:flex; align-items:center; justify-content:center; gap:6px;
-font-family:var(–font-mono); font-size:9px; color:rgba(255,100,100,0.3); letter-spacing:1px;
-}
-.key-features-row { display:flex; justify-content:space-around; }
-.key-feat-item { display:flex; flex-direction:column; align-items:center; gap:3px; }
-.key-feat-icon { font-size:16px; }
-.key-feat-label { font-family:var(–font-mono); font-size:8px; color:rgba(255,100,100,0.35); letter-spacing:1px; }
-
-/* ══ VIP ACTIVE BANNER ══ */
-#vip-banner {
-background:linear-gradient(90deg,rgba(255,26,26,0.08),rgba(255,100,0,0.06),rgba(255,26,26,0.08));
-border-bottom:1px solid rgba(255,26,26,0.2); color:var(–gold);
-padding:6px 16px; text-align:center; font-family:var(–font-main); font-size:10px; letter-spacing:2px;
-animation:bannerPulse 4s ease-in-out infinite;
-}
-@keyframes bannerPulse { 0%,100%{background-position:0%} 50%{background-position:100%} }
-
-/* ══ AIM APPLY BTN ══ */
-.aim-apply-btn-mini {
-padding:8px 16px; background:linear-gradient(135deg,#ff1a1a,#cc0000); border:none;
-color:#fff; font-family:var(–font-main); font-size:9px; letter-spacing:2px; border-radius:6px; cursor:pointer;
-}
-
-/* ══ GYRO CARD ══ */
-.gyro-card { background:var(–card2); border:1px solid var(–border); border-radius:12px; padding:14px; margin-bottom:10px; }
-.gyro-toggle-row { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
-.gyro-title { font-family:var(–font-main); font-size:11px; font-weight:700; }
-.gyro-sub { font-size:11px; color:var(–text2); }
-
-/* ══ HL CARD ══ */
-.hl-card { background:var(–card2); border:1px solid var(–border); border-radius:12px; padding:14px; margin-bottom:10px; }
-.hl-toggle-row { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
-.hl-title { font-family:var(–font-main); font-size:11px; font-weight:700; }
-.hl-sub { font-size:11px; color:var(–text2); }
-.hl-lvl-btns { display:flex; gap:6px; flex-wrap:wrap; }
-.hl-lvl-btn { padding:6px 12px; background:var(–card); border:1px solid var(–border); border-radius:6px; color:var(–text2); font-size:10px; cursor:pointer; }
-.hl-lvl-btn.active { background:var(–red3); border-color:var(–red); color:var(–red); }
-
-/* ══ TIMELINE CARD ══ */
-.tl-card { background:var(–card2); border:1px solid var(–border); border-radius:12px; padding:14px; margin-bottom:10px; }
-.tl-optimize-btns { display:flex; gap:6px; flex-wrap:wrap; margin-top:10px; }
-.tl-optimize-btn { flex:1; min-width:70px; padding:8px; background:var(–card); border:1px solid var(–border); border-radius:6px; color:var(–text2); font-size:10px; text-align:center; cursor:pointer; }
-.tl-optimize-btn.active { background:var(–red3); border-color:var(–red); color:var(–red); }
-
-</style>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>BloodCore — Elite Optimizer</title>
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=DM+Mono:wght@300;400;500&family=Exo+2:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<!-- SPLASH SCREEN -->
-
-<div id="splash-screen">
-  <div class="splash-bg"></div>
-  <div class="splash-grid"></div>
-  <div class="splash-content">
-    <div class="splash-logo-wrap">
-      <div class="splash-target">
-        <svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="50" cy="50" r="45" stroke="#ff1a1a" stroke-width="1.5" fill="none" opacity="0.6"/>
-          <circle cx="50" cy="50" r="35" stroke="#ff1a1a" stroke-width="1" fill="none" opacity="0.5"/>
-          <circle cx="50" cy="50" r="25" stroke="#ff1a1a" stroke-width="1" fill="none" opacity="0.4"/>
-          <circle cx="50" cy="50" r="15" stroke="#ff1a1a" stroke-width="1.5" fill="none" opacity="0.7"/>
-          <line x1="50" y1="2" x2="50" y2="20" stroke="#ff1a1a" stroke-width="1.5"/>
-          <line x1="50" y1="80" x2="50" y2="98" stroke="#ff1a1a" stroke-width="1.5"/>
-          <line x1="2" y1="50" x2="20" y2="50" stroke="#ff1a1a" stroke-width="1.5"/>
-          <line x1="80" y1="50" x2="98" y2="50" stroke="#ff1a1a" stroke-width="1.5"/>
-          <!-- Hexagon center -->
-          <polygon points="50,38 59,44 59,56 50,62 41,56 41,44" stroke="#ff1a1a" stroke-width="1" fill="rgba(255,26,26,0.2)"/>
-          <polygon points="50,42 55,46 55,54 50,58 45,54 45,46" fill="rgba(255,26,26,0.4)"/>
-        </svg>
-      </div>
-      <div class="splash-rings">
-        <div class="ring ring-1"></div>
-        <div class="ring ring-2"></div>
-        <div class="ring ring-3"></div>
-      </div>
+<!-- ═══════════ SPLASH ═══════════ -->
+<div id="splash">
+  <div class="sp-noise"></div>
+  <div class="sp-grid"></div>
+  <div class="sp-vignette"></div>
+  <div class="sp-logo">
+    <div class="sp-rings"><div class="sp-ring"></div><div class="sp-ring"></div><div class="sp-ring"></div></div>
+    <svg class="sp-hex" width="110" height="110" viewBox="0 0 100 100" fill="none">
+      <polygon points="50,6 90,28 90,72 50,94 10,72 10,28" stroke="#ff1a1a" stroke-width="1.5" fill="none" opacity=".3"/>
+      <polygon points="50,14 82,32 82,68 50,86 18,68 18,32" stroke="#ff1a1a" stroke-width="1.5" fill="none" opacity=".5"/>
+      <polygon points="50,22 74,36 74,64 50,78 26,64 26,36" fill="#ff1a1a" opacity=".08"/>
+    </svg>
+    <div class="sp-hex-inner">
+      <svg width="36" height="36" viewBox="0 0 24 24" fill="none">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z" fill="#ff1a1a" opacity=".9"/>
+      </svg>
     </div>
-    <div class="splash-title">BLOODCORE</div>
-    <div class="splash-sub">OPTIMIZER</div>
-    <div class="splash-tagline">ELITE · GAMING · SYSTEM</div>
-    <div class="splash-loader">
-      <div class="loader-bar">
-        <div class="loader-fill" id="splash-loader-fill"></div>
-      </div>
-      <div class="loader-text" id="splash-loader-text">INITIALIZING CORE...</div>
-    </div>
-    <div class="splash-version">v1.0.0 — BLOODCORE 2025</div>
   </div>
-  <div class="splash-particles" id="splash-particles"></div>
+  <div class="sp-name">BLOODCORE</div>
+  <div class="sp-tag">ELITE GAMING OPTIMIZER</div>
+  <div class="sp-bar-wrap">
+    <div class="sp-bar"><div class="sp-fill" id="sp-fill"></div></div>
+    <div class="sp-status" id="sp-status">BOOT SEQUENCE...</div>
+  </div>
 </div>
 
-<!-- MAIN APP -->
+<!-- ═══════════ APP ═══════════ -->
+<div id="app">
 
-<div id="app" style="display:none;">
-
-  <!-- TOP BAR -->
-
+  <!-- TOPBAR -->
   <div class="topbar">
-    <div class="topbar-logo">
-      <svg width="22" height="22" viewBox="0 0 100 100" fill="none">
-        <circle cx="50" cy="50" r="45" stroke="#ff1a1a" stroke-width="3" fill="none" opacity="0.5"/>
-        <circle cx="50" cy="50" r="28" stroke="#ff1a1a" stroke-width="2" fill="none" opacity="0.4"/>
-        <circle cx="50" cy="50" r="10" fill="#ff1a1a"/>
-        <line x1="50" y1="5" x2="50" y2="22" stroke="#ff1a1a" stroke-width="3"/>
-        <line x1="50" y1="78" x2="50" y2="95" stroke="#ff1a1a" stroke-width="3"/>
-        <line x1="5" y1="50" x2="22" y2="50" stroke="#ff1a1a" stroke-width="3"/>
-        <line x1="78" y1="50" x2="95" y2="50" stroke="#ff1a1a" stroke-width="3"/>
-      </svg>
-      <span>BLOODCORE</span>
+    <button class="hbg" id="hbg-btn" onclick="toggleDrawer()">
+      <div class="hbg-line"></div><div class="hbg-line"></div><div class="hbg-line"></div>
+    </button>
+    <div class="tb-logo">
+      <div class="tb-logo-icon">
+        <svg width="26" height="26" viewBox="0 0 100 100" fill="none">
+          <polygon points="50,6 90,28 90,72 50,94 10,72 10,28" stroke="#ff1a1a" stroke-width="3" fill="none"/>
+          <circle cx="50" cy="50" r="10" fill="#ff1a1a"/>
+        </svg>
+      </div>
+      <div class="tb-logo-text">BLOODCORE</div>
     </div>
-    <div class="topbar-center">
-      <span class="tier-badge" id="tier-badge">FREE</span>
-    </div>
-    <div class="topbar-right">
-      <div class="status-dot" id="status-dot"></div>
-      <span class="status-text" id="status-text">ACTIVE</span>
+    <div class="tb-badge" id="tier-badge">FREE</div>
+    <div class="tb-right">
+      <div class="live-dot"></div>
+      <span class="live-txt">LIVE</span>
     </div>
   </div>
 
   <!-- PAGES -->
+  <div class="pages">
 
-  <div class="pages-container">
+    <!-- ══ DASHBOARD ══ -->
+    <div class="page active" id="page-dash">
+      <div class="pscroll">
 
-```
-<!-- PAGE: HOME -->
-<div class="page active" id="page-home">
-  <div class="page-scroll">
-    <div class="hero-section">
-      <div class="hero-text">
-        <div class="hero-title">BLOOD<br><span>CORE</span></div>
-        <div class="hero-desc">Elite Gaming Optimizer · Tối ưu hóa đỉnh cao</div>
+        <div class="hero">
+          <div class="hero-bg"></div>
+          <div class="hero-corner tl"></div><div class="hero-corner tr"></div>
+          <div class="hero-corner bl"></div><div class="hero-corner br"></div>
+          <div class="hero-title">SYSTEM <b>IGNITION</b></div>
+          <div class="hero-desc">AI-Powered · Real-time Optimizer v4.0</div>
+          <button class="ignite-btn" onclick="runBoost()">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" fill="#fff" fill-opacity=".4" stroke="#fff" stroke-width="1.5"/></svg>
+            IGNITE SYSTEM
+          </button>
+        </div>
+
+        <div class="stat-grid">
+          <div class="sc"><div class="sc-lbl">FRAMES/SEC</div><div class="sc-val" id="v-fps">--</div><div class="sc-bar"><div class="sc-fill fill-r" id="b-fps" style="width:0%"></div></div><div class="sc-status" id="s-fps">scanning...</div></div>
+          <div class="sc"><div class="sc-lbl">PROCESSOR</div><div class="sc-val" id="v-cpu">--<sup>%</sup></div><div class="sc-bar"><div class="sc-fill fill-o" id="b-cpu" style="width:0%"></div></div><div class="sc-status" id="s-cpu">scanning...</div></div>
+          <div class="sc"><div class="sc-lbl">MEMORY</div><div class="sc-val" id="v-ram">--<sup>%</sup></div><div class="sc-bar"><div class="sc-fill fill-b" id="b-ram" style="width:0%"></div></div><div class="sc-status" id="s-ram">scanning...</div></div>
+          <div class="sc"><div class="sc-lbl">THERMAL</div><div class="sc-val" id="v-tmp">--<sup>°</sup></div><div class="sc-bar"><div class="sc-fill fill-g" id="b-tmp" style="width:0%"></div></div><div class="sc-status" id="s-tmp">scanning...</div></div>
+        </div>
+
+        <div class="score-bar-card">
+          <div class="sb-row">
+            <div><div class="sb-label">CORE SCORE</div><div class="sb-score" id="core-score">0</div></div>
+            <div style="text-align:right"><div class="sb-grade" id="core-grade">INITIALIZING...</div><div style="font-size:9px;color:var(--txt4);font-family:'DM Mono',monospace;margin-top:2px">/ 100 MAX</div></div>
+          </div>
+          <div class="sb-track"><div class="sb-progress" id="sb-prog" style="width:0%"></div></div>
+          <div class="sb-segs"><span>0</span><span>25</span><span>50</span><span>75</span><span>100</span></div>
+        </div>
+
+        <div class="qa-label">Quick Actions</div>
+        <div class="qa-row">
+          <div class="qa" onclick="qa('ram')"><div class="qa-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6" stroke="#ff1a1a" stroke-width="2" stroke-linecap="round"/></svg></div><span>Clear<br>Memory</span></div>
+          <div class="qa" onclick="qa('cool')"><div class="qa-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2v20M4.93 4.93l14.14 14.14M2 12h20M4.93 19.07l14.14-14.14" stroke="#00e5ff" stroke-width="1.5"/></svg></div><span>Cool<br>Down</span></div>
+          <div class="qa" onclick="qa('fps')"><div class="qa-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="#ff1a1a" stroke-width="2" fill="#ff1a1a" fill-opacity=".2"/></svg></div><span>FPS<br>Boost</span></div>
+          <div class="qa" onclick="qa('net')"><div class="qa-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M1 6s4-4 11-4 11 4 11 4M5 10s2.5-2.5 7-2.5S19 10 19 10M9 14s1-1 3-1 3 1 3 1M12 18v.01" stroke="#39ff14" stroke-width="2"/></svg></div><span>Net<br>Fix</span></div>
+          <div class="qa" onclick="qa('game')"><div class="qa-icon"><svg viewBox="0 0 24 24" fill="none"><rect x="2" y="6" width="20" height="14" rx="3" stroke="#ff8800" stroke-width="2"/><path d="M8 13h4M10 11v4M15 13h.01M17 13h.01" stroke="#ff8800" stroke-width="2" stroke-linecap="round"/></svg></div><span>Game<br>Mode</span></div>
+          <div class="qa" onclick="qa('junk')"><div class="qa-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2v6M12 16v6M4.93 4.93l4.24 4.24M14.83 14.83l4.24 4.24M2 12h6M16 12h6M4.93 19.07l4.24-4.24M14.83 9.17l4.24-4.24" stroke="#ffc400" stroke-width="2"/></svg></div><span>Clean<br>Junk</span></div>
+        </div>
+
+        <!-- LAUNCH GAMES -->
+        <div class="qa-label" style="margin-top:16px">Launch Game</div>
+        <div class="ff-grid">
+          <button class="ff-btn ff-normal" onclick="launchGame('ff')">
+            <div class="ff-top-line"></div>
+            <div class="ff-ico">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+                <path d="M12 2c0 0-6 5-6 10a6 6 0 0012 0c0-2-1-4-2-5 0 2-1 3-2 3-1 0-2-1-2-3z" fill="#fff" fill-opacity=".9"/>
+                <path d="M9 14c0 1.66 1.34 3 3 3s3-1.34 3-3c0-1-.5-2-1-2.5 0 1-.5 1.5-1 1.5s-1-.5-1-1.5C10.5 12 9 13 9 14z" fill="#ffdd00"/>
+              </svg>
+            </div>
+            <div class="ff-name">FREE FIRE</div>
+            <div class="ff-tap">TAP TO LAUNCH</div>
+          </button>
+          <button class="ff-btn ff-max" onclick="launchGame('ffmax')">
+            <div class="ff-top-line"></div>
+            <div class="ff-ico">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+                <path d="M12 2c0 0-6 5-6 10a6 6 0 0012 0c0-2-1-4-2-5 0 2-1 3-2 3-1 0-2-1-2-3z" fill="#fff" fill-opacity=".9"/>
+                <path d="M9 14c0 1.66 1.34 3 3 3s3-1.34 3-3c0-1-.5-2-1-2.5 0 1-.5 1.5-1 1.5s-1-.5-1-1.5C10.5 12 9 13 9 14z" fill="#ffdd00"/>
+                <path d="M8 6l2 2 2-3 2 3 2-2" stroke="#ffd700" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="ff-name">FREE FIRE MAX</div>
+            <div class="ff-tap">TAP TO LAUNCH</div>
+          </button>
+        </div>
+
       </div>
-      <button class="boost-btn" id="boost-btn" onclick="runBoost()">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-          <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="#fff" stroke-width="2" fill="rgba(255,255,255,0.2)"/>
-        </svg>
-        <span>BOOST</span>
+    </div>
+
+    <!-- ══ MONITOR ══ -->
+    <div class="page" id="page-monitor">
+      <div class="pscroll">
+        <div class="pg-head"><div class="pg-title">MONITOR</div><div class="pg-sub">Real-time system graphs</div></div>
+        <div class="divider"></div>
+        <div class="chart-card">
+          <div class="cc-head"><span class="cc-label">FRAMES / SEC</span><span class="cc-val rv" id="rt-fps">--</span></div>
+          <canvas id="cv-fps" height="55"></canvas>
+          <div class="cc-stats">
+            <div class="cs-item"><div class="cs-lbl">MIN</div><div class="cs-val" id="fps-min">--</div></div>
+            <div class="cs-item"><div class="cs-lbl">AVG</div><div class="cs-val" id="fps-avg">--</div></div>
+            <div class="cs-item"><div class="cs-lbl">MAX</div><div class="cs-val" id="fps-max">--</div></div>
+            <div class="cs-item"><div class="cs-lbl">NOW</div><div class="cs-val" id="fps-now">--</div></div>
+          </div>
+        </div>
+        <div class="chart-card">
+          <div class="cc-head"><span class="cc-label">CPU LOAD</span><span class="cc-val ov" id="rt-cpu">--%</span></div>
+          <canvas id="cv-cpu" height="55"></canvas>
+          <div class="cc-stats">
+            <div class="cs-item"><div class="cs-lbl">MIN</div><div class="cs-val" id="cpu-min">--</div></div>
+            <div class="cs-item"><div class="cs-lbl">AVG</div><div class="cs-val" id="cpu-avg">--</div></div>
+            <div class="cs-item"><div class="cs-lbl">MAX</div><div class="cs-val" id="cpu-max">--</div></div>
+            <div class="cs-item"><div class="cs-lbl">NOW</div><div class="cs-val" id="cpu-now">--</div></div>
+          </div>
+        </div>
+        <div class="chart-card">
+          <div class="cc-head"><span class="cc-label">MEMORY</span><span class="cc-val bv" id="rt-ram">--%</span></div>
+          <canvas id="cv-ram" height="55"></canvas>
+          <div class="cc-stats">
+            <div class="cs-item"><div class="cs-lbl">MIN</div><div class="cs-val" id="ram-min">--</div></div>
+            <div class="cs-item"><div class="cs-lbl">AVG</div><div class="cs-val" id="ram-avg">--</div></div>
+            <div class="cs-item"><div class="cs-lbl">MAX</div><div class="cs-val" id="ram-max">--</div></div>
+            <div class="cs-item"><div class="cs-lbl">NOW</div><div class="cs-val" id="ram-now">--</div></div>
+          </div>
+        </div>
+        <div class="chart-card">
+          <div class="cc-head"><span class="cc-label">THERMAL</span><span class="cc-val gv" id="rt-tmp">--°</span></div>
+          <canvas id="cv-tmp" height="55"></canvas>
+          <div class="cc-stats">
+            <div class="cs-item"><div class="cs-lbl">MIN</div><div class="cs-val" id="tmp-min">--</div></div>
+            <div class="cs-item"><div class="cs-lbl">AVG</div><div class="cs-val" id="tmp-avg">--</div></div>
+            <div class="cs-item"><div class="cs-lbl">MAX</div><div class="cs-val" id="tmp-max">--</div></div>
+            <div class="cs-item"><div class="cs-lbl">NOW</div><div class="cs-val" id="tmp-now">--</div></div>
+          </div>
+        </div>
+        <div class="net-row">
+          <div class="net-c"><div class="net-icon" style="color:#39ff14">↓</div><div class="net-v" id="net-dl">--</div><div class="net-l">DOWNLOAD</div></div>
+          <div class="net-c"><div class="net-icon" style="color:#ff8800">↑</div><div class="net-v" id="net-ul">--</div><div class="net-l">UPLOAD</div></div>
+          <div class="net-c"><div class="net-icon" style="color:#00e5ff">◎</div><div class="net-v" id="net-ping">--</div><div class="net-l">PING</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ BOOST ══ -->
+    <div class="page" id="page-boost">
+      <div class="pscroll">
+        <div class="pg-head"><div class="pg-title">BOOST</div><div class="pg-sub">Optimization profiles & toggles</div></div>
+        <div class="divider"></div>
+        <div class="sec-lbl">Performance Mode</div>
+        <div class="bm-grid" id="bm-grid"></div>
+        <div class="sec-lbl">Power Toggles</div>
+        <div class="pt-list" id="pt-list"></div>
+        <div class="elite-wall">
+          <div class="ew-icon">👑</div>
+          <div class="ew-title">ELITE FEATURES</div>
+          <div class="ew-sub">Unlock AI Deep Optimizer, Thermal Shield Pro,<br>Frame Engine MAX & Network Turbo</div>
+          <button class="ew-btn" onclick="showKey()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><rect x="3" y="11" width="18" height="11" rx="2" stroke="currentColor" stroke-width="2"/><path d="M7 11V7a5 5 0 0110 0v4" stroke="currentColor" stroke-width="2"/></svg>
+            NHẬP ELITE KEY
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ AIM LAB ══ -->
+    <div class="page" id="page-aim">
+      <div class="pscroll">
+        <div class="pg-head"><div class="pg-title">AIM LAB</div><div class="pg-sub">Crosshair · Sensitivity · Trainer · Gyro</div></div>
+        <div class="divider"></div>
+
+        <!-- HERO -->
+        <div class="aim-hero">
+          <div class="aim-preview">
+            <div class="ch-o1"></div><div class="ch-o2"></div><div class="ch-o3"></div>
+            <div class="ch-h"></div><div class="ch-v"></div><div class="ch-dot"></div>
+          </div>
+          <div class="aim-metrics">
+            <div class="am-item"><div class="am-val" id="aim-score-display">78</div><div class="am-lbl">AIM SCORE</div></div>
+            <div class="am-item"><div class="am-val" id="ch-score" style="font-size:14px;color:var(--txt2)">78</div><div class="am-lbl">SCORE</div></div>
+            <div class="am-item"><div class="am-val" id="ch-lock" style="font-size:14px;color:var(--txt2)">v3</div><div class="am-lbl">LOCK</div></div>
+          </div>
+        </div>
+
+        <!-- AIM LOCK -->
+        <div class="sec-lbl">Aim Lock — Khoá tâm</div>
+        <div class="lock-grid">
+          <button class="lb" id="lb-v1" onclick="setLock(this,'v1')"><span class="lb-ver">v1</span><span class="lb-name">Nhẹ</span><span class="lb-sub">basic</span></button>
+          <button class="lb" id="lb-v2" onclick="setLock(this,'v2')"><span class="lb-ver">v2</span><span class="lb-name">Vừa</span><span class="lb-sub">steady</span></button>
+          <button class="lb on" id="lb-v3" onclick="setLock(this,'v3')"><span class="lb-ver">v3</span><span class="lb-name">Mạnh</span><span class="lb-sub">pro</span></button>
+          <button class="lb" id="lb-v4" onclick="setLock(this,'v4')"><span class="lb-ver">v4</span><span class="lb-name">MAX</span><span class="lb-sub">elite</span></button>
+        </div>
+        <div class="lock-info">
+          <div class="li-row"><span>Lock Radius</span><span class="li-val" id="li-r">38px</span></div>
+          <div class="li-row"><span>Track Speed</span><span class="li-val" id="li-s">Medium-Fast</span></div>
+          <div class="li-row"><span>Target Zone</span><span class="li-val" id="li-t">Head + Chest</span></div>
+        </div>
+
+        <!-- SENSITIVITY -->
+        <div class="sec-lbl">Sensitivity Tuning</div>
+        <div class="sens-wrap">
+          <div class="sens-preset">
+            <div class="sp-item on" onclick="setPreset(this,'bal')"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3v18M5 8l7-5 7 5" stroke="#ff1a1a" stroke-width="2"/></svg><span>Cân bằng</span></div>
+            <div class="sp-item" onclick="setPreset(this,'snp')"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#ff1a1a" stroke-width="1.5"/><circle cx="12" cy="12" r="3" fill="#ff1a1a"/></svg><span>Sniper</span></div>
+            <div class="sp-item" onclick="setPreset(this,'rush')"><svg viewBox="0 0 24 24" fill="none"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="#ffc400" stroke-width="2"/></svg><span>Rush</span></div>
+            <div class="sp-item" onclick="setPreset(this,'pro')"><svg viewBox="0 0 24 24" fill="none"><path d="M2 19h20M3 9l4 4 5-8 5 8 4-4-2 10H5L3 9z" stroke="#ffc400" stroke-width="2"/></svg><span>Pro</span></div>
+          </div>
+          <div class="sr"><div class="sr-top"><span class="sr-lbl">General</span><span class="sr-val" id="sv-g">100</span></div><input type="range" min="1" max="200" value="100" oninput="sv('g',this.value)"></div>
+          <div class="sr"><div class="sr-top"><span class="sr-lbl">ADS</span><span class="sr-val" id="sv-a">80</span></div><input type="range" min="1" max="200" value="80" oninput="sv('a',this.value)"></div>
+          <div class="sr"><div class="sr-top"><span class="sr-lbl">Scope 2×</span><span class="sr-val" id="sv-s2">65</span></div><input type="range" min="1" max="200" value="65" oninput="sv('s2',this.value)"></div>
+          <div class="sr"><div class="sr-top"><span class="sr-lbl">Scope 4×</span><span class="sr-val" id="sv-s4">50</span></div><input type="range" min="1" max="200" value="50" oninput="sv('s4',this.value)"></div>
+          <div class="sr" style="margin-bottom:0"><div class="sr-top"><span class="sr-lbl">Scope 8×</span><span class="sr-val" id="sv-s8">35</span></div><input type="range" min="1" max="200" value="35" oninput="sv('s8',this.value)"></div>
+        </div>
+
+        <!-- FINGER LAYOUT -->
+        <div class="sec-lbl">Finger Layout — Bố cục ngón tay</div>
+        <div class="finger-grid">
+          <div class="fg-btn" onclick="selectFinger(this,'2')"><div class="fg-icon">✌️</div><div class="fg-name">2 Ngón</div><div class="fg-desc">Người mới<br>basic aim</div></div>
+          <div class="fg-btn on" onclick="selectFinger(this,'3')"><div class="fg-icon">🤟</div><div class="fg-name">3 Ngón</div><div class="fg-desc">Phổ biến<br>balanced</div></div>
+          <div class="fg-btn" onclick="selectFinger(this,'4')"><div class="fg-icon">🖐</div><div class="fg-name">4 Ngón</div><div class="fg-desc">Pro aim<br>fast reflex</div></div>
+          <div class="fg-btn" onclick="selectFinger(this,'claw')"><div class="fg-icon">🦅</div><div class="fg-name">Claw</div><div class="fg-desc">Expert mode<br>max control</div></div>
+        </div>
+
+        <!-- RECOIL CONTROL -->
+        <div class="sec-lbl">Recoil Control — Kiểm soát giật</div>
+        <div class="recoil-wrap">
+          <div class="recoil-zone">
+            <div class="recoil-grid-lines"></div>
+            <canvas id="cv-recoil" width="340" height="88" style="position:absolute;inset:0;width:100%;height:100%"></canvas>
+          </div>
+          <div class="recoil-btns">
+            <div class="rb-btn on" onclick="setRecoil(this,'auto')">Auto Compensate</div>
+            <div class="rb-btn" onclick="setRecoil(this,'manual')">Manual Control</div>
+            <div class="rb-btn" onclick="setRecoil(this,'ar')">AR Pattern (M4A1)</div>
+            <div class="rb-btn" onclick="setRecoil(this,'sniper')">Sniper Mode</div>
+          </div>
+        </div>
+
+        <!-- HEADSHOT TRAINER -->
+        <div class="sec-lbl">Headshot Trainer — Luyện bám đầu</div>
+        <div class="hs-card">
+          <div class="hs-scene" id="hs-scene"></div>
+          <div class="hs-stats">
+            <div class="hs-stat"><div class="hs-stat-val" id="hs-hits">0</div><div class="hs-stat-lbl">HITS</div></div>
+            <div class="hs-stat"><div class="hs-stat-val" id="hs-misses" style="color:#ff8800">0</div><div class="hs-stat-lbl">MISS</div></div>
+            <div class="hs-stat"><div class="hs-stat-val" id="hs-acc">0%</div><div class="hs-stat-lbl">ACC%</div></div>
+          </div>
+          <div class="hs-controls">
+            <div class="hs-ctrl-btn start" onclick="startHSTrainer()">START</div>
+            <div class="hs-ctrl-btn" onclick="document.getElementById('hs-scene').querySelectorAll('.hs-target').forEach(t=>t.remove());hsScore=0;hsMisses=0;hsActive=false;document.getElementById('hs-hits').textContent='0';document.getElementById('hs-misses').textContent='0';document.getElementById('hs-acc').textContent='0%';document.querySelector('.hs-ctrl-btn.start').textContent='START';document.querySelector('.hs-ctrl-btn.start').onclick=startHSTrainer;">RESET</div>
+          </div>
+        </div>
+
+        <!-- GYROSCOPE -->
+        <div class="sec-lbl">Gyroscope — Con quay hồi chuyển</div>
+        <div class="gyro-card">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+            <div><div style="font-size:13px;font-weight:600">Gyro Aim</div><div style="font-size:10px;color:var(--txt3)">Nghiêng máy để kéo tâm</div></div>
+            <label class="toggle"><input type="checkbox" id="gyro-toggle" onchange="toggleGyro(this)"><span class="ttrack"></span></label>
+          </div>
+          <div id="gyro-panel" style="display:none">
+            <div class="gyro-vis">
+              <div class="gyro-bar-h" id="gyro-bar-h" style="top:50%"></div>
+              <div class="gyro-bar-v" id="gyro-bar-v" style="left:50%"></div>
+              <div class="gyro-center"></div>
+            </div>
+            <div class="sr"><div class="sr-top"><span class="sr-lbl">Gyro Vertical</span><span class="sr-val" id="sv-gyv">60</span></div><input type="range" min="1" max="150" value="60" oninput="sv('gyv',this.value)"></div>
+            <div class="sr" style="margin-bottom:0"><div class="sr-top"><span class="sr-lbl">Gyro Horizontal</span><span class="sr-val" id="sv-gyh">55</span></div><input type="range" min="1" max="150" value="55" oninput="sv('gyh',this.value)"></div>
+          </div>
+        </div>
+
+        <button class="aim-apply" onclick="applyAim()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+          APPLY ALL AIM SETTINGS
+        </button>
+      </div>
+    </div>
+
+    <!-- ══ OPTIMIZE ══ (NEW PAGE) -->
+    <div class="page" id="page-optimize">
+      <div class="pscroll">
+        <div class="pg-head"><div class="pg-title">OPTIMIZE</div><div class="pg-sub">System scan · Fix · Deep clean</div></div>
+        <div class="divider"></div>
+
+        <!-- SCAN -->
+        <div class="opt-scan-card">
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <div>
+              <div style="font-family:'Black Han Sans',sans-serif;font-size:16px;letter-spacing:1px;color:var(--txt)">SYSTEM SCANNER</div>
+              <div style="font-size:10px;color:var(--txt3);margin-top:2px" id="scan-status">Nhấn SCAN để quét hệ thống</div>
+            </div>
+            <button onclick="runScan()" style="padding:8px 16px;border-radius:8px;background:var(--rg3);border:1px solid var(--border);color:var(--r1);font-family:'Black Han Sans',sans-serif;font-size:14px;letter-spacing:1px;cursor:pointer">SCAN</button>
+          </div>
+          <div class="scan-anim"><div class="scan-beam" id="scan-beam"></div></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+            <div style="font-size:10px;color:var(--txt3);letter-spacing:1px;font-family:'DM Mono',monospace">ISSUES FOUND</div>
+            <button onclick="fixAll()" style="padding:5px 12px;border-radius:6px;background:linear-gradient(135deg,#880000,var(--r1));border:none;color:#fff;font-size:10px;font-weight:700;letter-spacing:1px;cursor:pointer">FIX ALL</button>
+          </div>
+          <div class="issues-list" id="issues-list"></div>
+        </div>
+
+        <!-- OPT TOOLS -->
+        <div class="sec-lbl">Optimization Tools</div>
+        <div class="opt-tools-grid" id="opt-tools-grid"></div>
+
+        <!-- CLEAN TOOLS -->
+        <div class="sec-lbl">Deep Cleaner</div>
+        <div id="clean-list"></div>
+
+        <!-- BATTERY OPTIMIZER -->
+        <div class="sec-lbl">Battery Optimizer</div>
+        <div style="background:var(--ink2);border:1px solid var(--border2);border-radius:12px;overflow:hidden;margin-bottom:14px">
+          <div style="display:flex;gap:0">
+            <div onclick="setBattery(this,'save')" style="flex:1;text-align:center;padding:12px 6px;border-right:1px solid var(--border2);cursor:pointer;background:var(--rg4);border-top:2px solid var(--r1)">
+              <div style="font-size:18px;margin-bottom:4px">🔋</div>
+              <div style="font-family:'Black Han Sans',sans-serif;font-size:12px;color:var(--r1)">SAVE</div>
+              <div style="font-size:9px;color:var(--txt3)">Tiết kiệm pin</div>
+            </div>
+            <div onclick="setBattery(this,'balance')" style="flex:1;text-align:center;padding:12px 6px;border-right:1px solid var(--border2);cursor:pointer">
+              <div style="font-size:18px;margin-bottom:4px">⚖️</div>
+              <div style="font-family:'Black Han Sans',sans-serif;font-size:12px;color:var(--txt2)">BALANCE</div>
+              <div style="font-size:9px;color:var(--txt3)">Cân bằng</div>
+            </div>
+            <div onclick="setBattery(this,'perf')" style="flex:1;text-align:center;padding:12px 6px;cursor:pointer">
+              <div style="font-size:18px;margin-bottom:4px">⚡</div>
+              <div style="font-family:'Black Han Sans',sans-serif;font-size:12px;color:var(--txt2)">PERF</div>
+              <div style="font-size:9px;color:var(--txt3)">Hiệu năng cao</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- STORAGE -->
+        <div class="sec-lbl">Storage Info</div>
+        <div style="background:var(--ink2);border:1px solid var(--border2);border-radius:12px;padding:14px;margin-bottom:14px">
+          <div style="display:flex;justify-content:space-between;margin-bottom:8px">
+            <div style="font-size:13px;font-weight:600">Internal Storage</div>
+            <div style="font-family:'DM Mono',monospace;font-size:12px;color:var(--r1)">73% used</div>
+          </div>
+          <div style="height:8px;background:var(--ink4);border-radius:4px;overflow:hidden">
+            <div style="width:73%;height:100%;background:linear-gradient(90deg,#880000,var(--r1));border-radius:4px;box-shadow:0 0 6px var(--rg)"></div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:10px">
+            <div style="text-align:center;padding:8px;background:var(--ink4);border-radius:8px">
+              <div style="font-family:'Black Han Sans',sans-serif;font-size:16px;color:#ff8800">4.2G</div>
+              <div style="font-size:9px;color:var(--txt3);font-family:'DM Mono',monospace">GAMES</div>
+            </div>
+            <div style="text-align:center;padding:8px;background:var(--ink4);border-radius:8px">
+              <div style="font-family:'Black Han Sans',sans-serif;font-size:16px;color:#00e5ff">1.8G</div>
+              <div style="font-size:9px;color:var(--txt3);font-family:'DM Mono',monospace">CACHE</div>
+            </div>
+            <div style="text-align:center;padding:8px;background:var(--ink4);border-radius:8px">
+              <div style="font-family:'Black Han Sans',sans-serif;font-size:16px;color:var(--lime)">2.1G</div>
+              <div style="font-size:9px;color:var(--txt3);font-family:'DM Mono',monospace">FREE</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ══ CONTACT ══ -->
+    <div class="page" id="page-contact">
+      <div class="pscroll">
+        <div class="contact-hero">
+          <div class="ch-tag">BLOODCORE NETWORK</div>
+          <div class="ch-title">LIÊN HỆ <span>ADMIN</span></div>
+        </div>
+        <div class="admin-row">
+          <div class="av"><img src="https://sf-static.upanhlaylink.com/img/image_2026032908b0dc0c6571f1e01cbd954b962b09d1.jpg" alt="Admin" onerror="this.style.display='none'"></div>
+          <div class="admin-info">
+            <div class="aname">BloodCore Admin</div>
+            <div class="astatus"><div class="odot"></div><span class="ostxt">Online · Phản hồi nhanh</span></div>
+            <div class="arole">⚡ OWNER · DEVELOPER</div>
+          </div>
+        </div>
+        <div class="contact-links">
+          <a class="cl-item" href="https://zalo.me/0336854208" target="_blank">
+            <div class="cl-icon" style="background:#0068ff22;border:1px solid #0068ff44"><svg width="24" height="24" viewBox="0 0 50 50" fill="none"><rect width="50" height="50" rx="10" fill="#0068FF"/><text x="50%" y="60%" dominant-baseline="middle" text-anchor="middle" fill="white" font-size="26" font-weight="bold" font-family="Arial">Z</text></svg></div>
+            <div><div class="cl-pf">Zalo</div><div class="cl-handle">0336854208</div><div class="cl-desc">Chat trực tiếp · Mua key Elite</div></div>
+          </a>
+          <a class="cl-item" href="https://www.facebook.com/share/1CjgQCh4n2/?mibextid=wwXIfr" target="_blank">
+            <div class="cl-icon" style="background:#1877f222;border:1px solid #1877f244"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect width="24" height="24" rx="6" fill="#1877F2"/><path d="M16 4h-2a4 4 0 00-4 4v2H8v3h2v7h3v-7h2.5l.5-3h-3V8a1 1 0 011-1h2V4z" fill="white"/></svg></div>
+            <div><div class="cl-pf">Facebook</div><div class="cl-handle">BloodCore Official</div><div class="cl-desc">Fanpage · Update · Community</div></div>
+          </a>
+          <a class="cl-item" href="https://t.me/spernew" target="_blank">
+            <div class="cl-icon" style="background:#229ed922;border:1px solid #229ed944"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect width="24" height="24" rx="6" fill="#229ED9"/><path d="M20 4L3 11l6 2 2 6 3-4 5 3 1-14z" fill="white"/></svg></div>
+            <div><div class="cl-pf">Telegram</div><div class="cl-handle">@BloodCoreAdmin</div><div class="cl-desc">Kênh thông báo · 24/7 Support</div></div>
+          </a>
+        </div>
+        <div class="stats-pills">
+          <div class="sp-pill"><div class="sp-val">500+</div><div class="sp-lbl">USERS</div></div>
+          <div class="sp-pill"><div class="sp-val">24/7</div><div class="sp-lbl">SUPPORT</div></div>
+          <div class="sp-pill"><div class="sp-val">v4.0</div><div class="sp-lbl">VERSION</div></div>
+        </div>
+        <div style="background:var(--ink2);border:1px solid var(--border2);border-radius:10px;padding:12px;display:flex;gap:8px;font-size:11px;color:var(--txt3);line-height:1.6">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="9" stroke="#ff1a1a" stroke-width="2"/><path d="M12 8v4M12 16h.01" stroke="#ff1a1a" stroke-width="2" stroke-linecap="round"/></svg>
+          <span>Liên hệ admin để mua key Elite, báo lỗi hoặc yêu cầu tính năng. Phản hồi trong 1–6 giờ.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ SETTINGS ══ -->
+    <div class="page" id="page-set">
+      <div class="pscroll">
+        <div class="pg-head"><div class="pg-title">SETTINGS</div><div class="pg-sub">System preferences</div></div>
+        <div class="divider"></div>
+        <div class="sgroup">
+          <div class="sg-hdr">DISPLAY</div>
+          <div class="si"><div class="si-ico"><svg viewBox="0 0 24 24" fill="none"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" stroke="#ff1a1a" stroke-width="2"/></svg></div><div class="si-info"><div class="si-name">Dark Mode</div><div class="si-desc">Nền tối gaming</div></div><label class="toggle"><input type="checkbox" checked><span class="ttrack"></span></label></div>
+          <div class="si"><div class="si-ico"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="4" stroke="#ff1a1a" stroke-width="2"/><path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke="#ff1a1a" stroke-width="2"/></svg></div><div class="si-info"><div class="si-name">Animations</div><div class="si-desc">Hiệu ứng chuyển động</div></div><label class="toggle"><input type="checkbox" checked><span class="ttrack"></span></label></div>
+          <div class="si"><div class="si-ico"><svg viewBox="0 0 24 24" fill="none"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" stroke="#ff1a1a" stroke-width="2"/></svg></div><div class="si-info"><div class="si-name">Neon Glow Effects</div><div class="si-desc">Hiệu ứng phát sáng đỏ neon</div></div><label class="toggle"><input type="checkbox" checked><span class="ttrack"></span></label></div>
+          <div class="si"><div class="si-ico"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2v20M2 12h20" stroke="#ff1a1a" stroke-width="2"/></svg></div><div class="si-info"><div class="si-name">Scan Line Effect</div><div class="si-desc">Hiệu ứng scanline CRT</div></div><label class="toggle"><input type="checkbox" checked><span class="ttrack"></span></label></div>
+        </div>
+        <div class="sgroup">
+          <div class="sg-hdr">SYSTEM</div>
+          <div class="si"><div class="si-ico"><svg viewBox="0 0 24 24" fill="none"><path d="M11 5L6 9H2v6h4l5 4V5z" stroke="#ff1a1a" stroke-width="2"/><path d="M15.54 8.46a5 5 0 010 7.07" stroke="#ff1a1a" stroke-width="2"/></svg></div><div class="si-info"><div class="si-name">Sound FX</div><div class="si-desc">Âm thanh phản hồi UI</div></div><label class="toggle"><input type="checkbox" id="s-sound" checked><span class="ttrack"></span></label></div>
+          <div class="si"><div class="si-ico"><svg viewBox="0 0 24 24" fill="none"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="#ff1a1a" stroke-width="2"/></svg></div><div class="si-info"><div class="si-name">Auto Boost on Open</div><div class="si-desc">Tự động tối ưu khi mở app</div></div><label class="toggle"><input type="checkbox"><span class="ttrack"></span></label></div>
+          <div class="si"><div class="si-ico"><svg viewBox="0 0 24 24" fill="none"><path d="M18 20V10M12 20V4M6 20v-6" stroke="#ff1a1a" stroke-width="2" stroke-linecap="round"/></svg></div><div class="si-info"><div class="si-name">Live Monitor</div><div class="si-desc">Theo dõi hệ thống nền liên tục</div></div><label class="toggle"><input type="checkbox" checked><span class="ttrack"></span></label></div>
+          <div class="si"><div class="si-ico"><svg viewBox="0 0 24 24" fill="none"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0" stroke="#ff1a1a" stroke-width="2"/></svg></div><div class="si-info"><div class="si-name">Notifications</div><div class="si-desc">Thông báo cảnh báo hệ thống</div></div><label class="toggle"><input type="checkbox" checked><span class="ttrack"></span></label></div>
+          <div class="si"><div class="si-ico"><svg viewBox="0 0 24 24" fill="none"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="#ff1a1a" stroke-width="2"/></svg></div><div class="si-info"><div class="si-name">Anti-Cheat Shield</div><div class="si-desc">Bảo vệ tài khoản game</div></div><label class="toggle"><input type="checkbox" checked><span class="ttrack"></span></label></div>
+        </div>
+        <div class="sgroup">
+          <div class="sg-hdr">ABOUT</div>
+          <div class="si"><span class="si-name">App</span><span class="si-val">BloodCore Optimizer</span></div>
+          <div class="si"><span class="si-name">Version</span><span class="si-val">4.0.0</span></div>
+          <div class="si"><span class="si-name">Tier</span><span class="si-val" id="about-tier">FREE</span></div>
+          <div class="si"><span class="si-name">Build</span><span class="si-val">2026.04</span></div>
+          <div class="si"><span class="si-name">Engine</span><span class="si-val">BlazEngine AI</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end pages -->
+
+  <!-- BOTTOM NAV BAR -->
+  <div class="nav">
+    <div class="nav-cur">
+      <div class="nav-cur-dot"></div>
+      <span class="nav-cur-name" id="nav-cur-name">DASHBOARD</span>
+    </div>
+  </div>
+
+  <!-- DRAWER BACKDROP -->
+  <div class="drawer-backdrop" id="drawer-bd" onclick="closeDrawer()"></div>
+
+  <!-- DRAWER MENU -->
+  <div class="drawer" id="drawer">
+    <div class="drawer-handle"></div>
+    <div class="drawer-title">NAVIGATE</div>
+    <div class="drawer-grid">
+      <button class="dm-btn dm-on" id="dm-dash" onclick="dmGo('dash','DASHBOARD')">
+        <div class="dm-icon"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1.5" stroke="#ff1a1a" stroke-width="2"/><rect x="14" y="3" width="7" height="7" rx="1.5" stroke="#ff1a1a" stroke-width="2"/><rect x="3" y="14" width="7" height="7" rx="1.5" stroke="#ff1a1a" stroke-width="2"/><rect x="14" y="14" width="7" height="7" rx="1.5" stroke="#ff1a1a" stroke-width="2"/></svg></div>
+        <div class="dm-name">DASH</div><div class="dm-active-bar"></div>
+      </button>
+      <button class="dm-btn" id="dm-monitor" onclick="dmGo('monitor','MONITOR')">
+        <div class="dm-icon"><svg viewBox="0 0 24 24" fill="none"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div>
+        <div class="dm-name">MONITOR</div><div class="dm-active-bar"></div>
+      </button>
+      <button class="dm-btn" id="dm-boost" onclick="dmGo('boost','BOOST')">
+        <div class="dm-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="currentColor" stroke-width="2"/></svg></div>
+        <div class="dm-name">BOOST</div><div class="dm-active-bar"></div>
+      </button>
+      <button class="dm-btn" id="dm-aim" onclick="dmGo('aim','AIM LAB')">
+        <div class="dm-icon"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/><line x1="12" y1="3" x2="12" y2="6" stroke="currentColor" stroke-width="2"/><line x1="12" y1="18" x2="12" y2="21" stroke="currentColor" stroke-width="2"/><line x1="3" y1="12" x2="6" y2="12" stroke="currentColor" stroke-width="2"/><line x1="18" y1="12" x2="21" y2="12" stroke="currentColor" stroke-width="2"/></svg></div>
+        <div class="dm-name">AIM LAB</div><div class="dm-active-bar"></div>
+      </button>
+      <button class="dm-btn" id="dm-optimize" onclick="dmGo('optimize','OPTIMIZE')">
+        <div class="dm-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="currentColor" stroke-width="2"/><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div>
+        <div class="dm-name">OPTIMIZE</div><div class="dm-active-bar"></div>
+      </button>
+      <button class="dm-btn" id="dm-contact" onclick="dmGo('contact','ADMIN')">
+        <div class="dm-icon"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="2"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div>
+        <div class="dm-name">ADMIN</div><div class="dm-active-bar"></div>
+      </button>
+      <button class="dm-btn" id="dm-set" onclick="dmGo('set','SETTINGS')" style="grid-column:1/-1;max-width:33%;margin:0 auto">
+        <div class="dm-icon"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z" stroke="currentColor" stroke-width="2"/></svg></div>
+        <div class="dm-name">SETTINGS</div><div class="dm-active-bar"></div>
       </button>
     </div>
-
-    <div class="stats-grid">
-      <div class="stat-card">
-        <div class="stat-label">FPS</div>
-        <div class="stat-value" id="val-fps">--</div>
-        <div class="stat-bar"><div class="stat-bar-fill green" id="bar-fps"></div></div>
-        <div class="stat-status" id="status-fps">Scanning...</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">CPU</div>
-        <div class="stat-value" id="val-cpu">--<span>%</span></div>
-        <div class="stat-bar"><div class="stat-bar-fill yellow" id="bar-cpu"></div></div>
-        <div class="stat-status" id="status-cpu">Scanning...</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">RAM</div>
-        <div class="stat-value" id="val-ram">--<span>%</span></div>
-        <div class="stat-bar"><div class="stat-bar-fill blue" id="bar-ram"></div></div>
-        <div class="stat-status" id="status-ram">Scanning...</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">TEMP</div>
-        <div class="stat-value" id="val-temp">--<span>°</span></div>
-        <div class="stat-bar"><div class="stat-bar-fill red" id="bar-temp"></div></div>
-        <div class="stat-status" id="status-temp">Scanning...</div>
-      </div>
-    </div>
-
-    <div class="perf-score-card">
-      <div class="perf-score-left">
-        <div class="perf-label">BLOODCORE SCORE</div>
-        <div class="perf-score-val" id="perf-score">0</div>
-        <div class="perf-grade" id="perf-grade">ANALYZING...</div>
-      </div>
-      <div class="perf-score-right">
-        <svg class="score-ring" viewBox="0 0 80 80">
-          <circle cx="40" cy="40" r="32" fill="none" stroke="#1a0505" stroke-width="6"/>
-          <circle cx="40" cy="40" r="32" fill="none" stroke="#ff1a1a" stroke-width="6"
-            stroke-dasharray="201" stroke-dashoffset="201" stroke-linecap="round"
-            id="score-ring-circle" style="transform:rotate(-90deg);transform-origin:center;transition:stroke-dashoffset 1.5s ease"/>
-        </svg>
-      </div>
-    </div>
-
-    <div class="section-title">Quick Actions</div>
-    <div class="quick-actions">
-      <button class="qa-btn" onclick="quickAction('clear')">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6" stroke="#ff1a1a" stroke-width="2"/></svg>
-        <span>Clear RAM</span>
-      </button>
-      <button class="qa-btn" onclick="quickAction('cool')">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" stroke="#ff1a1a" stroke-width="2"/></svg>
-        <span>Cool Down</span>
-      </button>
-      <button class="qa-btn" onclick="quickAction('boost')">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="#ff1a1a" stroke-width="2"/></svg>
-        <span>FPS+</span>
-      </button>
-      <button class="qa-btn" onclick="quickAction('network')">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M1 6s4-4 11-4 11 4 11 4M5 10s2.5-2.5 7-2.5S19 10 19 10M9 14s1-1 3-1 3 1 3 1M12 18v.01" stroke="#ff1a1a" stroke-width="2"/></svg>
-        <span>Net Fix</span>
-      </button>
-    </div>
-
-    <!-- BLOOD RANK CARD (new feature) -->
-    <div class="section-title">Blood Rank — Xếp hạng</div>
-    <div style="background:linear-gradient(135deg,rgba(255,26,26,0.08),rgba(255,100,0,0.04));border:1px solid rgba(255,26,26,0.2);border-radius:12px;padding:14px;margin-bottom:14px;">
-      <div style="display:flex;justify-content:space-between;align-items:center;">
-        <div>
-          <div style="font-family:var(--font-main);font-size:11px;color:var(--text2);letter-spacing:2px;margin-bottom:4px;">BLOOD RANK</div>
-          <div style="font-family:var(--font-main);font-size:24px;font-weight:900;color:var(--red);text-shadow:var(--glow-r);" id="blood-rank">IRON I</div>
-          <div style="font-size:11px;color:var(--text2);margin-top:2px;" id="blood-rank-desc">Mới bắt đầu hành trình</div>
-        </div>
-        <div style="text-align:right;">
-          <div style="font-family:var(--font-main);font-size:28px;font-weight:900;color:var(--gold);" id="blood-xp">0</div>
-          <div style="font-size:10px;color:var(--text2);letter-spacing:1px;">XP</div>
-        </div>
-      </div>
-      <div style="margin-top:10px;">
-        <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text2);margin-bottom:4px;"><span>Tiến độ lên rank</span><span id="blood-xp-pct">0%</span></div>
-        <div style="height:4px;background:rgba(255,26,26,0.1);border-radius:2px;overflow:hidden;">
-          <div id="blood-xp-bar" style="height:100%;background:linear-gradient(90deg,#ff1a1a,#ff6600);border-radius:2px;transition:width 1s ease;width:0%;box-shadow:0 0 8px #ff1a1a;"></div>
-        </div>
-      </div>
-    </div>
-
-  </div>
-</div>
-
-<!-- PAGE: FEATURES -->
-<div class="page" id="page-features">
-  <div class="page-scroll">
-    <div class="section-header">
-      <div class="section-title-lg">FEATURES</div>
-      <div class="section-sub">Tính năng tối ưu hóa BloodCore</div>
-    </div>
-    <div class="feat-group-label">
-      <span class="badge-free">FREE</span>
-      <span>Basic Optimization</span>
-    </div>
-    <div class="feature-list" id="feature-list-free"></div>
-    <div class="feat-group-label vip-group">
-      <span class="badge-vip">VIP</span>
-      <span>Elite Features</span>
-      <button class="upgrade-mini-btn" onclick="showKeyModal()">NHẬP KEY</button>
-    </div>
-    <div class="feature-list locked" id="feature-list-vip"></div>
-  </div>
-</div>
-
-<!-- PAGE: STATS -->
-<div class="page" id="page-stats">
-  <div class="page-scroll">
-    <div class="section-header">
-      <div class="section-title-lg">LIVE STATS</div>
-      <div class="section-sub">Thống kê thời gian thực</div>
-    </div>
-    <div class="realtime-grid">
-      <div class="rt-card">
-        <div class="rt-card-top"><span class="rt-label">FPS COUNTER</span><span class="rt-value green" id="rt-fps">60</span></div>
-        <canvas id="graph-fps" width="300" height="50" class="rt-graph"></canvas>
-        <div class="rt-info"><span>Min: <b id="rt-fps-min">--</b></span><span>Avg: <b id="rt-fps-avg">--</b></span><span>Max: <b id="rt-fps-max">--</b></span></div>
-      </div>
-      <div class="rt-card">
-        <div class="rt-card-top"><span class="rt-label">CPU USAGE</span><span class="rt-value yellow" id="rt-cpu">0%</span></div>
-        <canvas id="graph-cpu" width="300" height="50" class="rt-graph"></canvas>
-        <div class="rt-info"><span>Min: <b id="rt-cpu-min">--</b></span><span>Avg: <b id="rt-cpu-avg">--</b></span><span>Max: <b id="rt-cpu-max">--</b></span></div>
-      </div>
-      <div class="rt-card">
-        <div class="rt-card-top"><span class="rt-label">RAM USAGE</span><span class="rt-value blue" id="rt-ram">0%</span></div>
-        <canvas id="graph-ram" width="300" height="50" class="rt-graph"></canvas>
-        <div class="rt-info"><span>Min: <b id="rt-ram-min">--</b></span><span>Avg: <b id="rt-ram-avg">--</b></span><span>Max: <b id="rt-ram-max">--</b></span></div>
-      </div>
-      <div class="rt-card">
-        <div class="rt-card-top"><span class="rt-label">TEMPERATURE</span><span class="rt-value red" id="rt-temp">0°</span></div>
-        <canvas id="graph-temp" width="300" height="50" class="rt-graph"></canvas>
-        <div class="rt-info"><span>Min: <b id="rt-temp-min">--</b></span><span>Avg: <b id="rt-temp-avg">--</b></span><span>Max: <b id="rt-temp-max">--</b></span></div>
-      </div>
-    </div>
-    <div class="section-title" style="margin-top:20px">NETWORK MONITOR</div>
-    <div class="net-stats">
-      <div class="net-item"><div class="net-icon">↓</div><div class="net-data"><div class="net-val" id="net-down">0 MB/s</div><div class="net-lbl">Download</div></div></div>
-      <div class="net-item"><div class="net-icon">↑</div><div class="net-data"><div class="net-val" id="net-up">0 MB/s</div><div class="net-lbl">Upload</div></div></div>
-      <div class="net-item"><div class="net-icon">⟳</div><div class="net-data"><div class="net-val" id="net-ping">-- ms</div><div class="net-lbl">Ping</div></div></div>
-    </div>
-  </div>
-</div>
-
-<!-- PAGE: VIP -->
-<div class="page" id="page-vip">
-  <div class="page-scroll">
-    <div class="section-header">
-      <div class="section-title-lg" style="background:linear-gradient(135deg,#ffcc00,#ff6600);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">VIP ELITE</div>
-      <div class="section-sub">Nâng cấp để mở khóa toàn bộ</div>
-    </div>
-    <div class="vip-plans">
-      <div class="vip-plan">
-        <div class="vip-plan-name">🗡 SILVER</div>
-        <div class="vip-plan-price">30K <span>VND / 7 ngày</span></div>
-        <ul class="vip-plan-features">
-          <li>Aim Lock v1–v2</li><li>Smooth Aim cơ bản</li><li>Stats Realtime</li><li>FPS Boost nâng cao</li>
-        </ul>
-        <button class="vip-buy-btn" onclick="showKeyModal()">NHẬP KEY KÍCH HOẠT</button>
-      </div>
-      <div class="vip-plan featured">
-        <div class="vip-plan-name">💀 BLOOD ELITE</div>
-        <div class="vip-plan-price">60K <span>VND / 30 ngày</span></div>
-        <ul class="vip-plan-features">
-          <li>Aim Lock v1–v4 FULL</li><li>Auto Headshot Assist</li><li>Gyroscope Pro</li>
-          <li>Anti-Recoil MAX</li><li>Radar ESP Lite</li><li>Blood Rank System</li>
-        </ul>
-        <button class="vip-buy-btn" onclick="showKeyModal()">NHẬP KEY KÍCH HOẠT</button>
-      </div>
-      <div class="vip-plan">
-        <div class="vip-plan-name">☠ IMMORTAL</div>
-        <div class="vip-plan-price">150K <span>VND / Vĩnh viễn</span></div>
-        <ul class="vip-plan-features">
-          <li>TẤT CẢ tính năng ELITE</li><li>Update miễn phí trọn đời</li><li>Priority Support 24/7</li><li>Early Access tính năng mới</li>
-        </ul>
-        <button class="vip-buy-btn" style="background:linear-gradient(135deg,#ffcc00,#ff9900);color:#000;" onclick="showKeyModal()">NHẬP KEY KÍCH HOẠT</button>
-      </div>
-    </div>
-    <button class="key-secondary-btn" onclick="showKeyModal()">🔑 ĐÃ CÓ KEY? NHẬP TẠI ĐÂY</button>
-  </div>
-</div>
-
-<!-- PAGE: AIM LAB -->
-<div class="page" id="page-aimlab">
-  <div class="page-scroll">
-    <div class="aim-header">
-      <div>
-        <div style="font-family:var(--font-main);font-size:16px;font-weight:900;color:var(--red);">AIM LAB</div>
-        <div class="aim-status-badge" id="aim-status-badge">● READY</div>
-      </div>
-      <div class="aim-score-wrap">
-        <div class="aim-score-val" id="aim-score">85</div>
-        <div class="aim-score-lbl">AIM SCORE</div>
-      </div>
-    </div>
-
-    <button class="aim-apply-btn-full" onclick="applyAimSettings()">⚡ APPLY ALL SETTINGS</button>
-
-    <div class="aim-section-title">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#ff1a1a" stroke-width="2"/><circle cx="12" cy="12" r="4" stroke="#ff1a1a" stroke-width="2"/><circle cx="12" cy="12" r="1.5" fill="#ff1a1a"/></svg>
-      AIM LOCK — Khoá tâm
-    </div>
-    <div class="aimlock-grid">
-      <button class="aimlock-btn" id="al-v1" onclick="setAimLock(this,'v1')"><span class="al-ver">v1</span><span class="al-name">Nhẹ</span><span class="al-desc">Tự nhiên</span></button>
-      <button class="aimlock-btn" id="al-v2" onclick="setAimLock(this,'v2')"><span class="al-ver">v2</span><span class="al-name">Vừa</span><span class="al-desc">Cân bằng</span></button>
-      <button class="aimlock-btn active" id="al-v3" onclick="setAimLock(this,'v3')"><span class="al-ver">v3</span><span class="al-name">Mạnh</span><span class="al-desc">Bám tốt</span></button>
-      <button class="aimlock-btn" id="al-v4" onclick="setAimLock(this,'v4')"><span class="al-ver">v4</span><span class="al-name">MAX</span><span class="al-desc">Pro lock</span></button>
-    </div>
-    <div class="aimlock-detail" id="aimlock-detail">
-      <div class="ald-row"><span>Lock radius</span><span class="ald-val" id="al-radius">35px</span></div>
-      <div class="ald-row"><span>Track speed</span><span class="ald-val" id="al-speed">Medium</span></div>
-      <div class="ald-row"><span>Priority</span><span class="ald-val" id="al-priority">Đầu + Ngực</span></div>
-    </div>
-
-    <div class="aim-section-title">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M20.24 12.24a6 6 0 00-8.49-8.49L5 10.5V19h8.5l6.74-6.76z" stroke="#ff1a1a" stroke-width="2"/></svg>
-      SMOOTH AIM — Nhẹ tâm
-    </div>
-    <div class="smooth-card">
-      <div class="smooth-preview-row">
-        <div class="smooth-bar-wrap">
-          <div class="smooth-bar-track"><div class="smooth-bar-fill" id="smooth-fill" style="width:60%"></div></div>
-          <div class="smooth-labels"><span>Cứng</span><span>Mượt</span></div>
-        </div>
-        <span class="smooth-pct" id="smooth-pct">60%</span>
-      </div>
-      <input type="range" min="0" max="100" value="60" class="sens-slider" oninput="updateSmooth(this.value)">
-      <div class="smooth-presets">
-        <button class="smooth-pre-btn" onclick="setSmooth(this,20)">Chắc tay</button>
-        <button class="smooth-pre-btn active" onclick="setSmooth(this,60)">Cân bằng</button>
-        <button class="smooth-pre-btn" onclick="setSmooth(this,85)">Siêu mượt</button>
-      </div>
-    </div>
-
-    <div class="aim-section-title">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><rect x="3" y="8" width="18" height="13" rx="2" stroke="#ff1a1a" stroke-width="2"/><path d="M8 8V6a4 4 0 018 0v2" stroke="#ff1a1a" stroke-width="2"/></svg>
-      AIM ASSIST — Hỗ trợ ngắm
-    </div>
-    <div class="assist-card">
-      <div class="assist-toggle-row">
-        <div><div class="assist-title">Aim Assist</div><div class="assist-sub">Kéo tâm tự nhiên khi ngắm</div></div>
-        <label class="toggle"><input type="checkbox" id="assist-toggle" checked><span class="toggle-track"></span></label>
-      </div>
-      <div class="assist-opt-row"><span>Phạm vi</span><div class="assist-lvl-btns"><button class="assist-lvl active" onclick="setAssistLevel(this,'low')">Thấp</button><button class="assist-lvl" onclick="setAssistLevel(this,'mid')">Trung</button><button class="assist-lvl" onclick="setAssistLevel(this,'high')">Cao</button></div></div>
-      <div class="assist-opt-row"><span>Ưu tiên</span><div class="assist-lvl-btns"><button class="assist-target active" onclick="setAssistTarget(this,'head')">Đầu</button><button class="assist-target" onclick="setAssistTarget(this,'body')">Ngực</button><button class="assist-target" onclick="setAssistTarget(this,'auto')">Auto</button></div></div>
-      <div class="assist-opt-row"><span>Kích hoạt</span><div class="assist-lvl-btns"><button class="assist-when active" onclick="setAssistWhen(this,'ads')">ADS</button><button class="assist-when" onclick="setAssistWhen(this,'always')">Luôn</button><button class="assist-when" onclick="setAssistWhen(this,'scope')">Scope</button></div></div>
-    </div>
-
-    <div class="aim-section-title">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M4 6h16M4 12h16M4 18h16" stroke="#ff1a1a" stroke-width="2" stroke-linecap="round"/><circle cx="8" cy="6" r="2" fill="#ff1a1a"/><circle cx="16" cy="12" r="2" fill="#ff1a1a"/><circle cx="10" cy="18" r="2" fill="#ff1a1a"/></svg>
-      SENSITIVITY — Độ nhạy
-    </div>
-    <div class="sens-preset-grid">
-      <button class="sens-preset-btn active" onclick="applySensPreset(this,'balanced')"><span class="sp-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 3v18M5 8l7-5 7 5" stroke="#ff1a1a" stroke-width="2"/></svg></span><span class="sp-name">Cân bằng</span></button>
-      <button class="sens-preset-btn" onclick="applySensPreset(this,'sniper')"><span class="sp-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#ff1a1a" stroke-width="1.5"/><circle cx="12" cy="12" r="4" stroke="#ff1a1a" stroke-width="1.5"/></svg></span><span class="sp-name">Sniper</span></button>
-      <button class="sens-preset-btn" onclick="applySensPreset(this,'rush')"><span class="sp-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="#ff1a1a" stroke-width="2"/></svg></span><span class="sp-name">Rush</span></button>
-      <button class="sens-preset-btn" onclick="applySensPreset(this,'pro')"><span class="sp-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M2 19h20M3 9l4 4 5-8 5 8 4-4-2 10H5" stroke="#ff1a1a" stroke-width="2"/></svg></span><span class="sp-name">Pro</span></button>
-    </div>
-    <div>
-      <div class="sens-row"><span class="sens-label">Tổng quát <span class="sens-val" id="sv-general">100</span></span><input type="range" min="1" max="200" value="100" id="sr-general" class="sens-slider" oninput="updateSens('general',this.value)"></div>
-      <div class="sens-row"><span class="sens-label">ADS <span class="sens-val" id="sv-ads">80</span></span><input type="range" min="1" max="200" value="80" id="sr-ads" class="sens-slider" oninput="updateSens('ads',this.value)"></div>
-      <div class="sens-row"><span class="sens-label">Scope 2x <span class="sens-val" id="sv-scope2">65</span></span><input type="range" min="1" max="200" value="65" id="sr-scope2" class="sens-slider" oninput="updateSens('scope2',this.value)"></div>
-      <div class="sens-row"><span class="sens-label">Scope 4x <span class="sens-val" id="sv-scope4">50</span></span><input type="range" min="1" max="200" value="50" id="sr-scope4" class="sens-slider" oninput="updateSens('scope4',this.value)"></div>
-    </div>
-
-    <!-- ANTI RECOIL (new) -->
-    <div class="aim-section-title">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 2v4M12 18v4M2 12h4M18 12h4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" stroke="#ff1a1a" stroke-width="2"/></svg>
-      ANTI-RECOIL — Giảm giật
-    </div>
-    <div class="hl-card">
-      <div class="hl-toggle-row">
-        <div><div class="hl-title">Anti-Recoil System</div><div class="hl-sub">Giảm độ giật khi bắn liên tục</div></div>
-        <label class="toggle"><input type="checkbox" id="recoil-toggle" checked><span class="toggle-track"></span></label>
-      </div>
-      <div class="hl-lvl-btns">
-        <button class="hl-lvl-btn active" onclick="setHL(this,'low')">Nhẹ</button>
-        <button class="hl-lvl-btn" onclick="setHL(this,'mid')">Trung</button>
-        <button class="hl-lvl-btn" onclick="setHL(this,'high')">Mạnh</button>
-        <button class="hl-lvl-btn" onclick="setHL(this,'max')">MAX</button>
-      </div>
-    </div>
-
-    <!-- GYRO (new) -->
-    <div class="aim-section-title">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#ff1a1a" stroke-width="2"/><ellipse cx="12" cy="12" rx="9" ry="4" stroke="#ff1a1a" stroke-width="1.5"/><line x1="12" y1="3" x2="12" y2="21" stroke="#ff1a1a" stroke-width="1.5"/></svg>
-      GYROSCOPE PRO — Con quay hồi chuyển
-    </div>
-    <div class="gyro-card">
-      <div class="gyro-toggle-row">
-        <div><div class="gyro-title">Gyroscope Mode</div><div class="gyro-sub">Điều khiển bằng con quay gyro</div></div>
-        <label class="toggle"><input type="checkbox" id="gyro-toggle"><span class="toggle-track"></span></label>
-      </div>
-      <div class="gyro-mode-lbl">Chế độ:</div>
-      <div class="gyro-mode-btns">
-        <button class="gyro-mode-btn active" onclick="setGyroMode(this,'ads')">ADS only</button>
-        <button class="gyro-mode-btn" onclick="setGyroMode(this,'always')">Always On</button>
-        <button class="gyro-mode-btn" onclick="setGyroMode(this,'scope')">Scope only</button>
-      </div>
-    </div>
-
-  </div>
-</div>
-
-<!-- PAGE: ADMIN -->
-<div class="page" id="page-admin">
-  <div class="page-scroll">
-    <div class="section-header">
-      <div class="section-title-lg">ADMIN</div>
-      <div class="section-sub">Liên hệ mua key & hỗ trợ</div>
-    </div>
-    <a class="admin-contact-card" href="https://zalo.me" target="_blank">
-      <div class="acc-icon-wrap zalo-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><rect width="24" height="24" rx="6" fill="#0068FF"/><path d="M5 16.5c.5-1.5 1-3 2-4.5s2.5-2.5 4-2.5c2 0 3.5 1.5 3.5 3.5S13 16.5 11 16.5c-.8 0-1.5-.3-2-.7l-4 .7z" fill="white"/></svg></div>
-      <div class="acc-info"><div class="acc-platform">Zalo</div><div class="acc-handle">@BloodCoreAdmin</div><div class="acc-desc">Chat trực tiếp · Mua key VIP</div></div>
-      <div class="acc-arrow"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div>
-      <div class="acc-glow zalo-glow"></div>
-    </a>
-    <a class="admin-contact-card" href="https://facebook.com" target="_blank">
-      <div class="acc-icon-wrap fb-icon" style="background:rgba(24,119,242,0.15);"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><rect width="24" height="24" rx="6" fill="#1877F2"/><path d="M16 4h-2a4 4 0 00-4 4v2H8v3h2v7h3v-7h2.5l.5-3h-3V8a1 1 0 011-1h2V4z" fill="white"/></svg></div>
-      <div class="acc-info"><div class="acc-platform">Facebook</div><div class="acc-handle">BloodCore Official</div><div class="acc-desc">Fanpage · Tin tức · Update</div></div>
-      <div class="acc-arrow"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div>
-      <div class="acc-glow fb-glow"></div>
-    </a>
-    <a class="admin-contact-card" href="https://t.me" target="_blank">
-      <div class="acc-icon-wrap tg-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><rect width="24" height="24" rx="6" fill="#229ED9"/><path d="M20 4L3 11l6 2 2 6 3-4 5 3 1-14z" fill="white" opacity="0.9"/></svg></div>
-      <div class="acc-info"><div class="acc-platform">Telegram</div><div class="acc-handle">@BloodCoreAdmin</div><div class="acc-desc">Kênh thông báo · Support 24/7</div></div>
-      <div class="acc-arrow"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div>
-      <div class="acc-glow tg-glow"></div>
-    </a>
-    <div class="admin-stats-row">
-      <div class="admin-stat-item"><div class="admin-stat-val">1K+</div><div class="admin-stat-lbl">Người dùng</div></div>
-      <div class="admin-stat-divider"></div>
-      <div class="admin-stat-item"><div class="admin-stat-val">24/7</div><div class="admin-stat-lbl">Hỗ trợ</div></div>
-      <div class="admin-stat-divider"></div>
-      <div class="admin-stat-item"><div class="admin-stat-val">v1.0</div><div class="admin-stat-lbl">Phiên bản</div></div>
-    </div>
-    <div class="admin-note"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="9" stroke="#ff1a1a" stroke-width="2"/><path d="M12 8v4M12 16h.01" stroke="#ff1a1a" stroke-width="2" stroke-linecap="round"/></svg><span>Liên hệ admin để mua key VIP, báo lỗi hoặc yêu cầu tính năng mới. Phản hồi 1–6 giờ.</span></div>
-  </div>
-</div>
-
-<!-- PAGE: SETTINGS -->
-<div class="page" id="page-settings">
-  <div class="page-scroll">
-    <div class="section-header">
-      <div class="section-title-lg">SETTINGS</div>
-      <div class="section-sub">Cài đặt BloodCore</div>
-    </div>
-    <div class="settings-section">
-      <div class="settings-item">
-        <div class="settings-item-left">
-          <div class="settings-item-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M9 18V5l12-2v13" stroke="#ff1a1a" stroke-width="2" stroke-linecap="round"/><circle cx="6" cy="18" r="3" stroke="#ff1a1a" stroke-width="2"/><circle cx="18" cy="16" r="3" stroke="#ff1a1a" stroke-width="2"/></svg></div>
-          <div><div class="settings-item-title">Sound FX</div><div class="settings-item-sub">Âm thanh hiệu ứng</div></div>
-        </div>
-        <label class="toggle"><input type="checkbox" id="s-sound" checked><span class="toggle-track"></span></label>
-      </div>
-      <div class="settings-item">
-        <div class="settings-item-left">
-          <div class="settings-item-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="#ff1a1a" stroke-width="2"/></svg></div>
-          <div><div class="settings-item-title">Haptic Feedback</div><div class="settings-item-sub">Rung phản hồi</div></div>
-        </div>
-        <label class="toggle"><input type="checkbox" id="s-haptic" checked><span class="toggle-track"></span></label>
-      </div>
-      <div class="settings-item">
-        <div class="settings-item-left">
-          <div class="settings-item-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="2" y="3" width="20" height="14" rx="2" stroke="#ff1a1a" stroke-width="2"/><path d="M8 21h8M12 17v4" stroke="#ff1a1a" stroke-width="2" stroke-linecap="round"/></svg></div>
-          <div><div class="settings-item-title">Performance Mode</div><div class="settings-item-sub">Chế độ hiệu suất cao</div></div>
-        </div>
-        <label class="toggle"><input type="checkbox" id="s-perf" checked><span class="toggle-track"></span></label>
-      </div>
-      <div class="settings-item">
-        <div class="settings-item-left">
-          <div class="settings-item-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="#ff1a1a" stroke-width="2"/></svg></div>
-          <div><div class="settings-item-title">Auto Boost</div><div class="settings-item-sub">Tự động tối ưu khi vào game</div></div>
-        </div>
-        <label class="toggle"><input type="checkbox" id="s-autoboost"><span class="toggle-track"></span></label>
-      </div>
-    </div>
-
-    <!-- KEY MANAGEMENT section (NEW) -->
-    <div class="section-title">KEY MANAGEMENT</div>
-    <div class="settings-section">
-      <div class="settings-item">
-        <div class="settings-item-left">
-          <div class="settings-item-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="3" y="11" width="18" height="11" rx="2" stroke="#ff1a1a" stroke-width="2"/><path d="M7 11V7a5 5 0 0110 0v4" stroke="#ff1a1a" stroke-width="2"/></svg></div>
-          <div><div class="settings-item-title">VIP Key Status</div><div class="settings-item-sub" id="key-status-text">Chưa kích hoạt</div></div>
-        </div>
-        <button class="select-btn" onclick="showKeyModal()">NHẬP KEY</button>
-      </div>
-      <div class="settings-item">
-        <div class="settings-item-left">
-          <div class="settings-item-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="4" stroke="#ff1a1a" stroke-width="2"/><path d="M8 12h8M12 8v8" stroke="#ff1a1a" stroke-width="2" stroke-linecap="round"/></svg></div>
-          <div><div class="settings-item-title">Device ID</div><div class="settings-item-sub" id="device-id-display" style="font-family:var(--font-mono);font-size:10px;">Đang tải...</div></div>
-        </div>
-      </div>
-      <div class="settings-item">
-        <div class="settings-item-left">
-          <div class="settings-item-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M3 12a9 9 0 109 9" stroke="#ff1a1a" stroke-width="2" stroke-linecap="round"/><path d="M3 3v9h9" stroke="#ff1a1a" stroke-width="2" stroke-linecap="round"/></svg></div>
-          <div><div class="settings-item-title">Reset Key</div><div class="settings-item-sub">Xóa key đã lưu</div></div>
-        </div>
-        <button class="select-btn" style="border-color:rgba(255,50,50,0.3);color:rgba(255,80,80,0.6);" onclick="resetKey()">RESET</button>
-      </div>
-    </div>
-
-    <div class="section-title">ABOUT</div>
-    <div class="settings-section">
-      <div class="settings-item">
-        <div class="settings-item-left">
-          <div class="settings-item-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#ff1a1a" stroke-width="2"/><path d="M12 8v4M12 16h.01" stroke="#ff1a1a" stroke-width="2" stroke-linecap="round"/></svg></div>
-          <div><div class="settings-item-title">BloodCore</div><div class="settings-item-sub">v1.0.0 — Elite Gaming Optimizer</div></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-```
-
-  </div><!-- end pages-container -->
-
-  <!-- BOTTOM NAV -->
-
-  <div class="bottom-nav">
-    <button class="bnav-btn active" data-page="home" onclick="switchPage('home')">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" stroke="currentColor" stroke-width="2"/><path d="M9 22V12h6v10" stroke="currentColor" stroke-width="2"/></svg>
-      <span>Home</span>
-    </button>
-    <button class="bnav-btn" data-page="features" onclick="switchPage('features')">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" stroke="currentColor" stroke-width="2"/></svg>
-      <span>Features</span>
-    </button>
-    <button class="bnav-btn" data-page="stats" onclick="switchPage('stats')">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M18 20V10M12 20V4M6 20v-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-      <span>Stats</span>
-    </button>
-    <button class="bnav-btn" data-page="vip" onclick="switchPage('vip')">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z" stroke="currentColor" stroke-width="2"/></svg>
-      <span>VIP</span>
-    </button>
-    <button class="bnav-btn" data-page="aimlab" onclick="switchPage('aimlab')">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="2"/><line x1="12" y1="3" x2="12" y2="7" stroke="currentColor" stroke-width="2"/><line x1="12" y1="17" x2="12" y2="21" stroke="currentColor" stroke-width="2"/><line x1="3" y1="12" x2="7" y2="12" stroke="currentColor" stroke-width="2"/><line x1="17" y1="12" x2="21" y2="12" stroke="currentColor" stroke-width="2"/></svg>
-      <span>AIM LAB</span>
-    </button>
-    <button class="bnav-btn" data-page="admin" onclick="switchPage('admin')">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="2"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-      <span>Admin</span>
-    </button>
-    <button class="bnav-btn" data-page="settings" onclick="switchPage('settings')">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z" stroke="currentColor" stroke-width="2"/></svg>
-      <span>Settings</span>
-    </button>
   </div>
 
-  <div id="toast" class="toast"></div>
-  <div id="boost-overlay" class="boost-overlay" style="display:none;">
-    <div class="boost-overlay-inner">
-      <div class="boost-overlay-ring"></div>
-      <div class="boost-overlay-text" id="boost-overlay-text">CALIBRATING CORE...</div>
-      <div class="boost-overlay-percent" id="boost-overlay-pct">0%</div>
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+  <!-- BOOST OVERLAY -->
+  <div class="b-overlay" id="bov">
+    <div class="b-ring-wrap">
+      <svg class="b-ring" width="120" height="120" viewBox="0 0 120 120">
+        <circle cx="60" cy="60" r="52" fill="none" stroke="#1a0000" stroke-width="5"/>
+        <circle cx="60" cy="60" r="52" fill="none" stroke="#ff1a1a" stroke-width="5"
+          stroke-dasharray="327" stroke-dashoffset="327" stroke-linecap="round"
+          id="bov-arc" style="transform:rotate(-90deg);transform-origin:center"/>
+      </svg>
+      <div class="b-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" fill="#ff1a1a" fill-opacity=".5" stroke="#ff1a1a" stroke-width="1.5"/></svg></div>
     </div>
+    <div class="b-title" id="bov-txt">IGNITING...</div>
+    <div class="b-pct" id="bov-pct">0%</div>
   </div>
 
 </div><!-- end app -->
 
-<!-- ══════════════════════════════════════
-     KEY MODAL — BLOODCORE EDITION
-══════════════════════════════════════ -->
-
-<div id="key-modal" style="display:none;">
-  <div class="key-modal-bg"></div>
-  <div class="key-modal-scanlines"></div>
-
+<!-- KEY MODAL -->
+<div id="key-modal">
   <div class="key-modal-box">
     <div class="corner corner-tl"></div>
     <div class="corner corner-tr"></div>
     <div class="corner corner-bl"></div>
     <div class="corner corner-br"></div>
-
-```
-<!-- Logo target -->
-<div class="key-modal-logo">
-  <div class="key-modal-target">
-    <svg width="70" height="70" viewBox="0 0 100 100" fill="none">
-      <circle cx="50" cy="50" r="46" stroke="#ff1a1a" stroke-width="1.5" fill="none" opacity="0.5"/>
-      <circle cx="50" cy="50" r="36" stroke="#ff1a1a" stroke-width="1" fill="none" opacity="0.4"/>
-      <circle cx="50" cy="50" r="26" stroke="#ff1a1a" stroke-width="1" fill="none" opacity="0.3"/>
-      <circle cx="50" cy="50" r="14" stroke="#ff1a1a" stroke-width="1.5" fill="rgba(255,26,26,0.1)" opacity="0.8"/>
-      <line x1="50" y1="4" x2="50" y2="20" stroke="#ff1a1a" stroke-width="1.5"/>
-      <line x1="50" y1="80" x2="50" y2="96" stroke="#ff1a1a" stroke-width="1.5"/>
-      <line x1="4" y1="50" x2="20" y2="50" stroke="#ff1a1a" stroke-width="1.5"/>
-      <line x1="80" y1="50" x2="96" y2="50" stroke="#ff1a1a" stroke-width="1.5"/>
-    </svg>
-    <div class="key-modal-target-center"></div>
+    <span class="key-modal-icon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none"><rect x="3" y="11" width="18" height="11" rx="2" stroke="#00ff88" stroke-width="2" fill="#00ff8811"/><path d="M7 11V7a5 5 0 0110 0v4" stroke="#00ff88" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="16" r="1.5" fill="#00ff88"/></svg></span>
+    <div class="key-modal-title">NHẬP KEY VIP</div>
+    <div class="key-modal-sub">Liên hệ admin để lấy key kích hoạt</div>
+    <input id="key-input" placeholder="Nhập access key của bạn..."
+      onkeydown="if(event.key==='Enter')activateKey()">
+    <div id="key-msg"></div>
+    <button id="activate-btn" onclick="activateKey()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;margin-right:6px"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="currentColor" stroke-width="2" fill="currentColor" fill-opacity="0.3"/></svg>KÍCH HOẠT</button>
+    <div class="key-modal-lock"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;margin-right:4px"><rect x="3" y="11" width="18" height="11" rx="2" stroke="currentColor" stroke-width="2"/><path d="M7 11V7a5 5 0 0110 0v4" stroke="currentColor" stroke-width="2"/></svg>1 KEY — 1 THIẾT BỊ</div>
   </div>
 </div>
 
-<!-- Badge -->
-<div class="key-modal-badge"><span>BLOODCORE AUTHENTICATION</span></div>
-
-<div class="key-modal-title">NHẬP KEY VIP</div>
-<div class="key-modal-sub">Liên hệ admin để lấy key kích hoạt Elite</div>
-
-<!-- Key type selector -->
-<div class="key-type-row">
-  <button class="key-type-btn active" id="kt-weekly" onclick="selectKeyType(this,'weekly')">
-    <span class="kt-icon">🗡</span>
-    <span>SILVER</span>
-    <span class="kt-duration">7 ngày</span>
-  </button>
-  <button class="key-type-btn" id="kt-monthly" onclick="selectKeyType(this,'monthly')">
-    <span class="kt-icon">💀</span>
-    <span>ELITE</span>
-    <span class="kt-duration">30 ngày</span>
-  </button>
-  <button class="key-type-btn" id="kt-lifetime" onclick="selectKeyType(this,'lifetime')">
-    <span class="kt-icon">☠</span>
-    <span>IMMORTAL</span>
-    <span class="kt-duration">Vĩnh viễn</span>
-  </button>
-</div>
-
-<!-- Input -->
-<div class="key-input-wrapper">
-  <label class="key-input-label">ACCESS KEY</label>
-  <input id="key-input" class="key-input-field" placeholder="BLOOD-XXXX-XXXX-XXXX"
-    onkeydown="if(event.key==='Enter')activateKey()"
-    oninput="onKeyInput(this)">
-  <div class="key-input-icon">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="3" y="11" width="18" height="11" rx="2" stroke="currentColor" stroke-width="2"/><path d="M7 11V7a5 5 0 0110 0v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-  </div>
-</div>
-
-<!-- Device info -->
-<div class="device-info-bar">
-  <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><rect x="2" y="3" width="20" height="14" rx="2" stroke="currentColor" stroke-width="2"/><path d="M8 21h8M12 17v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-  <span class="device-info-text">DEVICE: <span class="device-id-val" id="device-id-modal">---</span></span>
-</div>
-
-<div id="key-msg"></div>
-
-<button id="activate-btn" onclick="activateKey()">
-  <span class="btn-icon">⚡</span>KÍCH HOẠT BLOODCORE
-</button>
-
-<button class="key-secondary-btn" onclick="openAdmin()">
-  💬 Liên hệ admin để mua key
-</button>
-
-<!-- Footer -->
-<div class="key-modal-footer">
-  <div class="key-features-row">
-    <div class="key-feat-item"><span class="key-feat-icon">🎯</span><span class="key-feat-label">AIM LOCK</span></div>
-    <div class="key-feat-item"><span class="key-feat-icon">⚡</span><span class="key-feat-label">FPS BOOST</span></div>
-    <div class="key-feat-item"><span class="key-feat-icon">🛡</span><span class="key-feat-label">ANTI-BAN</span></div>
-    <div class="key-feat-item"><span class="key-feat-icon">📡</span><span class="key-feat-label">NET OPT</span></div>
-  </div>
-  <div class="key-modal-lock">
-    <svg width="11" height="11" viewBox="0 0 24 24" fill="none"><rect x="3" y="11" width="18" height="11" rx="2" stroke="currentColor" stroke-width="2"/><path d="M7 11V7a5 5 0 0110 0v4" stroke="currentColor" stroke-width="2"/></svg>
-    1 KEY — 1 THIẾT BỊ · SECURE BIND
-  </div>
-</div>
-```
-
-  </div>
-</div>
-
+<script src="script.js"></script>
+<!-- Extra helpers not in script.js -->
 <script>
-// ═══════════════════════════════════════════
-//   BLOODCORE — SCRIPT ENGINE
-// ═══════════════════════════════════════════
-
-// Prevent context menu
-(() => {
-  const prevent = e => e.preventDefault();
-  ['contextmenu','selectstart','dragstart','copy','cut'].forEach(ev =>
-    document.addEventListener(ev, prevent, {passive:false})
-  );
-  document.addEventListener('keydown', e => {
-    if ((e.ctrlKey||e.metaKey) && ['a','c','x'].includes(e.key.toLowerCase()))
-      e.preventDefault();
-  }, {passive:false});
-})();
-
-// ── SOUND ENGINE ──
-const AudioCtx = window.AudioContext || window.webkitAudioContext;
-let audioCtx = null;
-function getAC() { if (!audioCtx) audioCtx = new AudioCtx(); return audioCtx; }
-
-function playSound(type) {
-  try {
-    const s = document.getElementById('s-sound');
-    if (s && !s.checked) return;
-    const ctx = getAC();
-    const g = ctx.createGain();
-    g.connect(ctx.destination);
-
-    const sounds = {
-      click: () => { const o = ctx.createOscillator(); o.type='sine'; o.frequency.setValueAtTime(660,ctx.currentTime); o.frequency.exponentialRampToValueAtTime(330,ctx.currentTime+0.08); g.gain.setValueAtTime(0.12,ctx.currentTime); g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.1); o.connect(g); o.start(); o.stop(ctx.currentTime+0.1); },
-      nav: () => { const o = ctx.createOscillator(); o.type='sine'; o.frequency.setValueAtTime(330,ctx.currentTime); o.frequency.exponentialRampToValueAtTime(550,ctx.currentTime+0.06); g.gain.setValueAtTime(0.08,ctx.currentTime); g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.08); o.connect(g); o.start(); o.stop(ctx.currentTime+0.08); },
-      boost: () => { const o = ctx.createOscillator(); o.type='sawtooth'; o.frequency.setValueAtTime(120,ctx.currentTime); o.frequency.exponentialRampToValueAtTime(900,ctx.currentTime+0.6); g.gain.setValueAtTime(0.15,ctx.currentTime); g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.6); o.connect(g); o.start(); o.stop(ctx.currentTime+0.6); },
-      success: () => { [440,550,660,880].forEach((f,i) => { const o=ctx.createOscillator(); o.type='sine'; o.frequency.value=f; const gg=ctx.createGain(); gg.gain.setValueAtTime(0,ctx.currentTime+i*0.07); gg.gain.linearRampToValueAtTime(0.1,ctx.currentTime+i*0.07+0.04); gg.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+i*0.07+0.2); o.connect(gg); gg.connect(ctx.destination); o.start(ctx.currentTime+i*0.07); o.stop(ctx.currentTime+i*0.07+0.25); }); },
-      error: () => { const o = ctx.createOscillator(); o.type='sawtooth'; o.frequency.setValueAtTime(220,ctx.currentTime); o.frequency.exponentialRampToValueAtTime(110,ctx.currentTime+0.25); g.gain.setValueAtTime(0.12,ctx.currentTime); g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.28); o.connect(g); o.start(); o.stop(ctx.currentTime+0.28); },
-      'toggle-on': () => { const o=ctx.createOscillator(); o.type='square'; o.frequency.setValueAtTime(440,ctx.currentTime); o.frequency.exponentialRampToValueAtTime(660,ctx.currentTime+0.1); g.gain.setValueAtTime(0.07,ctx.currentTime); g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.12); o.connect(g); o.start(); o.stop(ctx.currentTime+0.12); },
-      'toggle-off': () => { const o=ctx.createOscillator(); o.type='square'; o.frequency.setValueAtTime(400,ctx.currentTime); o.frequency.exponentialRampToValueAtTime(200,ctx.currentTime+0.1); g.gain.setValueAtTime(0.06,ctx.currentTime); g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.12); o.connect(g); o.start(); o.stop(ctx.currentTime+0.12); },
-    };
-    if (sounds[type]) sounds[type]();
-  } catch(e) {}
-}
-
-// ── RIPPLE ──
-function addRipple(btn, e) {
-  const existing = btn.querySelector('.ripple-wave'); if (existing) existing.remove();
-  const rect = btn.getBoundingClientRect();
-  const x = (e.clientX || rect.left+rect.width/2) - rect.left;
-  const y = (e.clientY || rect.top+rect.height/2) - rect.top;
-  const r = document.createElement('span'); r.className='ripple-wave';
-  r.style.cssText = `left:${x}px;top:${y}px`; btn.appendChild(r);
-  setTimeout(() => r.remove(), 600);
-}
-document.addEventListener('click', function(e) {
-  const btn = e.target.closest('button,.bnav-btn,.qa-btn,.aimlock-btn,.sens-preset-btn,.smooth-pre-btn,.assist-lvl,.assist-target,.assist-when,.gyro-mode-btn,.hl-lvl-btn,.tl-optimize-btn,.key-type-btn');
-  if (!btn) return;
-  if (btn.classList.contains('bnav-btn')) playSound('nav');
-  else if (btn.id==='boost-btn') playSound('boost');
-  else playSound('click');
-  addRipple(btn, e);
-}, true);
-document.addEventListener('change', function(e) {
-  if (e.target.type==='checkbox') playSound(e.target.checked ? 'toggle-on' : 'toggle-off');
-}, true);
-
-// ── SPLASH ──
-const splashMsgs = ['INITIALIZING CORE...','LOADING BLOOD ENGINE...','CALIBRATING SENSORS...','SCANNING DEVICE...','OPTIMIZING MEMORY...','BINDING NEURAL LINK...','READY.'];
-
-window.addEventListener('DOMContentLoaded', () => {
-  const pc = document.getElementById('splash-particles');
-  for (let i=0;i<20;i++) {
-    const p=document.createElement('div'); p.className='particle';
-    p.style.cssText=`left:${Math.random()*100}%;bottom:${Math.random()*30}%;animation-duration:${2+Math.random()*3}s;animation-delay:${Math.random()*3}s;width:${1+Math.random()*2}px;height:${1+Math.random()*2}px;`;
-    pc.appendChild(p);
-  }
-  const fill=document.getElementById('splash-loader-fill');
-  const text=document.getElementById('splash-loader-text');
-  let pct=0, msgIdx=0;
-  const iv=setInterval(()=>{
-    pct+=Math.random()*15+4; if(pct>100)pct=100;
-    fill.style.width=pct+'%';
-    const mi=Math.floor((pct/100)*(splashMsgs.length-1));
-    if(mi!==msgIdx){msgIdx=mi;text.textContent=splashMsgs[Math.min(mi,splashMsgs.length-1)];}
-    if(pct>=100){clearInterval(iv);text.textContent='READY.';setTimeout(hideSplash,600);}
-  },180);
-});
-
-function hideSplash() {
-  const splash=document.getElementById('splash-screen');
-  const app=document.getElementById('app');
-  splash.style.transition='opacity .6s ease'; splash.style.opacity='0';
-  setTimeout(()=>{splash.style.display='none';app.style.display='flex';initApp();},600);
-}
-
-// ── APP INIT ──
-function initApp() {
-  buildFeatures(); startStats(); startRealtimeGraphs();
-  setTimeout(()=>{animateScoreRing(82);document.getElementById('perf-score').textContent='82';document.getElementById('perf-grade').textContent='GREAT — Xuất sắc';},600);
-  checkSavedKey();
-  document.getElementById('device-id-display').textContent = getDeviceId();
-  document.getElementById('device-id-modal').textContent = getDeviceId();
-  startBloodRank();
-}
-
-// ── FEATURES DATA ──
-const FREE_FEATURES = [
-  {icon:'<path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="currentColor" stroke-width="2"/>',name:'FPS Boost Basic',desc:'Tăng FPS cơ bản cho mobile'},
-  {icon:'<path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6" stroke="currentColor" stroke-width="2"/>',name:'RAM Cleaner',desc:'Dọn RAM thông minh'},
-  {icon:'<path d="M1 6s4-4 11-4 11 4 11 4M5 10s2.5-2.5 7-2.5S19 10 19 10M9 14s1-1 3-1 3 1 3 1" stroke="currentColor" stroke-width="2"/>',name:'Network Optimizer',desc:'Tối ưu kết nối mạng'},
-  {icon:'<circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="2"/>',name:'Live Stats Monitor',desc:'Theo dõi CPU/RAM/nhiệt độ'},
-  {icon:'<path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4" stroke="currentColor" stroke-width="2"/>',name:'CPU Cooler',desc:'Làm mát CPU tự động'},
-];
-const VIP_FEATURES = [
-  {icon:'<circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3" fill="currentColor"/>',name:'Aim Lock v1–v4',desc:'Khoá tâm chuyên nghiệp'},
-  {icon:'<path d="M20.24 12.24a6 6 0 00-8.49-8.49L5 10.5V19h8.5z" stroke="currentColor" stroke-width="2"/>',name:'Smooth Aim Pro',desc:'Ngắm mượt mà tự nhiên'},
-  {icon:'<rect x="3" y="8" width="18" height="13" rx="2" stroke="currentColor" stroke-width="2"/><path d="M8 8V6a4 4 0 018 0v2" stroke="currentColor" stroke-width="2"/>',name:'Aim Assist Elite',desc:'AI hỗ trợ ngắm thông minh'},
-  {icon:'<path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 7.76l2.83-2.83" stroke="currentColor" stroke-width="2"/>',name:'Anti-Recoil MAX',desc:'Triệt tiêu giật hoàn toàn'},
-  {icon:'<circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><ellipse cx="12" cy="12" rx="9" ry="4" stroke="currentColor" stroke-width="1.5"/>',name:'Gyroscope Pro',desc:'Điều khiển con quay hồi chuyển'},
-  {icon:'<path d="M22 12h-4l-3 9L9 3l-3 9H2" stroke="currentColor" stroke-width="2"/>',name:'Blood Rank System',desc:'Hệ thống xếp hạng độc quyền'},
-  {icon:'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="currentColor" stroke-width="2"/>',name:'Anti-Cheat Shield',desc:'Bảo vệ tài khoản khỏi ban'},
-  {icon:'<rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/><path d="M9 9h6M9 13h6M9 17h4" stroke="currentColor" stroke-width="2"/>',name:'Config Profiles',desc:'Lưu nhiều cấu hình cài đặt'},
-];
-
-function buildFeatures() {
-  const fl = document.getElementById('feature-list-free');
-  FREE_FEATURES.forEach((f,i) => {
-    const el = document.createElement('div'); el.className='feat-item';
-    el.innerHTML=`<div class="feat-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none">${f.icon}</svg></div><div class="feat-info"><div class="feat-name">${f.name}</div><div class="feat-desc">${f.desc}</div></div><label class="toggle"><input type="checkbox" checked><span class="toggle-track"></span></label>`;
-    fl.appendChild(el);
+function setBattery(el, mode) {
+  snd('click');
+  document.querySelectorAll('[onclick^="setBattery"]').forEach(b => {
+    b.style.background = ''; b.querySelector('div:nth-child(2)').style.color = 'var(--txt2)';
+    b.style.borderTop = '';
   });
-  const vl = document.getElementById('feature-list-vip');
-  VIP_FEATURES.forEach((f,i) => {
-    const el = document.createElement('div'); el.className='feat-item';
-    el.innerHTML=`<div class="feat-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none">${f.icon}</svg></div><div class="feat-info"><div class="feat-name">${f.name}</div><div class="feat-desc">${f.desc}</div></div><label class="toggle"><input type="checkbox" disabled><span class="toggle-track"></span></label>`;
-    vl.appendChild(el);
-  });
-}
-
-// ── STATS ──
-let statsData = {fps:0,cpu:0,ram:0,temp:0};
-function startStats() {
-  statsData = {fps:58+Math.random()*4,cpu:25+Math.random()*15,ram:40+Math.random()*20,temp:42+Math.random()*8};
-  updateStatCards();
-  setInterval(()=>{
-    statsData.fps=Math.max(30,Math.min(120,statsData.fps+(Math.random()*10-5)));
-    statsData.cpu=Math.max(5,Math.min(95,statsData.cpu+(Math.random()*8-4)));
-    statsData.ram=Math.max(20,Math.min(95,statsData.ram+(Math.random()*4-2)));
-    statsData.temp=Math.max(30,Math.min(85,statsData.temp+(Math.random()*4-2)));
-    updateStatCards();
-  },1800);
-}
-function updateStatCards() {
-  const fps=Math.round(statsData.fps),cpu=Math.round(statsData.cpu),ram=Math.round(statsData.ram),temp=Math.round(statsData.temp);
-  document.getElementById('val-fps').textContent=fps;
-  document.getElementById('val-cpu').innerHTML=cpu+'<span>%</span>';
-  document.getElementById('val-ram').innerHTML=ram+'<span>%</span>';
-  document.getElementById('val-temp').innerHTML=temp+'<span>°</span>';
-  document.getElementById('bar-fps').style.width=(fps/120*100)+'%';
-  document.getElementById('bar-cpu').style.width=cpu+'%';
-  document.getElementById('bar-ram').style.width=ram+'%';
-  document.getElementById('bar-temp').style.width=(temp/100*100)+'%';
-  document.getElementById('status-fps').textContent=fps>=60?'✓ Smooth':'⚠ Low';
-  document.getElementById('status-cpu').textContent=cpu<50?'✓ Normal':'⚠ High';
-  document.getElementById('status-ram').textContent=ram<70?'✓ OK':'⚠ Full';
-  document.getElementById('status-temp').textContent=temp<60?'✓ Cool':'🔥 Hot';
-}
-
-// ── REALTIME GRAPHS ──
-const graphData = {fps:[],cpu:[],ram:[],temp:[]};
-const graphColors = {fps:'#00ff88',cpu:'#ffcc00',ram:'#00aaff',temp:'#ff1a1a'};
-const graphMax = {fps:120,cpu:100,ram:100,temp:100};
-
-function startRealtimeGraphs() {
-  ['fps','cpu','ram','temp'].forEach(k=>{for(let i=0;i<30;i++)graphData[k].push(0);});
-  setInterval(()=>{
-    const keys=['fps','cpu','ram','temp'];
-    keys.forEach(k=>{
-      const v=k==='fps'?statsData.fps:k==='cpu'?statsData.cpu:k==='ram'?statsData.ram:statsData.temp;
-      graphData[k].push(v); if(graphData[k].length>30)graphData[k].shift();
-      drawGraph(k);
-      const el=document.getElementById('rt-'+k);
-      if(el)el.textContent=k==='fps'?Math.round(v):Math.round(v)+(k==='temp'?'°':'%');
-      updateMinAvgMax(k);
-    });
-  },1000);
-}
-
-function drawGraph(key) {
-  const canvas=document.getElementById('graph-'+key); if(!canvas)return;
-  const ctx=canvas.getContext('2d');
-  const W=canvas.offsetWidth||300,H=canvas.offsetHeight||50;
-  canvas.width=W; canvas.height=H;
-  ctx.clearRect(0,0,W,H);
-  const data=graphData[key]; const max=graphMax[key]; const color=graphColors[key];
-  const step=W/(data.length-1);
-  const grad=ctx.createLinearGradient(0,0,0,H);
-  grad.addColorStop(0,color+'44'); grad.addColorStop(1,color+'00');
-  ctx.beginPath();
-  data.forEach((v,i)=>{ const x=i*step,y=H-(v/max)*H; i===0?ctx.moveTo(x,y):ctx.lineTo(x,y); });
-  ctx.lineTo(W,H); ctx.lineTo(0,H); ctx.closePath();
-  ctx.fillStyle=grad; ctx.fill();
-  ctx.beginPath();
-  data.forEach((v,i)=>{ const x=i*step,y=H-(v/max)*H; i===0?ctx.moveTo(x,y):ctx.lineTo(x,y); });
-  ctx.strokeStyle=color; ctx.lineWidth=1.5; ctx.stroke();
-}
-
-function updateMinAvgMax(key) {
-  const data=graphData[key].filter(v=>v>0);
-  if(!data.length)return;
-  const min=Math.round(Math.min(...data)),max=Math.round(Math.max(...data)),avg=Math.round(data.reduce((a,b)=>a+b,0)/data.length);
-  const s=key==='fps'?'':key==='temp'?'°':'%';
-  const el=id=>document.getElementById('rt-'+key+'-'+id);
-  if(el('min'))el('min').textContent=min+s;
-  if(el('avg'))el('avg').textContent=avg+s;
-  if(el('max'))el('max').textContent=max+s;
-}
-
-// ── SCORE RING ──
-function animateScoreRing(score) {
-  const c=document.getElementById('score-ring-circle'); if(!c)return;
-  const circ=2*Math.PI*32; const offset=circ-(score/100)*circ;
-  c.style.strokeDashoffset=offset;
-  const col=score>=80?'#00ff88':score>=60?'#ffcc00':'#ff1a1a';
-  c.style.stroke=col;
-}
-
-// ── BLOOD RANK SYSTEM ──
-const RANKS=['IRON I','IRON II','IRON III','BRONZE I','BRONZE II','SILVER I','SILVER II','GOLD I','GOLD II','PLATINUM','DIAMOND','BLOODLORD','IMMORTAL'];
-let bloodXP=0;
-
-function startBloodRank() {
-  bloodXP=Math.floor(Math.random()*200);
-  updateBloodRank();
-}
-
-function updateBloodRank() {
-  const rankIdx=Math.min(Math.floor(bloodXP/100),RANKS.length-1);
-  const rank=RANKS[rankIdx];
-  const pctInRank=(bloodXP%100);
-  document.getElementById('blood-rank').textContent=rank;
-  document.getElementById('blood-xp').textContent=bloodXP;
-  document.getElementById('blood-xp-pct').textContent=pctInRank+'%';
-  document.getElementById('blood-xp-bar').style.width=pctInRank+'%';
-  const descs=['Mới bắt đầu hành trình','Đang tiến bộ','Chiến binh tiềm năng','Thách thức mọi giới hạn','Kẻ săn máu thật sự'];
-  document.getElementById('blood-rank-desc').textContent=descs[Math.min(Math.floor(rankIdx/3),4)];
-}
-
-// ── QUICK ACTIONS ──
-function quickAction(type) {
-  const msgs={clear:'🧹 RAM đã được giải phóng!',cool:'❄️ Làm mát CPU thành công!',boost:'⚡ FPS tăng đột biến!',network:'📡 Kết nối mạng đã tối ưu!'};
-  showToast(msgs[type]||'✓ Hoàn tất!');
-  bloodXP+=5; updateBloodRank();
-}
-
-// ── BOOST ──
-function runBoost() {
-  const overlay=document.getElementById('boost-overlay');
-  const txt=document.getElementById('boost-overlay-text');
-  const pct=document.getElementById('boost-overlay-pct');
-  overlay.style.display='flex'; let p=0;
-  const msgs=['SCANNING SYSTEM...','CLEARING CACHE...','OPTIMIZING CPU...','BOOSTING FPS...','FINALIZING...','BLOODCORE READY!'];
-  const iv=setInterval(()=>{
-    p+=Math.random()*20+8; if(p>100)p=100;
-    pct.textContent=Math.round(p)+'%';
-    txt.textContent=msgs[Math.min(Math.floor((p/100)*(msgs.length-1)),msgs.length-1)];
-    if(p>=100){
-      clearInterval(iv);
-      setTimeout(()=>{overlay.style.display='none';showToast('🔥 BLOODCORE BOOST: +23 FPS! Score tăng!');bloodXP+=20;updateBloodRank();animateScoreRing(92);document.getElementById('perf-score').textContent='92';document.getElementById('perf-grade').textContent='ELITE — Đỉnh cao';},500);
-    }
-  },220);
-}
-
-// ── PAGE SWITCH ──
-function switchPage(id) {
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.bnav-btn').forEach(b=>b.classList.remove('active'));
-  const pg=document.getElementById('page-'+id); if(pg)pg.classList.add('active');
-  const btn=document.querySelector(`.bnav-btn[data-page="${id}"]`); if(btn)btn.classList.add('active');
-}
-
-// ── TOAST ──
-function showToast(msg,dur=2500) {
-  const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),dur);
-}
-
-// ── NET STATS ──
-setInterval(()=>{
-  document.getElementById('net-down').textContent=(Math.random()*8+0.5).toFixed(1)+' MB/s';
-  document.getElementById('net-up').textContent=(Math.random()*2+0.1).toFixed(1)+' MB/s';
-  document.getElementById('net-ping').textContent=Math.round(Math.random()*30+8)+' ms';
-},2000);
-
-// ── AIM LAB ──
-function setAimLock(btn,ver) {
-  document.querySelectorAll('.aimlock-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  const data={v1:{radius:'20px',speed:'Slow',priority:'Đầu'},v2:{radius:'30px',speed:'Medium',priority:'Đầu + Ngực'},v3:{radius:'45px',speed:'Fast',priority:'Đầu + Ngực'},v4:{radius:'65px',speed:'MAX',priority:'Auto-track'}};
-  const d=data[ver];
-  document.getElementById('al-radius').textContent=d.radius;
-  document.getElementById('al-speed').textContent=d.speed;
-  document.getElementById('al-priority').textContent=d.priority;
-  updateAimScore();
-}
-function updateSmooth(v) { document.getElementById('smooth-fill').style.width=v+'%'; document.getElementById('smooth-pct').textContent=v+'%'; }
-function setSmooth(btn,v) { document.querySelectorAll('.smooth-pre-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); document.querySelector('input.sens-slider').value=v; updateSmooth(v); }
-function setAssistLevel(btn){document.querySelectorAll('.assist-lvl').forEach(b=>b.classList.remove('active'));btn.classList.add('active');}
-function setAssistTarget(btn){document.querySelectorAll('.assist-target').forEach(b=>b.classList.remove('active'));btn.classList.add('active');}
-function setAssistWhen(btn){document.querySelectorAll('.assist-when').forEach(b=>b.classList.remove('active'));btn.classList.add('active');}
-function setHL(btn){document.querySelectorAll('.hl-lvl-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');}
-function setGyroMode(btn){document.querySelectorAll('.gyro-mode-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');}
-function applySensPreset(btn,preset){document.querySelectorAll('.sens-preset-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');const data={balanced:{g:100,ads:80,s2:65,s4:50},sniper:{g:60,ads:40,s2:35,s4:25},rush:{g:150,ads:120,s2:100,s4:80},pro:{g:120,ads:90,s2:70,s4:55}};const d=data[preset];['general','ads','scope2','scope4'].forEach((k,i)=>{const val=[d.g,d.ads,d.s2,d.s4][i];document.getElementById('sr-'+k).value=val;document.getElementById('sv-'+k).textContent=val;});}
-function updateSens(k,v){document.getElementById('sv-'+k).textContent=v;}
-function updateAimScore(){const s=70+Math.floor(Math.random()*25);document.getElementById('aim-score').textContent=s;}
-
-function applyAimSettings() {
-  const overlay=document.getElementById('boost-overlay');
-  const txt=document.getElementById('boost-overlay-text');
-  const pct=document.getElementById('boost-overlay-pct');
-  overlay.style.display='flex'; let p=0;
-  const msgs=['LOADING AIM DATA...','CALIBRATING SENSORS...','APPLYING AIM LOCK...','TUNING SENSITIVITY...','OPTIMIZING...','AIM SYSTEM READY!'];
-  const iv=setInterval(()=>{
-    p+=Math.random()*22+10; if(p>100)p=100;
-    pct.textContent=Math.round(p)+'%'; txt.textContent=msgs[Math.min(Math.floor((p/100)*(msgs.length-1)),msgs.length-1)];
-    if(p>=100){clearInterval(iv);setTimeout(()=>{overlay.style.display='none';document.getElementById('aim-status-badge').textContent='● OPTIMIZED';showToast('🎯 Cài đặt AIM đã áp dụng! Rank up nhanh thôi!');bloodXP+=10;updateBloodRank();},400);}
-  },200);
-}
-
-// ══════════════════════════════════════
-//   KEY SYSTEM — BLOODCORE ENHANCED
-// ══════════════════════════════════════
-
-const SUPABASE_URL = 'https://pjhdnvbssbcmbhepevcn.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBqaGRudmJzc2JjbWJoZXBldmNuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ2NTk4MzMsImV4cCI6MjA5MDIzNTgzM30.00MnFaNSNOJEHJO_OPbsMu45EftknC9o4_ukx5UHaE4';
-const SUPABASE_WRITE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBqaGRudmJzc2JjbWJoZXBldmNuIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NDY1OTgzMywiZXhwIjoyMDkwMjM1ODMzfQ.63NAUMk4y-25eyjy9n96BhK3grB0b_64Ng04wIsSDVM';
-
-// Device fingerprint
-function getDeviceId() {
-  let id = localStorage.getItem('bc_device_id');
-  if (!id) {
-    const ua=navigator.userAgent,scr=`${screen.width}x${screen.height}x${screen.colorDepth}`;
-    const lang=navigator.language,tz=Intl.DateTimeFormat().resolvedOptions().timeZone;
-    const cores=navigator.hardwareConcurrency||0,mem=navigator.deviceMemory||0;
-    const raw=`${ua}|${scr}|${lang}|${tz}|${cores}|${mem}`;
-    let hash=0; for(let i=0;i<raw.length;i++){hash=((hash<<5)-hash)+raw.charCodeAt(i);hash|=0;}
-    id='BC-'+Math.abs(hash).toString(16).toUpperCase();
-    localStorage.setItem('bc_device_id',id);
-  }
-  return id;
-}
-
-// Auto-format key input
-function onKeyInput(input) {
-  let v=input.value.replace(/[^A-Za-z0-9-]/g,'').toUpperCase();
-  input.value=v; input.classList.remove('success','error');
-  document.getElementById('key-msg').textContent='';
-}
-
-// Key type selector
-function selectKeyType(btn, type) {
-  document.querySelectorAll('.key-type-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-}
-
-function showKeyModal() {
-  const modal=document.getElementById('key-modal');
-  modal.style.display='flex';
-  document.getElementById('key-input').value='';
-  document.getElementById('key-msg').textContent='';
-  document.getElementById('key-input').classList.remove('success','error');
-  document.getElementById('device-id-modal').textContent=getDeviceId();
-  setTimeout(()=>document.getElementById('key-input').focus(),300);
-}
-
-function openAdmin() {
-  showToast('📱 Liên hệ admin để mua key VIP!');
-}
-
-function resetKey() {
-  if(!confirm('Xóa key đã lưu?')) return;
-  localStorage.removeItem('vip_key'); localStorage.removeItem('vip_expires');
-  document.getElementById('key-status-text').textContent='Chưa kích hoạt';
-  document.getElementById('tier-badge').textContent='FREE'; document.getElementById('tier-badge').className='tier-badge';
-  const banner=document.getElementById('vip-banner'); if(banner) banner.remove();
-  showToast('🔄 Key đã được xóa. Vui lòng nhập lại.');
-  document.getElementById('status-dot').className='status-dot';
-  setTimeout(()=>showKeyModal(),500);
-}
-
-async function activateKey() {
-  const key=document.getElementById('key-input').value.trim();
-  const msgEl=document.getElementById('key-msg');
-  const btn=document.getElementById('activate-btn');
-  const input=document.getElementById('key-input');
-  const deviceId=getDeviceId();
-
-  if(!key){
-    msgEl.style.color='#ff4d4d'; msgEl.textContent='⚠️ Vui lòng nhập key!';
-    input.classList.add('error'); playSound('error'); return;
-  }
-
-  // Animate button
-  btn.innerHTML='<span class="btn-icon">⏳</span>ĐANG XÁC THỰC...';
-  btn.disabled=true; msgEl.style.color='rgba(255,200,200,0.6)'; msgEl.textContent='Đang kết nối BloodCore server...';
-
-  try {
-    const res=await fetch(`${SUPABASE_URL}/rest/v1/keys?key=eq.${encodeURIComponent(key)}&select=expires_at,is_active,device_id`,
-      {headers:{apikey:SUPABASE_KEY,Authorization:`Bearer ${SUPABASE_KEY}`}});
-    const data=await res.json();
-
-    if(!data.length){
-      msgEl.style.color='#ff4d4d'; msgEl.textContent='❌ Key không tồn tại!';
-      input.classList.add('error'); playSound('error');
-    } else {
-      const {expires_at,is_active,device_id:boundDevice}=data[0];
-      if(!is_active){ msgEl.style.color='#ff4d4d'; msgEl.textContent='❌ Key đã bị thu hồi!'; input.classList.add('error'); playSound('error'); }
-      else if(new Date(expires_at)<new Date()){ msgEl.style.color='#ff4d4d'; msgEl.textContent='❌ Key đã hết hạn!'; input.classList.add('error'); playSound('error'); }
-      else if(boundDevice && boundDevice!==deviceId){ msgEl.style.color='#ff4d4d'; msgEl.textContent='❌ Key này đã được dùng trên thiết bị khác!'; input.classList.add('error'); playSound('error'); }
-      else {
-        if(!boundDevice){
-          const bindRes=await fetch(`${SUPABASE_URL}/rest/v1/keys?key=eq.${encodeURIComponent(key)}`,
-            {method:'PATCH',headers:{apikey:SUPABASE_WRITE_KEY,Authorization:`Bearer ${SUPABASE_WRITE_KEY}`,'Content-Type':'application/json',Prefer:'return=minimal'},
-            body:JSON.stringify({device_id:deviceId})});
-          if(!bindRes.ok){ msgEl.style.color='#ff4d4d'; msgEl.textContent='❌ Lỗi bind thiết bị, thử lại!'; btn.innerHTML='<span class="btn-icon">⚡</span>KÍCH HOẠT BLOODCORE'; btn.disabled=false; return; }
-        }
-        const exp=expires_at.slice(0,10);
-        localStorage.setItem('vip_key',key); localStorage.setItem('vip_expires',exp);
-        input.classList.add('success');
-        msgEl.style.color='#00ff88'; msgEl.textContent='✅ BLOODCORE ELITE KÍCH HOẠT THÀNH CÔNG!';
-        playSound('success');
-        setTimeout(()=>{ document.getElementById('key-modal').style.display='none'; unlockVIP(exp); },1000);
-      }
-    }
-  } catch(e) {
-    // Offline: check localStorage
-    const savedKey=localStorage.getItem('vip_key'), savedExp=localStorage.getItem('vip_expires');
-    if(savedKey===key && savedExp && new Date(savedExp)>new Date()){
-      msgEl.style.color='#ffcc00'; msgEl.textContent='⚠️ Offline mode — Key hợp lệ!';
-      setTimeout(()=>{ document.getElementById('key-modal').style.display='none'; unlockVIP(savedExp); },800);
-    } else {
-      msgEl.style.color='#ff4d4d'; msgEl.textContent='❌ Không kết nối được server!';
-      input.classList.add('error'); playSound('error');
-    }
-  }
-
-  btn.innerHTML='<span class="btn-icon">⚡</span>KÍCH HOẠT BLOODCORE'; btn.disabled=false;
-}
-
-function unlockVIP(expiresAt) {
-  // Unlock VIP features
-  const vipList=document.getElementById('feature-list-vip');
-  if(vipList){
-    vipList.classList.remove('locked');
-    vipList.querySelectorAll('input[type=checkbox]').forEach(el=>el.disabled=false);
-  }
-
-  // Update UI
-  document.getElementById('tier-badge').textContent='💀 ELITE';
-  document.getElementById('tier-badge').className='tier-badge vip';
-  document.getElementById('status-dot').className='status-dot online';
-  document.getElementById('status-text').textContent='ELITE';
-  document.getElementById('key-status-text').textContent='✅ VIP ACTIVE — Hết hạn: '+expiresAt;
-
-  // Upgrade button in VIP page
-  document.querySelectorAll('.upgrade-mini-btn').forEach(b=>{
-    b.innerHTML='👑 ELITE ACTIVE'; b.style.background='linear-gradient(135deg,#ffcc00,#ff9900)';
-    b.style.color='#000'; b.onclick=null;
-  });
-
-  // VIP Banner
-  if(!document.getElementById('vip-banner')){
-    const banner=document.createElement('div'); banner.id='vip-banner';
-    banner.innerHTML=`💀 BLOODCORE ELITE &nbsp;|&nbsp; ⚡ ALL FEATURES UNLOCKED &nbsp;|&nbsp; Hết hạn: ${expiresAt}`;
-    document.getElementById('app').insertBefore(banner,document.getElementById('app').children[1]);
-  }
-
-  // Blood XP bonus
-  bloodXP+=100; updateBloodRank();
-
-  showToast('💀 BLOODCORE ELITE kích hoạt! Hết hạn '+expiresAt);
-}
-
-async function checkSavedKey() {
-  const key=localStorage.getItem('vip_key');
-  const exp=localStorage.getItem('vip_expires');
-  if(!key || !exp || new Date(exp)<=new Date()){
-    localStorage.removeItem('vip_key'); localStorage.removeItem('vip_expires');
-    setTimeout(()=>showKeyModal(),800); return;
-  }
-  try {
-    const deviceId=getDeviceId();
-    const res=await fetch(`${SUPABASE_URL}/rest/v1/keys?key=eq.${encodeURIComponent(key)}&select=expires_at,is_active,device_id`,
-      {headers:{apikey:SUPABASE_KEY,Authorization:`Bearer ${SUPABASE_KEY}`}});
-    const data=await res.json();
-    if(!data.length || !data[0].is_active || new Date(data[0].expires_at)<new Date() || (data[0].device_id && data[0].device_id!==deviceId)){
-      localStorage.removeItem('vip_key'); localStorage.removeItem('vip_expires');
-      showKeyModal(); return;
-    }
-    unlockVIP(data[0].expires_at.slice(0,10));
-  } catch(e) {
-    unlockVIP(exp); // Offline mode
-  }
+  el.style.background = 'var(--rg4)';
+  el.querySelector('div:nth-child(2)').style.color = 'var(--r1)';
+  el.style.borderTop = '2px solid var(--r1)';
+  const msgs = { save: '🔋 Battery Saver ON — tiết kiệm pin', balance: '⚖️ Balanced mode', perf: '⚡ Performance mode — pin tiêu thụ nhanh hơn' };
+  toast(msgs[mode]);
 }
 </script>
-
 </body>
 </html>
