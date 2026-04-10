@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="com.spernew.optimize" version="1.0.0"
+  xmlns="http://www.w3.org/ns/widgets"
+  xmlns:cdv="http://cordova.apache.org/ns/1.0">
+  <name>SperNew Optimize</name>
+  <description>Gaming Optimizer</description>
+  <content src="index.html" />
+  <allow-navigation href="*" />
+  <platform name="ios">
+    <allow-intent href="itms:*" />
+    <allow-intent href="itms-apps:*" />
+  </platform>
+</widget>
