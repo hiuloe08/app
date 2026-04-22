@@ -1,7 +1,0 @@
-{
-  "name": "spernew-optimize",
-  "version": "1.0.0",
-  "cordova": {
-    "platforms": ["ios"]
-  }
-}
